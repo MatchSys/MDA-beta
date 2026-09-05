@@ -19,7 +19,6 @@
       --accent-hover: #1f6feb;
       --success: #238636;
       --danger: #da3633;
-      --warning: #d29922;
     }
 
     * { box-sizing: border-box; }
@@ -39,7 +38,6 @@
       margin: 0 auto;
     }
 
-    /* Auth Box */
     .auth-container {
       max-width: 360px;
       margin: 80px auto;
@@ -56,7 +54,6 @@
       text-align: center;
     }
 
-    /* Header & Navigation */
     .header-bar {
       display: flex;
       justify-content: space-between;
@@ -81,7 +78,6 @@
       color: var(--text-muted);
     }
 
-    /* Forms & Inputs */
     input, textarea {
       background: var(--card-subtle);
       border: 1px solid var(--border);
@@ -148,7 +144,6 @@
       flex: 1;
     }
 
-    /* Tabs */
     .tabs {
       display: flex;
       gap: 4px;
@@ -189,7 +184,6 @@
       color: var(--danger);
     }
 
-    /* Workspace */
     .workspace {
       background: var(--card-bg);
       padding: 20px;
@@ -220,7 +214,6 @@
       display: block;
     }
 
-    /* Checklist Section */
     .checklist-container {
       background: var(--card-subtle);
       border: 1px solid var(--border);
@@ -262,7 +255,6 @@
       color: var(--text-muted);
     }
 
-    /* Note Cards */
     .card {
       background: var(--card-subtle);
       border: 1px solid var(--border);
@@ -321,7 +313,6 @@
       resize: vertical;
     }
 
-    /* Standard Lines for complexes */
     .line-item {
       display: flex;
       justify-content: space-between;
@@ -362,7 +353,7 @@
 <div class="container">
 
   <!-- VISTA DE LOGIN -->
-  <div id="authView" class="auth-container" style="display: none;">
+  <div id="authView" class="auth-container">
     <h2>Iniciar Sesión</h2>
     <div style="display: flex; flex-direction: column; gap: 12px;">
       <input type="email" id="authEmail" placeholder="tu@email.com">
@@ -386,9 +377,9 @@
       </div>
     </div>
 
-    <!-- Buscador / Generador de Pestaña -->
+    <!-- Buscador de Complejo -->
     <div class="search-box">
-      <input type="text" id="complexInput" placeholder="Código de complejo (ej: 2008, 0733) o enter..." maxlength="4" onkeypress="if(event.key==='Enter') createNewTab()">
+      <input type="text" id="complexInput" placeholder="Código de complejo (ej: 2008, 0733)..." maxlength="4" onkeypress="if(event.key==='Enter') createNewTab()">
       <button class="btn-primary" onclick="createNewTab()">+ Abrir Complejo</button>
     </div>
 
@@ -401,9 +392,8 @@
         <h2 id="currentTitle">Notas / Bitácora</h2>
       </div>
 
-      <!-- SECCIÓN EXCLUSIVA DE NOTAS (Mi Pestaña Personal) -->
+      <!-- SECCIÓN EXCLUSIVA DE NOTAS -->
       <div id="notesSpecificSection" style="display: none;">
-        <!-- Checklist del turno -->
         <span class="section-title">Checklist / Foco del Día</span>
         <div class="checklist-container">
           <div class="checklist-input-box">
@@ -414,7 +404,7 @@
         </div>
       </div>
 
-      <!-- SECCIÓN COMPLEJOS: General y Relevos -->
+      <!-- SECCIÓN COMPLEJOS -->
       <div id="complexSection" style="display: none;">
         <span class="section-title">Relevos y Rutinas</span>
         <div id="staticLines"></div>
@@ -451,8 +441,9 @@
   // -------------------------------------------------------------
   const SUPABASE_URL = 'https://xlwhvmmgimeuvbvghemt.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsd2h2bW1naW1ldXZidmdoZW10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2Mzc1NjUsImV4cCI6MjEwNDIxMzU2NX0.wqtbkubn-JGW671twlZFAD6bWH0TohSH2BbsoZOdSHU';
-  
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Usamos sbClient para que no colisione con el objeto global window.supabase
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const dbComplejos = {
     "0000": "Bitácora / Notas",
@@ -476,9 +467,9 @@
   // -------------------------------------------------------------
   async function checkSession() {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        currentUser = session.user;
+      const { data } = await sbClient.auth.getSession();
+      if (data && data.session) {
+        currentUser = data.session.user;
         showApp();
       } else {
         showAuth();
@@ -502,9 +493,9 @@
 
     let result;
     if (type === 'login') {
-      result = await supabase.auth.signInWithPassword({ email, password });
+      result = await sbClient.auth.signInWithPassword({ email, password });
     } else {
-      result = await supabase.auth.signUp({ email, password });
+      result = await sbClient.auth.signUp({ email, password });
     }
 
     if (result.error) {
@@ -516,7 +507,7 @@
   }
 
   async function logout() {
-    await supabase.auth.signOut();
+    await sbClient.auth.signOut();
     currentUser = null;
     showAuth();
   }
@@ -534,7 +525,7 @@
   }
 
   // -------------------------------------------------------------
-  // PERSISTENCIA (SUPABASE)
+  // PERSISTENCIA
   // -------------------------------------------------------------
   function queueAutoSave() {
     document.getElementById('syncStatus').innerText = '○ Guardando...';
@@ -550,7 +541,7 @@
       userTodos: userTodos
     };
 
-    const { error } = await supabase
+    const { error } = await sbClient
       .from('user_workspace')
       .upsert({ user_id: currentUser.id, data: payload, updated_at: new Date() });
 
@@ -562,7 +553,7 @@
   }
 
   async function loadRemoteData() {
-    const { data, error } = await supabase
+    const { data, error } = await sbClient
       .from('user_workspace')
       .select('data')
       .eq('user_id', currentUser.id)
@@ -670,7 +661,7 @@
   }
 
   // -------------------------------------------------------------
-  // SECCIÓN PERSONAL: CHECKLIST
+  // CHECKLIST
   // -------------------------------------------------------------
   function addTodo() {
     const input = document.getElementById('newTodoInput');
@@ -715,7 +706,7 @@
   }
 
   // -------------------------------------------------------------
-  // TARJETAS / NOTAS MODULARES
+  // TARJETAS / APUNTES
   // -------------------------------------------------------------
   function addCustomLine() {
     const tab = activeTabs.find(t => t.id === currentTabId);
@@ -770,7 +761,7 @@
 
       const btnCopy = document.createElement('button');
       btnCopy.innerText = 'Copiar';
-      btnCopy.onclick = (e) => {
+      btnCopy.onclick = () => {
         const textToCopy = item.ticket ? `${item.ticket} ${item.text}` : item.text;
         copyText(textToCopy, btnCopy);
       };
@@ -806,7 +797,7 @@
   }
 
   // -------------------------------------------------------------
-  // LÓGICA DE COMPLEJOS Y TICKETS AUTOMÁTICOS
+  // RUTINAS Y EQUIPOS
   // -------------------------------------------------------------
   function renderStaticLines() {
     const lines = [
