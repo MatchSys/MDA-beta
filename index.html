@@ -871,7 +871,6 @@
       ];
     }
 
-    // Datos iniciales idénticos a tu captura del interior
     if (!interiorRosterData || interiorRosterData.length === 0) {
       interiorRosterData = [
         { label: 'Interior', days: ['Patio Olmos', 'Santa FE', 'Palmares', 'Neuquen', 'Rosario'] },
@@ -1015,9 +1014,7 @@
     }
   }
 
-  // -------------------------------------------------------------
   // VISTA FIJA DE HOY (CONSOLIDADA)
-  // -------------------------------------------------------------
   function renderTodayFixed() {
     const container = document.getElementById('todayFixedContent');
     if (!container) return;
@@ -1034,7 +1031,6 @@
       return;
     }
 
-    // 1. Técnicos AMBA hoy
     let ambaList = [];
     rosterData.forEach(t => {
       const m = (t.m[dayIndex] || '').trim();
@@ -1042,7 +1038,6 @@
       if (m !== '' || tarde !== '') ambaList.push({ name: t.name, m, t: tarde });
     });
 
-    // 2. Complejos del Interior hoy
     let interiorList = [];
     interiorRosterData.forEach(row => {
       const complex = (row.days[dayIndex] || '').trim();
@@ -1060,7 +1055,6 @@
 
     let html = '';
 
-    // Tabla AMBA
     if (ambaList.length > 0) {
       html += `
         <table class="today-table">
@@ -1085,7 +1079,6 @@
       html += `</tbody></table>`;
     }
 
-    // Listado Interior
     if (interiorList.length > 0) {
       html += `
         <div style="margin-top: 8px;">
@@ -1236,9 +1229,7 @@
     });
   }
 
-  // -------------------------------------------------------------
   // TABLAS SEMANALES (AMBA E INTERIOR)
-  // -------------------------------------------------------------
   function getCellColorClass(val) {
     if (!val) return 'cell-default';
     const text = val.trim().toUpperCase();
@@ -1282,7 +1273,6 @@
   function renderRoster() {
     const dayIndex = getCurrentDayIndex();
 
-    // Resaltar encabezados según día
     for (let d = 0; d < 5; d++) {
       const thM = document.getElementById(`thMainDay${d}`);
       const thI = document.getElementById(`thInteriorDay${d}`);
@@ -1290,7 +1280,7 @@
       if (thI) d === dayIndex ? thI.classList.add('col-today') : thI.classList.remove('col-today');
     }
 
-    // 1. Render AMBA (Doble fila M/T)
+    // 1. AMBA (M y T)
     const tbodyAMBA = document.getElementById('rosterTableBody');
     tbodyAMBA.innerHTML = '';
     rosterData.forEach((tech, i) => {
@@ -1324,7 +1314,7 @@
       tbodyAMBA.appendChild(trT);
     });
 
-    // 2. Render Interior (Fila Simple directa)
+    // 2. Interior (Línea simple)
     const tbodyInterior = document.getElementById('interiorRosterTableBody');
     tbodyInterior.innerHTML = '';
     interiorRosterData.forEach((row, i) => {
@@ -1362,9 +1352,7 @@
     queueAutoSave();
   }
 
-  // -------------------------------------------------------------
   // PEGAR DIRECTO DESDE EXCEL
-  // -------------------------------------------------------------
   async function pasteFromExcelPrompt(type) {
     try {
       const text = await navigator.clipboard.readText();
@@ -1376,14 +1364,30 @@
       const rawRows = text.trim().split(/\r?\n/).map(row => row.split('\t'));
 
       if (type === 'interior') {
-        // PARSER INTERIOR: Fila simple directa (1 fila de Excel = 1 fila en la web)
         let newInterior = [];
         rawRows.forEach(cols => {
-          const label = cols[0] ? cols[0].trim() : 'Interior';
-          const days = cols.slice(1, 6);
+          let cleanCols = cols.map(c => c.trim());
+          
+          if (cleanCols[0] && cleanCols[0].toLowerCase().includes('interior')) {
+            cleanCols.shift();
+          }
+
+          if (cleanCols.length > 5 && cleanCols[0] === '') {
+            cleanCols.shift();
+          }
+
+          const days = cleanCols.slice(0, 5);
           while (days.length < 5) days.push('');
-          newInterior.push({ label, days: days.map(s => s.trim()) });
+
+          const hasContent = days.some(d => d !== '');
+          if (hasContent) {
+            newInterior.push({ label: 'Interior', days });
+          }
         });
+
+        while (newInterior.length < 3) {
+          newInterior.push({ label: 'Interior', days: ['', '', '', '', ''] });
+        }
 
         if (newInterior.length > 0) {
           interiorRosterData = newInterior;
@@ -1392,7 +1396,6 @@
           queueAutoSave();
         }
       } else {
-        // PARSER AMBA: Bloques de 2 filas consecutivas (M y T)
         let newAMBA = [];
         for (let i = 0; i < rawRows.length; i += 2) {
           const rowM = rawRows[i];
