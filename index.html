@@ -449,26 +449,14 @@
   // -------------------------------------------------------------
   // CONFIGURACIÓN DE SUPABASE
   // -------------------------------------------------------------
-  const SUPABASE_URL = 'xlwhvmmgimeuvbvghemt';
+// -------------------------------------------------------------
+  // CONFIGURACIÓN DE SUPABASE
+  // -------------------------------------------------------------
+  const SUPABASE_URL = 'https://xlwhvmmgimeuvbvghemt.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsd2h2bW1naW1ldXZidmdoZW10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2Mzc1NjUsImV4cCI6MjEwNDIxMzU2NX0.wqtbkubn-JGW671twlZFAD6bWH0TohSH2BbsoZOdSHU';
-  const supabase = supa.createClient ? supa.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  const dbComplejos = {
-    "0000": "Bitácora / Notas",
-    "0732": "Palmares", "0733": "Palermo", "0734": "Caballito", "0739": "Soleil",
-    "0745": "Santa Fe", "0748": "San Justo", "0749": "Malvinas", "0756": "Tortugas",
-    "2000": "Unicenter", "2001": "Moron", "2002": "Quilmes", "2003": "Dot",
-    "2004": "Abasto", "2005": "Temperley", "2006": "Moreno", "2007": "Salta Hoyts",
-    "2008": "Nuevo Centro", "2009": "Patio Olmos", "2010": "Rosario", "2013": "Salta Cinemark",
-    "2014": "Neuquen", "2015": "Avellaneda", "2016": "Parque Brown"
-  };
-
-  const noteTabId = 'tab_personal';
-  let currentUser = null;
-  let activeTabs = [];
-  let currentTabId = noteTabId;
-  let userTodos = [];
-  let saveTimeout = null;
+  
+  // Inicialización limpia sin el objeto fantasma 'supa'
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // -------------------------------------------------------------
   // AUTENTICACIÓN
