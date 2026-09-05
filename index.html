@@ -352,9 +352,7 @@
 
     textarea { width: 100%; height: 50px; resize: vertical; }
 
-    /* -----------------------------------------------------------
-       VISTA COMPACTA: "SOLO HOY" (FIJA EN EL PANEL DERECHO)
-    ----------------------------------------------------------- */
+    /* VISTA COMPACTA: "SOLO HOY" */
     .today-fixed-container {
       background: #090d14;
       border: 1px solid #1e293b;
@@ -376,6 +374,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 0.75rem;
+      margin-bottom: 8px;
     }
 
     .today-table th {
@@ -395,14 +394,26 @@
       font-weight: 600;
     }
 
-    /* -----------------------------------------------------------
-       TABLA EXCEL OPERATIVA (VISTA COMPLETA SEMANAL)
-    ----------------------------------------------------------- */
+    .today-interior-pill {
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #f8fafc;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+    }
+
+    /* TABLA EXCEL SEMANAL */
     .excel-container {
       overflow-x: auto;
       background: #000000;
       border: 1px solid #334155;
       border-radius: 4px;
+      margin-bottom: 12px;
     }
 
     .excel-table {
@@ -569,7 +580,7 @@
         </div>
       </div>
 
-      <!-- COLUMNA DERECHA: GUARDIA FIJA DE HOY Y/O GRILLA SEMANAL -->
+      <!-- COLUMNA DERECHA: GUARDIA FIJA DE HOY Y/O GRILLAS SEMANALES -->
       <div class="panel">
         <div class="panel-header" style="align-items: center;">
           <div style="display: flex; align-items: center; gap: 8px;">
@@ -584,42 +595,77 @@
 
           <div style="display: flex; gap: 6px;">
             <button class="btn-icon" id="btnToggleWeekView" onclick="toggleWeekView()" style="color:#fde047; font-weight:700;">📅 Ver Semana</button>
-            <button class="btn-icon" id="btnPasteExcel" onclick="pasteFromExcelPrompt()" style="display:none;" title="Pegar datos directo desde Excel">📋 Pegar Excel</button>
-            <button class="btn-primary btn-icon" id="btnAddTech" onclick="addRosterRow()" style="display:none;">+ Técnico</button>
           </div>
         </div>
 
-        <!-- 1. VISTA FIJA DE HOY (POR DEFECTO) -->
+        <!-- 1. VISTA FIJA DE HOY -->
         <div id="todayFixedView" class="today-fixed-container">
           <div id="todayFixedContent"></div>
         </div>
 
-        <!-- 2. VISTA GRILLA SEMANAL (SE DESPLIEGA AL TOCAR "VER SEMANA") -->
+        <!-- 2. VISTA GRILLAS SEMANALES (AMBA + INTERIOR) -->
         <div id="weekGridView" style="display: none;">
+          
+          <!-- SECCIÓN 1: TÉCNICOS CENTRAL / AMBA (FORMATO M/T) -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 6px 0;">
+            <span class="section-subtitle" style="color: #38bdf8; margin: 0;">🏢 Técnicos Central / AMBA (M / T)</span>
+            <div style="display: flex; gap: 4px;">
+              <button class="btn-icon" onclick="pasteFromExcelPrompt('main')" title="Pegar desde Excel">📋 Pegar AMBA</button>
+              <button class="btn-primary btn-icon" onclick="addRosterRow('main')">+ Técnico</button>
+            </div>
+          </div>
+
           <div class="excel-container">
             <table class="excel-table">
               <thead>
                 <tr>
                   <th style="width: 22%;">Técnicos</th>
                   <th style="width: 4%;"></th>
-                  <th id="thDay0" style="width: 14.8%;">Lunes</th>
-                  <th id="thDay1" style="width: 14.8%;">Martes</th>
-                  <th id="thDay2" style="width: 14.8%;">Miércoles</th>
-                  <th id="thDay3" style="width: 14.8%;">Jueves</th>
-                  <th id="thDay4" style="width: 14.8%;">Viernes</th>
+                  <th id="thMainDay0" style="width: 14.8%;">Lunes</th>
+                  <th id="thMainDay1" style="width: 14.8%;">Martes</th>
+                  <th id="thMainDay2" style="width: 14.8%;">Miércoles</th>
+                  <th id="thMainDay3" style="width: 14.8%;">Jueves</th>
+                  <th id="thMainDay4" style="width: 14.8%;">Viernes</th>
                   <th style="width: 4%;"></th>
                 </tr>
               </thead>
               <tbody id="rosterTableBody"></tbody>
             </table>
           </div>
+
+          <!-- SECCIÓN 2: VISITAS DEL INTERIOR (FORMATO SIMPLE DIRECTO) -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0 6px 0;">
+            <span class="section-subtitle" style="color: #fb923c; margin: 0;">📍 Visitas del Interior (Planilla Simple)</span>
+            <div style="display: flex; gap: 4px;">
+              <button class="btn-icon" onclick="pasteFromExcelPrompt('interior')" title="Pegar desde Excel">📋 Pegar Interior</button>
+              <button class="btn-primary btn-icon" onclick="addRosterRow('interior')">+ Fila</button>
+            </div>
+          </div>
+
+          <div class="excel-container">
+            <table class="excel-table">
+              <thead>
+                <tr>
+                  <th style="width: 22%;">Zona / Grupo</th>
+                  <th id="thInteriorDay0" style="width: 15.6%;">Lunes</th>
+                  <th id="thInteriorDay1" style="width: 15.6%;">Martes</th>
+                  <th id="thInteriorDay2" style="width: 15.6%;">Miércoles</th>
+                  <th id="thInteriorDay3" style="width: 15.6%;">Jueves</th>
+                  <th id="thInteriorDay4" style="width: 15.6%;">Viernes</th>
+                  <th style="width: 4%;"></th>
+                </tr>
+              </thead>
+              <tbody id="interiorRosterTableBody"></tbody>
+            </table>
+          </div>
+
         </div>
 
       </div>
 
     </div>
 
-    <!-- MODO 2: COMPLEJO ACTIVO (RELEVOS, RUTINAS Y TICKETS) -->
+    <!-- MODO 2: COMPLEJO ACTIVO -->
     <div id="complexWorkspace" class="panel" style="display: none;">
       <div class="panel-header">
         <span class="panel-title" id="complexTitleDisplay">Complejo</span>
@@ -669,9 +715,10 @@
   let activeTabs = [];
   let currentTabId = noteTabId;
   let userTodos = [];
-  let rosterData = [];
+  let rosterData = [];        // AMBA: { name, m: [], t: [] }
+  let interiorRosterData = []; // Interior: { label: 'Interior', days: ['', '', '', '', ''] }
   let notesBodyVisible = true;
-  let showFullWeek = false; // Por defecto: Vista fija de HOY
+  let showFullWeek = false;
   let saveTimeout = null;
 
   // RELOJ LLAMATIVO
@@ -694,13 +741,10 @@
   setInterval(updateClock, 1000);
   updateClock();
 
-  // OBTENER ÍNDICE DEL DÍA ACTUAL (Lunes=0 ... Viernes=4)
   function getCurrentDayIndex() {
     const day = new Date().getDay();
-    if (day >= 1 && day <= 5) {
-      return day - 1;
-    }
-    return -1; // Fin de semana
+    if (day >= 1 && day <= 5) return day - 1;
+    return -1;
   }
 
   // AUTENTICACIÓN
@@ -774,6 +818,7 @@
       currentTabId,
       userTodos,
       rosterData,
+      interiorRosterData,
       notesBodyVisible,
       showFullWeek
     };
@@ -803,6 +848,7 @@
       currentTabId = data.data.currentTabId || noteTabId;
       userTodos = data.data.userTodos || [];
       rosterData = data.data.rosterData || [];
+      interiorRosterData = data.data.interiorRosterData || [];
       notesBodyVisible = data.data.notesBodyVisible !== undefined ? data.data.notesBodyVisible : true;
       showFullWeek = data.data.showFullWeek !== undefined ? data.data.showFullWeek : false;
     }
@@ -821,9 +867,16 @@
 
     if (!rosterData || rosterData.length === 0) {
       rosterData = [
-        { name: 'Daniel', m: ['HQ', 'HQ', 'HQ', 'Tortugas', 'WNS'], t: ['HQ', 'HQ', 'HQ', 'Malvinas', 'MDA'] },
-        { name: 'Técnico 2', m: ['OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK'], t: ['OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK'] },
-        { name: 'Técnico 3', m: ['WNS', 'WNS', 'San Justo', 'HQ', 'HQ'], t: ['Caballito', 'Palermo', 'MDA', 'HQ', 'HQ'] }
+        { name: 'Daniel', m: ['HQ', 'HQ', 'HQ', 'Tortugas', 'WNS'], t: ['HQ', 'HQ', 'HQ', 'Malvinas', 'MDA'] }
+      ];
+    }
+
+    // Datos iniciales idénticos a tu captura del interior
+    if (!interiorRosterData || interiorRosterData.length === 0) {
+      interiorRosterData = [
+        { label: 'Interior', days: ['Patio Olmos', 'Santa FE', 'Palmares', 'Neuquen', 'Rosario'] },
+        { label: 'Interior', days: ['Salta 2013', 'Nuevo Centro', 'Salta 2007', '', ''] },
+        { label: 'Interior', days: ['', '', '', '', ''] }
       ];
     }
 
@@ -835,9 +888,7 @@
 
   // TABS
   function getTabMateClass(tab, index) {
-    if (tab.code === "0000" || tab.id === noteTabId) {
-      return 'tab-mate-notes';
-    }
+    if (tab.code === "0000" || tab.id === noteTabId) return 'tab-mate-notes';
     const codeNum = parseInt(tab.code, 10);
     const colorIndex = isNaN(codeNum) ? (index % 6) : (codeNum % 6);
     return `tab-mate-${colorIndex}`;
@@ -918,7 +969,6 @@
     queueAutoSave();
   }
 
-  // MINIMIZAR SECCIÓN BITÁCORA
   function toggleNotesBody() {
     notesBodyVisible = !notesBodyVisible;
     applyNotesBodyVisibility();
@@ -937,9 +987,7 @@
     }
   }
 
-  // -------------------------------------------------------------
-  // ALTERNAR: "SOLO HOY" VS "VER SEMANA COMPLETA"
-  // -------------------------------------------------------------
+  // ALTERNAR VISTAS
   function toggleWeekView() {
     showFullWeek = !showFullWeek;
     updateRosterViewMode();
@@ -948,35 +996,27 @@
 
   function updateRosterViewMode() {
     const btn = document.getElementById('btnToggleWeekView');
-    const btnPaste = document.getElementById('btnPasteExcel');
-    const btnAdd = document.getElementById('btnAddTech');
     const todayView = document.getElementById('todayFixedView');
     const weekView = document.getElementById('weekGridView');
     const titleEl = document.getElementById('rosterPanelTitle');
 
     if (showFullWeek) {
-      // Modo Grilla Completa
       btn.innerText = '▲ Solo Hoy';
       titleEl.innerText = 'Cronograma Semanal';
       todayView.style.display = 'none';
       weekView.style.display = 'block';
-      btnPaste.style.display = 'inline-flex';
-      btnAdd.style.display = 'inline-flex';
       renderRoster();
     } else {
-      // Modo Fijo Solo Hoy
       btn.innerText = '📅 Ver Semana';
       titleEl.innerText = 'Guardia de Hoy';
       todayView.style.display = 'block';
       weekView.style.display = 'none';
-      btnPaste.style.display = 'none';
-      btnAdd.style.display = 'none';
       renderTodayFixed();
     }
   }
 
   // -------------------------------------------------------------
-  // RENDER: VISTA FIJA DE HOY
+  // VISTA FIJA DE HOY (CONSOLIDADA)
   // -------------------------------------------------------------
   function renderTodayFixed() {
     const container = document.getElementById('todayFixedContent');
@@ -985,58 +1025,79 @@
 
     const dayIndex = getCurrentDayIndex();
 
-    // Caso Fin de Semana
     if (dayIndex === -1) {
       container.innerHTML = `
         <div class="today-fixed-empty">
-          🏖️ <strong>Fin de semana:</strong> Hoy no hay visitas programadas en el cronograma regular.
+          🏖️ <strong>Fin de semana:</strong> No hay cronograma regular para hoy.
         </div>
       `;
       return;
     }
 
-    // Filtrar qué técnicos tienen algo asignado hoy
-    let activeTechs = [];
+    // 1. Técnicos AMBA hoy
+    let ambaList = [];
     rosterData.forEach(t => {
       const m = (t.m[dayIndex] || '').trim();
       const tarde = (t.t[dayIndex] || '').trim();
-      if (m !== '' || tarde !== '') {
-        activeTechs.push({ name: t.name, m, t: tarde });
-      }
+      if (m !== '' || tarde !== '') ambaList.push({ name: t.name, m, t: tarde });
     });
 
-    if (activeTechs.length === 0) {
+    // 2. Complejos del Interior hoy
+    let interiorList = [];
+    interiorRosterData.forEach(row => {
+      const complex = (row.days[dayIndex] || '').trim();
+      if (complex) interiorList.push(complex);
+    });
+
+    if (ambaList.length === 0 && interiorList.length === 0) {
       container.innerHTML = `
         <div class="today-fixed-empty">
-          📍 <strong>Hoy no hay visitas registradas.</strong>
+          📍 <strong>Hoy no hay visitas registradas ni en AMBA ni en el Interior.</strong>
         </div>
       `;
       return;
     }
 
-    let html = `
-      <table class="today-table">
-        <thead>
-          <tr>
-            <th style="width: 35%;">Técnico</th>
-            <th style="width: 32.5%;">Mañana (M)</th>
-            <th style="width: 32.5%;">Tarde (T)</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
+    let html = '';
 
-    activeTechs.forEach(item => {
+    // Tabla AMBA
+    if (ambaList.length > 0) {
       html += `
-        <tr>
-          <td style="color:var(--text-bright); font-weight:700;">${item.name}</td>
-          <td class="${getCellColorClass(item.m)}" style="text-align:center;">${item.m || '---'}</td>
-          <td class="${getCellColorClass(item.t)}" style="text-align:center;">${item.t || '---'}</td>
-        </tr>
+        <table class="today-table">
+          <thead>
+            <tr>
+              <th style="width: 38%;">Técnico (AMBA)</th>
+              <th style="width: 31%;">Mañana (M)</th>
+              <th style="width: 31%;">Tarde (T)</th>
+            </tr>
+          </thead>
+          <tbody>
       `;
-    });
+      ambaList.forEach(item => {
+        html += `
+          <tr>
+            <td style="color:var(--text-bright); font-weight:700;">${item.name}</td>
+            <td class="${getCellColorClass(item.m)}" style="text-align:center;">${item.m || '---'}</td>
+            <td class="${getCellColorClass(item.t)}" style="text-align:center;">${item.t || '---'}</td>
+          </tr>
+        `;
+      });
+      html += `</tbody></table>`;
+    }
 
-    html += `</tbody></table>`;
+    // Listado Interior
+    if (interiorList.length > 0) {
+      html += `
+        <div style="margin-top: 8px;">
+          <span class="section-subtitle" style="color:#fb923c; margin-bottom:4px;">📍 Complejos Interior Asignados Hoy:</span>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+      `;
+      interiorList.forEach(c => {
+        html += `<div class="today-interior-pill">🏛️ ${c}</div>`;
+      });
+      html += `</div></div>`;
+    }
+
     container.innerHTML = html;
   }
 
@@ -1176,7 +1237,7 @@
   }
 
   // -------------------------------------------------------------
-  // LÓGICA DE TABLA EXCEL DINÁMICA
+  // TABLAS SEMANALES (AMBA E INTERIOR)
   // -------------------------------------------------------------
   function getCellColorClass(val) {
     if (!val) return 'cell-default';
@@ -1192,39 +1253,47 @@
     return 'cell-default';
   }
 
-  function addRosterRow() {
-    rosterData.push({
-      name: `Técnico ${rosterData.length + 1}`,
-      m: ['', '', '', '', ''],
-      t: ['', '', '', '', '']
-    });
+  function addRosterRow(type) {
+    if (type === 'interior') {
+      interiorRosterData.push({ label: 'Interior', days: ['', '', '', '', ''] });
+    } else {
+      rosterData.push({
+        name: `Técnico ${rosterData.length + 1}`,
+        m: ['', '', '', '', ''],
+        t: ['', '', '', '', '']
+      });
+    }
     renderRoster();
     renderTodayFixed();
     queueAutoSave();
   }
 
-  function removeRosterRow(index) {
-    rosterData.splice(index, 1);
+  function removeRosterRow(type, index) {
+    if (type === 'interior') {
+      interiorRosterData.splice(index, 1);
+    } else {
+      rosterData.splice(index, 1);
+    }
     renderRoster();
     renderTodayFixed();
     queueAutoSave();
   }
 
   function renderRoster() {
-    const tbody = document.getElementById('rosterTableBody');
-    tbody.innerHTML = '';
     const dayIndex = getCurrentDayIndex();
 
+    // Resaltar encabezados según día
     for (let d = 0; d < 5; d++) {
-      const th = document.getElementById(`thDay${d}`);
-      if (th) {
-        if (d === dayIndex) th.classList.add('col-today');
-        else th.classList.remove('col-today');
-      }
+      const thM = document.getElementById(`thMainDay${d}`);
+      const thI = document.getElementById(`thInteriorDay${d}`);
+      if (thM) d === dayIndex ? thM.classList.add('col-today') : thM.classList.remove('col-today');
+      if (thI) d === dayIndex ? thI.classList.add('col-today') : thI.classList.remove('col-today');
     }
 
+    // 1. Render AMBA (Doble fila M/T)
+    const tbodyAMBA = document.getElementById('rosterTableBody');
+    tbodyAMBA.innerHTML = '';
     rosterData.forEach((tech, i) => {
-      // Fila Mañana (M)
       const trM = document.createElement('tr');
       trM.innerHTML = `
         <td rowspan="2" class="tech-cell">
@@ -1233,83 +1302,129 @@
         <td class="shift-cell">M</td>
         ${tech.m.map((val, d) => `
           <td class="${getCellColorClass(val)} ${d === dayIndex ? 'col-today-cell' : ''}">
-            <input type="text" class="excel-input" value="${val}" oninput="updateRosterCell(${i}, 'm', ${d}, this)">
+            <input type="text" class="excel-input" value="${val}" oninput="updateAMBACell(${i}, 'm', ${d}, this)">
           </td>
         `).join('')}
         <td rowspan="2" style="text-align:center; background:#1e293b;">
-          <button class="btn-danger btn-icon" onclick="removeRosterRow(${i})" title="Eliminar Técnico">✕</button>
+          <button class="btn-danger btn-icon" onclick="removeRosterRow('main', ${i})" title="Eliminar">✕</button>
         </td>
       `;
 
-      // Fila Tarde (T)
       const trT = document.createElement('tr');
       trT.innerHTML = `
         <td class="shift-cell">T</td>
         ${tech.t.map((val, d) => `
           <td class="${getCellColorClass(val)} ${d === dayIndex ? 'col-today-cell' : ''}">
-            <input type="text" class="excel-input" value="${val}" oninput="updateRosterCell(${i}, 't', ${d}, this)">
+            <input type="text" class="excel-input" value="${val}" oninput="updateAMBACell(${i}, 't', ${d}, this)">
           </td>
         `).join('')}
       `;
 
-      tbody.appendChild(trM);
-      tbody.appendChild(trT);
+      tbodyAMBA.appendChild(trM);
+      tbodyAMBA.appendChild(trT);
+    });
+
+    // 2. Render Interior (Fila Simple directa)
+    const tbodyInterior = document.getElementById('interiorRosterTableBody');
+    tbodyInterior.innerHTML = '';
+    interiorRosterData.forEach((row, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="tech-cell" style="background:#475569; color:#f8fafc;">
+          <input type="text" class="excel-input" style="font-weight:800; text-align:center; color:#f8fafc;" value="${row.label || 'Interior'}" oninput="interiorRosterData[${i}].label = this.value; queueAutoSave();">
+        </td>
+        ${row.days.map((val, d) => `
+          <td class="${getCellColorClass(val)} ${d === dayIndex ? 'col-today-cell' : ''}">
+            <input type="text" class="excel-input" value="${val}" oninput="updateInteriorCell(${i}, ${d}, this)">
+          </td>
+        `).join('')}
+        <td style="text-align:center; background:#1e293b;">
+          <button class="btn-danger btn-icon" onclick="removeRosterRow('interior', ${i})" title="Eliminar">✕</button>
+        </td>
+      `;
+      tbodyInterior.appendChild(tr);
     });
   }
 
-  function updateRosterCell(techIndex, shift, dayIndex, inputEl) {
+  function updateAMBACell(techIndex, shift, dayIndex, inputEl) {
     const val = inputEl.value;
     rosterData[techIndex][shift][dayIndex] = val;
-    
-    const td = inputEl.parentElement;
-    const isToday = (dayIndex === getCurrentDayIndex());
-    td.className = `${getCellColorClass(val)} ${isToday ? 'col-today-cell' : ''}`;
-
+    inputEl.parentElement.className = `${getCellColorClass(val)} ${dayIndex === getCurrentDayIndex() ? 'col-today-cell' : ''}`;
     renderTodayFixed();
     queueAutoSave();
   }
 
-  // Pegar datos directo desde Excel
-  async function pasteFromExcelPrompt() {
+  function updateInteriorCell(rowIndex, dayIndex, inputEl) {
+    const val = inputEl.value;
+    interiorRosterData[rowIndex].days[dayIndex] = val;
+    inputEl.parentElement.className = `${getCellColorClass(val)} ${dayIndex === getCurrentDayIndex() ? 'col-today-cell' : ''}`;
+    renderTodayFixed();
+    queueAutoSave();
+  }
+
+  // -------------------------------------------------------------
+  // PEGAR DIRECTO DESDE EXCEL
+  // -------------------------------------------------------------
+  async function pasteFromExcelPrompt(type) {
     try {
       const text = await navigator.clipboard.readText();
       if (!text || !text.includes('\t')) {
-        alert("Copiá primero un rango de celdas desde tu Excel (Ctrl + C) y volvé a tocar este botón.");
+        alert("Copiá primero las celdas desde tu Excel (Ctrl + C) y volvé a tocar este botón.");
         return;
       }
 
-      const rows = text.trim().split(/\r?\n/).map(row => row.split('\t'));
-      let newRoster = [];
-      for (let i = 0; i < rows.length; i += 2) {
-        const rowM = rows[i];
-        const rowT = rows[i + 1] || [];
-        
-        const name = rowM[0] ? rowM[0].trim() : `Técnico ${Math.floor(i/2) + 1}`;
-        const mCols = rowM.slice(rowM[1] === 'M' ? 2 : 1, 7);
-        const tCols = rowT.slice(rowT[1] === 'T' ? 2 : 1, 7);
+      const rawRows = text.trim().split(/\r?\n/).map(row => row.split('\t'));
 
-        while (mCols.length < 5) mCols.push('');
-        while (tCols.length < 5) tCols.push('');
-
-        newRoster.push({
-          name: name,
-          m: mCols.map(s => s.trim()),
-          t: tCols.map(s => s.trim())
+      if (type === 'interior') {
+        // PARSER INTERIOR: Fila simple directa (1 fila de Excel = 1 fila en la web)
+        let newInterior = [];
+        rawRows.forEach(cols => {
+          const label = cols[0] ? cols[0].trim() : 'Interior';
+          const days = cols.slice(1, 6);
+          while (days.length < 5) days.push('');
+          newInterior.push({ label, days: days.map(s => s.trim()) });
         });
-      }
 
-      if (newRoster.length > 0) {
-        rosterData = newRoster;
-        renderRoster();
-        renderTodayFixed();
-        queueAutoSave();
+        if (newInterior.length > 0) {
+          interiorRosterData = newInterior;
+          renderRoster();
+          renderTodayFixed();
+          queueAutoSave();
+        }
+      } else {
+        // PARSER AMBA: Bloques de 2 filas consecutivas (M y T)
+        let newAMBA = [];
+        for (let i = 0; i < rawRows.length; i += 2) {
+          const rowM = rawRows[i];
+          const rowT = rawRows[i + 1] || [];
+
+          const name = rowM[0] ? rowM[0].trim() : `Técnico ${Math.floor(i/2) + 1}`;
+          const mCols = rowM.slice(rowM[1] === 'M' ? 2 : 1, 7);
+          const tCols = rowT.slice(rowT[1] === 'T' ? 2 : 1, 7);
+
+          while (mCols.length < 5) mCols.push('');
+          while (tCols.length < 5) tCols.push('');
+
+          newAMBA.push({
+            name: name,
+            m: mCols.map(s => s.trim()),
+            t: tCols.map(s => s.trim())
+          });
+        }
+
+        if (newAMBA.length > 0) {
+          rosterData = newAMBA;
+          renderRoster();
+          renderTodayFixed();
+          queueAutoSave();
+        }
       }
     } catch (err) {
-      alert("No se pudo leer el portapapeles. Permití el acceso al navegador.");
+      alert("Permití el acceso al portapapeles para pegar.");
     }
   }
 
-  // LÓGICA DE COMPLEJOS Y TICKETS
+  // RUTINAS Y EQUIPOS
   function renderStaticLines() {
     const lines = [
       { id: 'visita', text: 'SW informa que se realizo la visita semanal de' },
