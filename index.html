@@ -30,7 +30,7 @@
       background-color: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 12px 16px;
+      padding: 10px 14px;
       font-size: 13px;
     }
 
@@ -51,7 +51,7 @@
       text-align: center;
     }
 
-    /* Top Navigation Bar */
+    /* Header Compacto */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -60,20 +60,20 @@
       border: 1px solid var(--border);
       padding: 6px 14px;
       border-radius: 6px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       gap: 12px;
     }
 
     .top-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .app-brand {
-      font-weight: 700;
-      color: var(--text-bright);
-      font-size: 0.95rem;
+      font-weight: 800;
+      color: #38bdf8;
+      font-size: 1rem;
       letter-spacing: 0.5px;
     }
 
@@ -92,7 +92,7 @@
     }
 
     .search-inline input {
-      width: 170px;
+      width: 150px;
       padding: 4px 8px;
       font-size: 0.8rem;
     }
@@ -100,25 +100,35 @@
     .top-right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
 
+    /* RELOJ LLAMATIVO */
     .clock-display {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.85rem;
-      color: var(--text-bright);
-      background: var(--card-subtle);
-      padding: 4px 10px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      background: #020617;
+      border: 1px solid #0284c7;
+      padding: 3px 10px;
       border-radius: 4px;
-      border: 1px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    }
+
+    .clock-date {
+      color: #facc15;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-transform: uppercase;
     }
 
     .clock-time {
       color: #38bdf8;
-      font-weight: bold;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
     }
 
     .user-tag {
@@ -126,7 +136,7 @@
       color: var(--text-muted);
     }
 
-    /* Forms & Inputs */
+    /* Form Controls */
     input, textarea, select {
       background: var(--card-subtle);
       border: 1px solid var(--border);
@@ -153,7 +163,7 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      transition: background 0.15s ease;
+      transition: all 0.15s ease;
     }
 
     button:hover {
@@ -191,7 +201,7 @@
       display: flex;
       gap: 4px;
       border-bottom: 1px solid var(--border);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       overflow-x: auto;
     }
 
@@ -226,11 +236,11 @@
       color: var(--danger);
     }
 
-    /* 2 Columns Grid Layout */
+    /* Layout 2 Columnas */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 10px;
       align-items: start;
     }
 
@@ -238,21 +248,21 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 12px;
+      padding: 10px;
     }
 
     .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      padding-bottom: 6px;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
       border-bottom: 1px solid var(--border);
     }
 
     .panel-title {
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
       color: var(--text-bright);
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -264,24 +274,24 @@
       letter-spacing: 0.5px;
       color: var(--text-muted);
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: block;
     }
 
-    /* Checklist */
+    /* Checklist & Cards */
     .checklist-box {
       background: var(--card-subtle);
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 8px;
-      margin-bottom: 12px;
+      padding: 6px;
+      margin-bottom: 8px;
     }
 
     .checklist-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 4px 0;
+      padding: 3px 0;
       border-bottom: 1px solid rgba(255,255,255,0.03);
     }
 
@@ -294,20 +304,19 @@
       color: var(--text-muted);
     }
 
-    /* Compact Cards */
     .note-card {
       background: var(--card-subtle);
       border: 1px solid var(--border);
       border-radius: 4px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       overflow: hidden;
     }
 
     .note-card-header {
       display: flex;
       align-items: center;
-      padding: 6px 8px;
-      gap: 8px;
+      padding: 4px 6px;
+      gap: 6px;
       background: rgba(255,255,255,0.02);
     }
 
@@ -330,13 +339,13 @@
     }
 
     .ticket-chip {
-      width: 100px;
-      padding: 2px 6px;
+      width: 90px;
+      padding: 2px 4px;
       font-size: 0.75rem;
     }
 
     .note-card-body {
-      padding: 8px;
+      padding: 6px;
     }
 
     .note-card-body.hidden {
@@ -345,59 +354,99 @@
 
     textarea {
       width: 100%;
-      height: 55px;
+      height: 50px;
       resize: vertical;
     }
 
-    /* Excel-Style Roster Table */
-    .excel-table-container {
+    /* -----------------------------------------------------------
+       TABLA EXCEL OPERATIVA CON SUB-FILAS (M/T) Y COLORES
+    ----------------------------------------------------------- */
+    .excel-container {
       overflow-x: auto;
+      background: #000000;
+      border: 1px solid #334155;
+      border-radius: 4px;
     }
 
     .excel-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+      font-family: inherit;
     }
 
     .excel-table th {
-      background: #11141a;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-align: left;
-      padding: 6px 8px;
-      border: 1px solid var(--border);
-      text-transform: uppercase;
-      font-size: 0.7rem;
+      background: #fde047;
+      color: #000000;
+      font-weight: 800;
+      text-align: center;
+      padding: 4px;
+      border: 1px solid #475569;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
     }
 
     .excel-table td {
-      border: 1px solid var(--border);
-      padding: 2px 4px;
-      background: var(--card-subtle);
+      border: 1px solid #475569;
+      padding: 0;
+      height: 22px;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: 600;
     }
 
-    .excel-table input, .excel-table select {
+    .tech-cell {
+      background: #94a3b8;
+      color: #0f172a;
+      font-weight: 800;
+      padding: 4px !important;
+      text-align: center;
+    }
+
+    .shift-cell {
+      background: #cbd5e1;
+      color: #0f172a;
+      font-weight: 800;
+      width: 22px;
+      text-align: center;
+    }
+
+    .excel-input {
       width: 100%;
-      background: transparent;
+      height: 100%;
       border: none;
-      padding: 4px;
-      color: var(--text-bright);
-      font-size: 0.8rem;
+      background: transparent;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: inherit;
+      padding: 2px;
     }
 
-    .excel-table input:focus, .excel-table select:focus {
-      background: var(--bg);
-      outline: none;
+    .excel-input:focus {
+      outline: 2px solid #38bdf8;
+      background: #000000 !important;
+      color: #ffffff !important;
     }
 
-    /* Routine Line Items for Complexes */
+    /* Clases de colores dinámicos idénticos al Excel */
+    .cell-hq { background-color: #fbcfe8 !important; color: #831843 !important; }
+    .cell-cmk { background-color: #fef08a !important; color: #713f12 !important; }
+    .cell-sdo { background-color: #475569 !important; color: #ffffff !important; }
+    .cell-wns { background-color: #38bdf8 !important; color: #082f49 !important; }
+    .cell-cipe { background-color: #7e22ce !important; color: #ffffff !important; }
+    .cell-mda { background-color: #facc15 !important; color: #000000 !important; font-weight: 900 !important; }
+    .cell-red { background-color: #ef4444 !important; color: #ffffff !important; }
+    .cell-green { background-color: #bbf7d0 !important; color: #14532d !important; }
+    .cell-default { background-color: #ffffff !important; color: #000000 !important; }
+
+    /* Líneas estándar para complejos */
     .line-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--card-subtle);
-      padding: 6px 10px;
+      padding: 5px 8px;
       margin-bottom: 4px;
       border-radius: 4px;
       border: 1px solid var(--border);
@@ -406,13 +455,13 @@
 
     .line-text {
       flex: 1;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN BOX -->
+  <!-- MODAL DE AUTENTICACIÓN -->
   <div id="authView" class="auth-container">
     <h2>Iniciar Sesión</h2>
     <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -439,9 +488,9 @@
       </div>
 
       <div class="top-right">
-        <!-- RELOJ DIGITAL EN VIVO -->
+        <!-- RELOJ DESTACADO -->
         <div class="clock-display">
-          <span id="liveDate" style="color:var(--text-muted);">---</span>
+          <span id="liveDate" class="clock-date">---</span>
           <span id="liveTime" class="clock-time">00:00:00</span>
         </div>
         <span class="user-tag" id="userDisplay"></span>
@@ -452,22 +501,21 @@
     <!-- PESTAÑAS -->
     <div class="tabs-bar" id="tabsContainer"></div>
 
-    <!-- CONTENIDO 1: MODO PERSONAL (2 COLUMNAS) -->
+    <!-- MODO 1: TABLERO OPERATIVO PRINCIPAL (2 COLUMNAS) -->
     <div id="notesWorkspace" class="dashboard-grid" style="display: none;">
       
-      <!-- COLUMNA IZQUIERDA: BITÁCORA Y NOTAS -->
+      <!-- COLUMNA IZQUIERDA: BITÁCORA Y TAREAS -->
       <div class="panel">
         <div class="panel-header">
           <span class="panel-title">Bitácora & Tareas</span>
           <div style="display:flex; gap:6px;">
-            <button class="btn-icon" onclick="toggleNotesBody()" id="btnToggleNotesBody" title="Minimizar panel">Plegar</button>
+            <button class="btn-icon" onclick="toggleNotesBody()" id="btnToggleNotesBody">Plegar</button>
             <button class="btn-primary btn-icon" onclick="addCustomLine()">+ Tarjeta</button>
           </div>
         </div>
 
         <div id="notesCollapsibleContent">
-          <!-- Checklist -->
-          <span class="section-subtitle">Checklist / Turno</span>
+          <span class="section-subtitle">Checklist Diario</span>
           <div class="checklist-box">
             <div style="display:flex; gap:6px; margin-bottom: 6px;">
               <input type="text" id="newTodoInput" placeholder="Nueva tarea..." style="flex:1;" onkeypress="if(event.key==='Enter') addTodo()">
@@ -476,38 +524,46 @@
             <div id="todosContainer"></div>
           </div>
 
-          <!-- Tarjetas Colapsables -->
           <span class="section-subtitle">Tarjetas de Apuntes</span>
           <div id="customCardsContainer"></div>
         </div>
       </div>
 
-      <!-- COLUMNA DERECHA: PLANILLA EXCEL TÉCNICOS EN VIVO -->
+      <!-- COLUMNA DERECHA: GRILLA DE TÉCNICOS ESTILO EXCEL -->
       <div class="panel">
         <div class="panel-header">
-          <span class="panel-title">Distribución de Técnicos (En Vivo)</span>
-          <button class="btn-primary btn-icon" onclick="addRosterRow()">+ Fila</button>
+          <span class="panel-title">Rango de Técnicos / Guardia Semanal</span>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-icon" onclick="pasteFromExcelPrompt()" title="Pegar datos directo desde Excel">📋 Pegar Excel</button>
+            <button class="btn-primary btn-icon" onclick="addRosterRow()">+ Técnico</button>
+            <button class="btn-icon" onclick="toggleRosterBody()" id="btnToggleRosterBody">Plegar</button>
+          </div>
         </div>
 
-        <div class="excel-table-container">
-          <table class="excel-table">
-            <thead>
-              <tr>
-                <th style="width: 25%;">Técnico</th>
-                <th style="width: 25%;">Complejo / Destino</th>
-                <th style="width: 30%;">Estado / Tarea</th>
-                <th style="width: 15%;">Horario</th>
-                <th style="width: 5%;"></th>
-              </tr>
-            </thead>
-            <tbody id="rosterTableBody"></tbody>
-          </table>
+        <div id="rosterCollapsibleContent">
+          <div class="excel-container">
+            <table class="excel-table">
+              <thead>
+                <tr>
+                  <th style="width: 22%;">Técnicos</th>
+                  <th style="width: 4%;"></th>
+                  <th style="width: 14.8%;">Lunes</th>
+                  <th style="width: 14.8%;">Martes</th>
+                  <th style="width: 14.8%;">Miércoles</th>
+                  <th style="width: 14.8%;">Jueves</th>
+                  <th style="width: 14.8%;">Viernes</th>
+                  <th style="width: 4%;"></th>
+                </tr>
+              </thead>
+              <tbody id="rosterTableBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
     </div>
 
-    <!-- CONTENIDO 2: MODO COMPLEJO SELECCIONADO -->
+    <!-- MODO 2: COMPLEJO ACTIVO (RELEVOS, RUTINAS Y TICKETS) -->
     <div id="complexWorkspace" class="panel" style="display: none;">
       <div class="panel-header">
         <span class="panel-title" id="complexTitleDisplay">Complejo</span>
@@ -518,7 +574,7 @@
       <div id="staticLines"></div>
 
       <div style="margin: 12px 0;">
-        <span class="section-subtitle">Pegar mezcla de Equipos / Impresoras (ej: KI02 SN03):</span>
+        <span class="section-subtitle">Pegar Equipos / Impresoras (ej: KI02 SN03):</span>
         <textarea id="rawEquipments" placeholder="KI02 SN03 SN04..." oninput="processEquipments()"></textarea>
       </div>
 
@@ -559,12 +615,13 @@
   let userTodos = [];
   let rosterData = [];
   let notesBodyVisible = true;
+  let rosterBodyVisible = true;
   let saveTimeout = null;
 
-  // RELOJ EN TIEMPO REAL
+  // RELOJ LLAMATIVO
   function updateClock() {
     const now = new Date();
-    const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const days = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
     const dName = days[now.getDay()];
     const dNum = String(now.getDate()).padStart(2, '0');
     const mNum = String(now.getMonth() + 1).padStart(2, '0');
@@ -650,7 +707,8 @@
       currentTabId,
       userTodos,
       rosterData,
-      notesBodyVisible
+      notesBodyVisible,
+      rosterBodyVisible
     };
 
     const { error } = await sbClient
@@ -679,6 +737,7 @@
       userTodos = data.data.userTodos || [];
       rosterData = data.data.rosterData || [];
       notesBodyVisible = data.data.notesBodyVisible !== undefined ? data.data.notesBodyVisible : true;
+      rosterBodyVisible = data.data.rosterBodyVisible !== undefined ? data.data.rosterBodyVisible : true;
     }
 
     if (!activeTabs || activeTabs.length === 0) {
@@ -693,14 +752,44 @@
       currentTabId = noteTabId;
     }
 
+    // Datos por defecto idénticos al Excel
     if (!rosterData || rosterData.length === 0) {
       rosterData = [
-        { tech: 'Técnico 1', complex: 'Unicenter (2000)', task: 'Mantenimiento Preventivo', time: '10:00 - 14:00' },
-        { tech: 'Técnico 2', complex: 'Palermo (0733)', task: 'Cambio de Fuente KI01', time: '12:00 - 15:30' }
+        {
+          name: 'Técnico 1',
+          m: ['HQ', 'HQ', 'HQ', 'WNS', 'Unicenter'],
+          t: ['HQ', 'HQ', 'HQ', 'Soleil', 'MDA']
+        },
+        {
+          name: 'Técnico 2',
+          m: ['OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK'],
+          t: ['OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK']
+        },
+        {
+          name: 'Técnico 3',
+          m: ['WNS', 'WNS', 'San Justo', 'HQ', 'HQ'],
+          t: ['Caballito', 'Palermo', 'MDA', 'HQ', 'HQ']
+        },
+        {
+          name: 'Técnico 4',
+          m: ['OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO'],
+          t: ['OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO']
+        },
+        {
+          name: 'Técnico 5',
+          m: ['Cipe', 'Cipe', 'Cipe', 'Temperley', 'Cipe'],
+          t: ['Parque Brown', 'Quilmes', 'Madero', 'MDA', 'MDA']
+        },
+        {
+          name: 'Técnico 6',
+          m: ['Abasto', 'Tortugas', 'GUARDIA', 'Global', 'Moron'],
+          t: ['OFICINA-CMK', 'Malvinas', 'GUARDIA', 'Dot', 'MDA']
+        }
       ];
     }
 
     applyNotesBodyVisibility();
+    applyRosterBodyVisibility();
     renderTabs();
     selectTab(currentTabId);
   }
@@ -779,7 +868,7 @@
     queueAutoSave();
   }
 
-  // MINIMIZAR CUADRO NOTAS
+  // MINIMIZAR SECCIONES
   function toggleNotesBody() {
     notesBodyVisible = !notesBodyVisible;
     applyNotesBodyVisibility();
@@ -790,6 +879,24 @@
     const el = document.getElementById('notesCollapsibleContent');
     const btn = document.getElementById('btnToggleNotesBody');
     if (notesBodyVisible) {
+      el.style.display = 'block';
+      btn.innerText = 'Plegar';
+    } else {
+      el.style.display = 'none';
+      btn.innerText = 'Expandir';
+    }
+  }
+
+  function toggleRosterBody() {
+    rosterBodyVisible = !rosterBodyVisible;
+    applyRosterBodyVisibility();
+    queueAutoSave();
+  }
+
+  function applyRosterBodyVisibility() {
+    const el = document.getElementById('rosterCollapsibleContent');
+    const btn = document.getElementById('btnToggleRosterBody');
+    if (rosterBodyVisible) {
       el.style.display = 'block';
       btn.innerText = 'Plegar';
     } else {
@@ -850,7 +957,7 @@
       title: 'Nota rápida',
       text: '',
       ticket: '',
-      isOpen: false // colapsada de entrada para mantenerlo minimalista
+      isOpen: false
     });
 
     const targetContainer = (tab.code === "0000") ? 'customCardsContainer' : 'complexCustomCardsContainer';
@@ -882,7 +989,7 @@
       const ticketInput = document.createElement('input');
       ticketInput.type = 'text';
       ticketInput.className = 'ticket-chip';
-      ticketInput.placeholder = 'INC # (opc)';
+      ticketInput.placeholder = 'INC #';
       ticketInput.value = item.ticket || '';
       ticketInput.oninput = (e) => { item.ticket = e.target.value; queueAutoSave(); };
 
@@ -933,9 +1040,29 @@
     });
   }
 
-  // PLANILLA EXCEL TÉCNICOS
+  // -------------------------------------------------------------
+  // LÓGICA DE TABLA EXCEL DINÁMICA (TÉCNICOS Y TURNOS)
+  // -------------------------------------------------------------
+  function getCellColorClass(val) {
+    if (!val) return 'cell-default';
+    const text = val.trim().toUpperCase();
+    if (text === 'HQ') return 'cell-hq';
+    if (text.includes('CMK')) return 'cell-cmk';
+    if (text.includes('SDO')) return 'cell-sdo';
+    if (text === 'WNS') return 'cell-wns';
+    if (text === 'CIPE') return 'cell-cipe';
+    if (text === 'MDA') return 'cell-mda';
+    if (text.includes('GUARDIA') || text.includes('FERIADO') || text.includes('FRANCO')) return 'cell-red';
+    if (text.includes('GLOBAL')) return 'cell-green';
+    return 'cell-default';
+  }
+
   function addRosterRow() {
-    rosterData.push({ tech: '', complex: '', task: '', time: '' });
+    rosterData.push({
+      name: `Técnico ${rosterData.length + 1}`,
+      m: ['', '', '', '', ''],
+      t: ['', '', '', '', '']
+    });
     renderRoster();
     queueAutoSave();
   }
@@ -950,20 +1077,95 @@
     const tbody = document.getElementById('rosterTableBody');
     tbody.innerHTML = '';
 
-    rosterData.forEach((row, i) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input type="text" value="${row.tech || ''}" placeholder="Nombre técnico" oninput="rosterData[${i}].tech = this.value; queueAutoSave();"></td>
-        <td><input type="text" value="${row.complex || ''}" placeholder="Complejo..." oninput="rosterData[${i}].complex = this.value; queueAutoSave();"></td>
-        <td><input type="text" value="${row.task || ''}" placeholder="Tarea / Guardia" oninput="rosterData[${i}].task = this.value; queueAutoSave();"></td>
-        <td><input type="text" value="${row.time || ''}" placeholder="Turno" oninput="rosterData[${i}].time = this.value; queueAutoSave();"></td>
-        <td style="text-align:center;"><button class="btn-danger btn-icon" onclick="removeRosterRow(${i})">✕</button></td>
+    rosterData.forEach((tech, i) => {
+      // Fila Mañana (M)
+      const trM = document.createElement('tr');
+      trM.innerHTML = `
+        <td rowspan="2" class="tech-cell">
+          <input type="text" class="excel-input" style="font-weight:800; text-align:center; color:#0f172a;" value="${tech.name}" oninput="rosterData[${i}].name = this.value; queueAutoSave();">
+        </td>
+        <td class="shift-cell">M</td>
+        ${tech.m.map((val, d) => `
+          <td class="${getCellColorClass(val)}">
+            <input type="text" class="excel-input" value="${val}" oninput="updateRosterCell(${i}, 'm', ${d}, this)">
+          </td>
+        `).join('')}
+        <td rowspan="2" style="text-align:center; background:#1e293b;">
+          <button class="btn-danger btn-icon" onclick="removeRosterRow(${i})" title="Eliminar Técnico">✕</button>
+        </td>
       `;
-      tbody.appendChild(tr);
+
+      // Fila Tarde (T)
+      const trT = document.createElement('tr');
+      trT.innerHTML = `
+        <td class="shift-cell">T</td>
+        ${tech.t.map((val, d) => `
+          <td class="${getCellColorClass(val)}">
+            <input type="text" class="excel-input" value="${val}" oninput="updateRosterCell(${i}, 't', ${d}, this)">
+          </td>
+        `).join('')}
+      `;
+
+      tbody.appendChild(trM);
+      tbody.appendChild(trT);
     });
   }
 
-  // RELEVOS Y LIMPIEZAS
+  function updateRosterCell(techIndex, shift, dayIndex, inputEl) {
+    const val = inputEl.value;
+    rosterData[techIndex][shift][dayIndex] = val;
+    
+    // Aplicar color en vivo a la celda
+    const td = inputEl.parentElement;
+    td.className = getCellColorClass(val);
+
+    queueAutoSave();
+  }
+
+  // Pegar datos directo desde Excel
+  async function pasteFromExcelPrompt() {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text || !text.includes('\t')) {
+        alert("Copiá primero un rango de celdas desde tu Excel (Ctrl + C) y volvé a tocar este botón.");
+        return;
+      }
+
+      const rows = text.trim().split(/\r?\n/).map(row => row.split('\t'));
+      
+      // Si el formato viene con M y T consecutivas por cada técnico
+      let newRoster = [];
+      for (let i = 0; i < rows.length; i += 2) {
+        const rowM = rows[i];
+        const rowT = rows[i + 1] || [];
+        
+        // Asumiendo Col 0: Técnico, Col 1: Turno (M/T), Col 2..6: Lunes a Viernes
+        const name = rowM[0] ? rowM[0].trim() : `Técnico ${Math.floor(i/2) + 1}`;
+        const mCols = rowM.slice(rowM[1] === 'M' ? 2 : 1, 7);
+        const tCols = rowT.slice(rowT[1] === 'T' ? 2 : 1, 7);
+
+        // Completar a 5 días
+        while (mCols.length < 5) mCols.push('');
+        while (tCols.length < 5) tCols.push('');
+
+        newRoster.push({
+          name: name,
+          m: mCols.map(s => s.trim()),
+          t: tCols.map(s => s.trim())
+        });
+      }
+
+      if (newRoster.length > 0) {
+        rosterData = newRoster;
+        renderRoster();
+        queueAutoSave();
+      }
+    } catch (err) {
+      alert("No se pudo leer el portapapeles. Permití el acceso al navegador.");
+    }
+  }
+
+  // LÓGICA DE COMPLEJOS Y TICKETS
   function renderStaticLines() {
     const lines = [
       { id: 'visita', text: 'SW informa que se realizo la visita semanal de' },
@@ -1010,7 +1212,7 @@
 
     const input = document.createElement('input');
     input.type = 'text';
-    input.style.width = '120px';
+    input.style.width = '110px';
     input.placeholder = 'INC #';
     input.value = savedVal;
     input.oninput = (e) => {
