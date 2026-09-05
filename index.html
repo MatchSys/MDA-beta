@@ -201,7 +201,7 @@
       font-size: 0.75rem;
     }
 
-    /* Tabs Bar con tonos mate diferenciados */
+    /* Tabs Bar */
     .tabs-bar {
       display: flex;
       gap: 5px;
@@ -224,17 +224,9 @@
       transition: filter 0.15s ease, transform 0.1s ease;
     }
 
-    .tab:hover {
-      filter: brightness(1.15);
-    }
+    .tab:hover { filter: brightness(1.15); }
+    .tab.active { font-weight: 700; border-bottom: 1px solid var(--card-bg); transform: translateY(1px); }
 
-    .tab.active {
-      font-weight: 700;
-      border-bottom: 1px solid var(--card-bg);
-      transform: translateY(1px);
-    }
-
-    /* Paleta mate para complejos */
     .tab-mate-notes { background: #1e293b; color: #94a3b8; border-top: 2.5px solid #64748b; }
     .tab-mate-notes.active { background: var(--card-bg); color: #f8fafc; border-top-color: #38bdf8; }
 
@@ -262,10 +254,79 @@
       padding: 0 2px;
       opacity: 0.7;
     }
+    .tab .close-tab:hover { color: var(--danger); opacity: 1; }
 
-    .tab .close-tab:hover {
-      color: var(--danger);
-      opacity: 1;
+    /* -----------------------------------------------------------
+       BANNER HORIZONTAL: VISITAS DE HOY
+    ----------------------------------------------------------- */
+    .today-banner {
+      background: #020617;
+      border: 1.5px solid #38bdf8;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+    }
+
+    .today-banner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .today-banner-title {
+      font-weight: 800;
+      color: #38bdf8;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .today-cards-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .today-tech-card {
+      min-width: 140px;
+      background: var(--card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .today-tech-name {
+      font-weight: 800;
+      color: var(--text-bright);
+      font-size: 0.8rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .today-tech-slot {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+    }
+
+    .today-slot-pill {
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 2px;
+      font-size: 0.7rem;
     }
 
     /* Layout 2 Columnas */
@@ -327,14 +388,8 @@
       border-bottom: 1px solid rgba(255,255,255,0.03);
     }
 
-    .checklist-item:last-child {
-      border-bottom: none;
-    }
-
-    .checklist-item.done span {
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-item.done span { text-decoration: line-through; color: var(--text-muted); }
 
     .note-card {
       background: var(--card-subtle);
@@ -352,9 +407,7 @@
       background: rgba(255,255,255,0.02);
     }
 
-    .note-card-header.open {
-      border-bottom: 1px solid var(--border);
-    }
+    .note-card-header.open { border-bottom: 1px solid var(--border); }
 
     .note-title-input {
       flex: 1;
@@ -365,30 +418,12 @@
       padding: 2px 4px;
     }
 
-    .note-title-input:focus {
-      background: var(--bg);
-      border-color: var(--accent);
-    }
+    .note-title-input:focus { background: var(--bg); border-color: var(--accent); }
+    .ticket-chip { width: 90px; padding: 2px 4px; font-size: 0.75rem; }
+    .note-card-body { padding: 6px; }
+    .note-card-body.hidden { display: none; }
 
-    .ticket-chip {
-      width: 90px;
-      padding: 2px 4px;
-      font-size: 0.75rem;
-    }
-
-    .note-card-body {
-      padding: 6px;
-    }
-
-    .note-card-body.hidden {
-      display: none;
-    }
-
-    textarea {
-      width: 100%;
-      height: 50px;
-      resize: vertical;
-    }
+    textarea { width: 100%; height: 50px; resize: vertical; }
 
     /* TABLA EXCEL OPERATIVA */
     .excel-container {
@@ -416,6 +451,13 @@
       letter-spacing: 0.5px;
     }
 
+    .excel-table th.col-today {
+      background: #38bdf8 !important;
+      color: #000000 !important;
+      font-weight: 900 !important;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+    }
+
     .excel-table td {
       border: 1px solid #475569;
       padding: 0;
@@ -423,6 +465,11 @@
       text-align: center;
       vertical-align: middle;
       font-weight: 600;
+    }
+
+    .excel-table td.col-today-cell {
+      border-left: 2px solid #38bdf8 !important;
+      border-right: 2px solid #38bdf8 !important;
     }
 
     .tech-cell {
@@ -459,7 +506,7 @@
       color: #ffffff !important;
     }
 
-    /* Clases de colores dinámicos */
+    /* Colores automáticos */
     .cell-hq { background-color: #fbcfe8 !important; color: #831843 !important; }
     .cell-cmk { background-color: #fef08a !important; color: #713f12 !important; }
     .cell-sdo { background-color: #475569 !important; color: #ffffff !important; }
@@ -470,7 +517,7 @@
     .cell-green { background-color: #bbf7d0 !important; color: #14532d !important; }
     .cell-default { background-color: #ffffff !important; color: #000000 !important; }
 
-    /* Líneas estándar para complejos */
+    /* Complejos */
     .line-item {
       display: flex;
       justify-content: space-between;
@@ -482,11 +529,7 @@
       border: 1px solid var(--border);
       gap: 8px;
     }
-
-    .line-text {
-      flex: 1;
-      font-size: 0.8rem;
-    }
+    .line-text { flex: 1; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -525,6 +568,15 @@
 
     <!-- PESTAÑAS -->
     <div class="tabs-bar" id="tabsContainer"></div>
+
+    <!-- BANNER HORIZONTAL: VISITAS DE HOY (ALERTA ACTIVA) -->
+    <div id="todayBannerContainer" class="today-banner" style="display: none;">
+      <div class="today-banner-header">
+        <span class="today-banner-title" id="todayBannerTitle">📍 VISITAS Y GUARDIA DE HOY</span>
+        <button class="btn-icon" onclick="toggleTodayBanner()" id="btnToggleTodayBanner">Plegar</button>
+      </div>
+      <div id="todayBannerContent" class="today-cards-row"></div>
+    </div>
 
     <!-- MODO 1: TABLERO OPERATIVO PRINCIPAL (2 COLUMNAS) -->
     <div id="notesWorkspace" class="dashboard-grid" style="display: none;">
@@ -581,11 +633,11 @@
                 <tr>
                   <th style="width: 22%;">Técnicos</th>
                   <th style="width: 4%;"></th>
-                  <th style="width: 14.8%;">Lunes</th>
-                  <th style="width: 14.8%;">Martes</th>
-                  <th style="width: 14.8%;">Miércoles</th>
-                  <th style="width: 14.8%;">Jueves</th>
-                  <th style="width: 14.8%;">Viernes</th>
+                  <th id="thDay0" style="width: 14.8%;">Lunes</th>
+                  <th id="thDay1" style="width: 14.8%;">Martes</th>
+                  <th id="thDay2" style="width: 14.8%;">Miércoles</th>
+                  <th id="thDay3" style="width: 14.8%;">Jueves</th>
+                  <th id="thDay4" style="width: 14.8%;">Viernes</th>
                   <th style="width: 4%;"></th>
                 </tr>
               </thead>
@@ -650,6 +702,7 @@
   let rosterData = [];
   let notesBodyVisible = true;
   let rosterBodyVisible = true;
+  let todayBannerVisible = true;
   let saveTimeout = null;
 
   // RELOJ LLAMATIVO
@@ -671,6 +724,15 @@
   }
   setInterval(updateClock, 1000);
   updateClock();
+
+  // OBTENER ÍNDICE DEL DÍA ACTUAL (Lunes=0 ... Viernes=4)
+  function getCurrentDayIndex() {
+    const day = new Date().getDay();
+    if (day >= 1 && day <= 5) {
+      return day - 1;
+    }
+    return -1; // Fin de semana
+  }
 
   // AUTENTICACIÓN
   async function checkSession() {
@@ -744,7 +806,8 @@
       userTodos,
       rosterData,
       notesBodyVisible,
-      rosterBodyVisible
+      rosterBodyVisible,
+      todayBannerVisible
     };
 
     const { error } = await sbClient
@@ -774,6 +837,7 @@
       rosterData = data.data.rosterData || [];
       notesBodyVisible = data.data.notesBodyVisible !== undefined ? data.data.notesBodyVisible : true;
       rosterBodyVisible = data.data.rosterBodyVisible !== undefined ? data.data.rosterBodyVisible : true;
+      todayBannerVisible = data.data.todayBannerVisible !== undefined ? data.data.todayBannerVisible : true;
     }
 
     if (!activeTabs || activeTabs.length === 0) {
@@ -790,51 +854,24 @@
 
     if (!rosterData || rosterData.length === 0) {
       rosterData = [
-        {
-          name: 'Técnico 1',
-          m: ['HQ', 'HQ', 'HQ', 'WNS', 'Unicenter'],
-          t: ['HQ', 'HQ', 'HQ', 'Soleil', 'MDA']
-        },
-        {
-          name: 'Técnico 2',
-          m: ['OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK'],
-          t: ['OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK']
-        },
-        {
-          name: 'Técnico 3',
-          m: ['WNS', 'WNS', 'San Justo', 'HQ', 'HQ'],
-          t: ['Caballito', 'Palermo', 'MDA', 'HQ', 'HQ']
-        },
-        {
-          name: 'Técnico 4',
-          m: ['OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO'],
-          t: ['OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO', 'OFICINA-SDO']
-        },
-        {
-          name: 'Técnico 5',
-          m: ['Cipe', 'Cipe', 'Cipe', 'Temperley', 'Cipe'],
-          t: ['Parque Brown', 'Quilmes', 'Madero', 'MDA', 'MDA']
-        },
-        {
-          name: 'Técnico 6',
-          m: ['Abasto', 'Tortugas', 'GUARDIA', 'Global', 'Moron'],
-          t: ['OFICINA-CMK', 'Malvinas', 'GUARDIA', 'Dot', 'MDA']
-        }
+        { name: 'Daniel', m: ['HQ', 'HQ', 'HQ', 'Tortugas', 'WNS'], t: ['HQ', 'HQ', 'HQ', 'Malvinas', 'MDA'] },
+        { name: 'Técnico 2', m: ['OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK'], t: ['OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK', 'OFICINA-CMK'] },
+        { name: 'Técnico 3', m: ['WNS', 'WNS', 'San Justo', 'HQ', 'HQ'], t: ['Caballito', 'Palermo', 'MDA', 'HQ', 'HQ'] }
       ];
     }
 
     applyNotesBodyVisibility();
     applyRosterBodyVisibility();
+    applyTodayBannerVisibility();
     renderTabs();
     selectTab(currentTabId);
   }
 
-  // TABS CON COLORES MATE DISTINTIVOS
+  // TABS
   function getTabMateClass(tab, index) {
     if (tab.code === "0000" || tab.id === noteTabId) {
       return 'tab-mate-notes';
     }
-    // Asignación de color determinística según código para mantener consistencia
     const codeNum = parseInt(tab.code, 10);
     const colorIndex = isNaN(codeNum) ? (index % 6) : (codeNum % 6);
     return `tab-mate-${colorIndex}`;
@@ -888,12 +925,14 @@
 
     const isNotes = tab.code === "0000";
     document.getElementById('notesWorkspace').style.display = isNotes ? 'grid' : 'none';
+    document.getElementById('todayBannerContainer').style.display = isNotes ? 'block' : 'none';
     document.getElementById('complexWorkspace').style.display = isNotes ? 'none' : 'block';
 
     if (isNotes) {
       renderTodos();
       renderCustomCards('customCardsContainer');
       renderRoster();
+      renderTodayBanner();
     } else {
       document.getElementById('complexTitleDisplay').innerText = `${tab.name} (${tab.code})`;
       document.getElementById('rawEquipments').value = tab.rawInput || "";
@@ -949,6 +988,64 @@
       el.style.display = 'none';
       btn.innerText = 'Expandir';
     }
+  }
+
+  function toggleTodayBanner() {
+    todayBannerVisible = !todayBannerVisible;
+    applyTodayBannerVisibility();
+    queueAutoSave();
+  }
+
+  function applyTodayBannerVisibility() {
+    const content = document.getElementById('todayBannerContent');
+    const btn = document.getElementById('btnToggleTodayBanner');
+    if (todayBannerVisible) {
+      content.style.display = 'flex';
+      btn.innerText = 'Plegar';
+    } else {
+      content.style.display = 'none';
+      btn.innerText = 'Expandir';
+    }
+  }
+
+  // -------------------------------------------------------------
+  // RENDER: BANNER HORIZONTAL DE VISITAS DE HOY
+  // -------------------------------------------------------------
+  function renderTodayBanner() {
+    const dayIndex = getCurrentDayIndex();
+    const daysNames = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
+    const titleEl = document.getElementById('todayBannerTitle');
+    const container = document.getElementById('todayBannerContent');
+    container.innerHTML = '';
+
+    if (dayIndex === -1) {
+      titleEl.innerText = `📍 VISITAS DE HOY — FIN DE SEMANA (GUARDIA)`;
+      container.innerHTML = `<div style="color:var(--text-muted); font-size:0.8rem; padding: 4px;">No hay cronograma de visitas de lunes a viernes programado para hoy.</div>`;
+      return;
+    }
+
+    const currentDayName = daysNames[dayIndex];
+    titleEl.innerText = `📍 VISITAS PROGRAMADAS PARA HOY (${currentDayName})`;
+
+    rosterData.forEach(tech => {
+      const mVal = tech.m[dayIndex] || '---';
+      const tVal = tech.t[dayIndex] || '---';
+
+      const card = document.createElement('div');
+      card.className = 'today-tech-card';
+      card.innerHTML = `
+        <span class="today-tech-name" title="${tech.name}">${tech.name}</span>
+        <div class="today-tech-slot">
+          <span style="color:var(--text-muted); width:12px;">M:</span>
+          <span class="today-slot-pill ${getCellColorClass(mVal)}">${mVal}</span>
+        </div>
+        <div class="today-tech-slot">
+          <span style="color:var(--text-muted); width:12px;">T:</span>
+          <span class="today-slot-pill ${getCellColorClass(tVal)}">${tVal}</span>
+        </div>
+      `;
+      container.appendChild(card);
+    });
   }
 
   // CHECKLIST
@@ -1087,7 +1184,7 @@
   }
 
   // -------------------------------------------------------------
-  // LÓGICA DE TABLA EXCEL DINÁMICA (TÉCNICOS Y TURNOS)
+  // LÓGICA DE TABLA EXCEL DINÁMICA
   // -------------------------------------------------------------
   function getCellColorClass(val) {
     if (!val) return 'cell-default';
@@ -1110,29 +1207,44 @@
       t: ['', '', '', '', '']
     });
     renderRoster();
+    renderTodayBanner();
     queueAutoSave();
   }
 
   function removeRosterRow(index) {
     rosterData.splice(index, 1);
     renderRoster();
+    renderTodayBanner();
     queueAutoSave();
   }
 
   function renderRoster() {
     const tbody = document.getElementById('rosterTableBody');
     tbody.innerHTML = '';
+    const dayIndex = getCurrentDayIndex();
+
+    // Resaltar cabecera del día actual
+    for (let d = 0; d < 5; d++) {
+      const th = document.getElementById(`thDay${d}`);
+      if (th) {
+        if (d === dayIndex) {
+          th.classList.add('col-today');
+        } else {
+          th.classList.remove('col-today');
+        }
+      }
+    }
 
     rosterData.forEach((tech, i) => {
       // Fila Mañana (M)
       const trM = document.createElement('tr');
       trM.innerHTML = `
         <td rowspan="2" class="tech-cell">
-          <input type="text" class="excel-input" style="font-weight:800; text-align:center; color:#0f172a;" value="${tech.name}" oninput="rosterData[${i}].name = this.value; queueAutoSave();">
+          <input type="text" class="excel-input" style="font-weight:800; text-align:center; color:#0f172a;" value="${tech.name}" oninput="rosterData[${i}].name = this.value; renderTodayBanner(); queueAutoSave();">
         </td>
         <td class="shift-cell">M</td>
         ${tech.m.map((val, d) => `
-          <td class="${getCellColorClass(val)}">
+          <td class="${getCellColorClass(val)} ${d === dayIndex ? 'col-today-cell' : ''}">
             <input type="text" class="excel-input" value="${val}" oninput="updateRosterCell(${i}, 'm', ${d}, this)">
           </td>
         `).join('')}
@@ -1146,7 +1258,7 @@
       trT.innerHTML = `
         <td class="shift-cell">T</td>
         ${tech.t.map((val, d) => `
-          <td class="${getCellColorClass(val)}">
+          <td class="${getCellColorClass(val)} ${d === dayIndex ? 'col-today-cell' : ''}">
             <input type="text" class="excel-input" value="${val}" oninput="updateRosterCell(${i}, 't', ${d}, this)">
           </td>
         `).join('')}
@@ -1163,8 +1275,10 @@
     
     // Aplicar color en vivo a la celda
     const td = inputEl.parentElement;
-    td.className = getCellColorClass(val);
+    const isToday = (dayIndex === getCurrentDayIndex());
+    td.className = `${getCellColorClass(val)} ${isToday ? 'col-today-cell' : ''}`;
 
+    renderTodayBanner();
     queueAutoSave();
   }
 
@@ -1178,7 +1292,6 @@
       }
 
       const rows = text.trim().split(/\r?\n/).map(row => row.split('\t'));
-      
       let newRoster = [];
       for (let i = 0; i < rows.length; i += 2) {
         const rowM = rows[i];
@@ -1201,6 +1314,7 @@
       if (newRoster.length > 0) {
         rosterData = newRoster;
         renderRoster();
+        renderTodayBanner();
         queueAutoSave();
       }
     } catch (err) {
