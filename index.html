@@ -256,79 +256,6 @@
     }
     .tab .close-tab:hover { color: var(--danger); opacity: 1; }
 
-    /* -----------------------------------------------------------
-       BANNER HORIZONTAL: VISITAS DE HOY
-    ----------------------------------------------------------- */
-    .today-banner {
-      background: #020617;
-      border: 1.5px solid #38bdf8;
-      border-radius: 6px;
-      padding: 8px 12px;
-      margin-bottom: 10px;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
-    }
-
-    .today-banner-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .today-banner-title {
-      font-weight: 800;
-      color: #38bdf8;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      letter-spacing: 0.5px;
-    }
-
-    .today-cards-row {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .today-tech-card {
-      min-width: 140px;
-      background: var(--card-subtle);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 6px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    .today-tech-name {
-      font-weight: 800;
-      color: var(--text-bright);
-      font-size: 0.8rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .today-tech-slot {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.75rem;
-    }
-
-    .today-slot-pill {
-      font-weight: 800;
-      padding: 1px 4px;
-      border-radius: 2px;
-      font-size: 0.7rem;
-    }
-
     /* Layout 2 Columnas */
     .dashboard-grid {
       display: grid;
@@ -425,7 +352,52 @@
 
     textarea { width: 100%; height: 50px; resize: vertical; }
 
-    /* TABLA EXCEL OPERATIVA */
+    /* -----------------------------------------------------------
+       VISTA COMPACTA: "SOLO HOY" (FIJA EN EL PANEL DERECHO)
+    ----------------------------------------------------------- */
+    .today-fixed-container {
+      background: #090d14;
+      border: 1px solid #1e293b;
+      border-radius: 4px;
+      padding: 8px;
+    }
+
+    .today-fixed-empty {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 16px 8px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 4px;
+      border: 1px dashed var(--border);
+    }
+
+    .today-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+    }
+
+    .today-table th {
+      background: #1e293b;
+      color: #94a3b8;
+      font-weight: 700;
+      text-align: left;
+      padding: 4px 8px;
+      border: 1px solid #334155;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .today-table td {
+      border: 1px solid #334155;
+      padding: 3px 6px;
+      font-weight: 600;
+    }
+
+    /* -----------------------------------------------------------
+       TABLA EXCEL OPERATIVA (VISTA COMPLETA SEMANAL)
+    ----------------------------------------------------------- */
     .excel-container {
       overflow-x: auto;
       background: #000000;
@@ -569,15 +541,6 @@
     <!-- PESTAÑAS -->
     <div class="tabs-bar" id="tabsContainer"></div>
 
-    <!-- BANNER HORIZONTAL: VISITAS DE HOY (ALERTA ACTIVA) -->
-    <div id="todayBannerContainer" class="today-banner" style="display: none;">
-      <div class="today-banner-header">
-        <span class="today-banner-title" id="todayBannerTitle">📍 VISITAS Y GUARDIA DE HOY</span>
-        <button class="btn-icon" onclick="toggleTodayBanner()" id="btnToggleTodayBanner">Plegar</button>
-      </div>
-      <div id="todayBannerContent" class="today-cards-row"></div>
-    </div>
-
     <!-- MODO 1: TABLERO OPERATIVO PRINCIPAL (2 COLUMNAS) -->
     <div id="notesWorkspace" class="dashboard-grid" style="display: none;">
       
@@ -606,11 +569,11 @@
         </div>
       </div>
 
-      <!-- COLUMNA DERECHA: GRILLA DE TÉCNICOS ESTILO EXCEL -->
+      <!-- COLUMNA DERECHA: GUARDIA FIJA DE HOY Y/O GRILLA SEMANAL -->
       <div class="panel">
         <div class="panel-header" style="align-items: center;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="panel-title">Rango de Técnicos / Guardia Semanal</span>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="panel-title" id="rosterPanelTitle">Guardia de Hoy</span>
             <!-- RELOJ INTEGRADO AL TÍTULO -->
             <div class="roster-clock-badge">
               <span id="liveDate" class="roster-clock-date">---</span>
@@ -620,13 +583,19 @@
           </div>
 
           <div style="display: flex; gap: 6px;">
-            <button class="btn-icon" onclick="pasteFromExcelPrompt()" title="Pegar datos directo desde Excel">📋 Pegar Excel</button>
-            <button class="btn-primary btn-icon" onclick="addRosterRow()">+ Técnico</button>
-            <button class="btn-icon" onclick="toggleRosterBody()" id="btnToggleRosterBody">Plegar</button>
+            <button class="btn-icon" id="btnToggleWeekView" onclick="toggleWeekView()" style="color:#fde047; font-weight:700;">📅 Ver Semana</button>
+            <button class="btn-icon" id="btnPasteExcel" onclick="pasteFromExcelPrompt()" style="display:none;" title="Pegar datos directo desde Excel">📋 Pegar Excel</button>
+            <button class="btn-primary btn-icon" id="btnAddTech" onclick="addRosterRow()" style="display:none;">+ Técnico</button>
           </div>
         </div>
 
-        <div id="rosterCollapsibleContent">
+        <!-- 1. VISTA FIJA DE HOY (POR DEFECTO) -->
+        <div id="todayFixedView" class="today-fixed-container">
+          <div id="todayFixedContent"></div>
+        </div>
+
+        <!-- 2. VISTA GRILLA SEMANAL (SE DESPLIEGA AL TOCAR "VER SEMANA") -->
+        <div id="weekGridView" style="display: none;">
           <div class="excel-container">
             <table class="excel-table">
               <thead>
@@ -645,6 +614,7 @@
             </table>
           </div>
         </div>
+
       </div>
 
     </div>
@@ -701,8 +671,7 @@
   let userTodos = [];
   let rosterData = [];
   let notesBodyVisible = true;
-  let rosterBodyVisible = true;
-  let todayBannerVisible = true;
+  let showFullWeek = false; // Por defecto: Vista fija de HOY
   let saveTimeout = null;
 
   // RELOJ LLAMATIVO
@@ -806,8 +775,7 @@
       userTodos,
       rosterData,
       notesBodyVisible,
-      rosterBodyVisible,
-      todayBannerVisible
+      showFullWeek
     };
 
     const { error } = await sbClient
@@ -836,8 +804,7 @@
       userTodos = data.data.userTodos || [];
       rosterData = data.data.rosterData || [];
       notesBodyVisible = data.data.notesBodyVisible !== undefined ? data.data.notesBodyVisible : true;
-      rosterBodyVisible = data.data.rosterBodyVisible !== undefined ? data.data.rosterBodyVisible : true;
-      todayBannerVisible = data.data.todayBannerVisible !== undefined ? data.data.todayBannerVisible : true;
+      showFullWeek = data.data.showFullWeek !== undefined ? data.data.showFullWeek : false;
     }
 
     if (!activeTabs || activeTabs.length === 0) {
@@ -861,8 +828,7 @@
     }
 
     applyNotesBodyVisibility();
-    applyRosterBodyVisibility();
-    applyTodayBannerVisibility();
+    updateRosterViewMode();
     renderTabs();
     selectTab(currentTabId);
   }
@@ -925,14 +891,13 @@
 
     const isNotes = tab.code === "0000";
     document.getElementById('notesWorkspace').style.display = isNotes ? 'grid' : 'none';
-    document.getElementById('todayBannerContainer').style.display = isNotes ? 'block' : 'none';
     document.getElementById('complexWorkspace').style.display = isNotes ? 'none' : 'block';
 
     if (isNotes) {
       renderTodos();
       renderCustomCards('customCardsContainer');
       renderRoster();
-      renderTodayBanner();
+      renderTodayFixed();
     } else {
       document.getElementById('complexTitleDisplay').innerText = `${tab.name} (${tab.code})`;
       document.getElementById('rawEquipments').value = tab.rawInput || "";
@@ -953,7 +918,7 @@
     queueAutoSave();
   }
 
-  // MINIMIZAR SECCIONES
+  // MINIMIZAR SECCIÓN BITÁCORA
   function toggleNotesBody() {
     notesBodyVisible = !notesBodyVisible;
     applyNotesBodyVisibility();
@@ -972,80 +937,107 @@
     }
   }
 
-  function toggleRosterBody() {
-    rosterBodyVisible = !rosterBodyVisible;
-    applyRosterBodyVisibility();
+  // -------------------------------------------------------------
+  // ALTERNAR: "SOLO HOY" VS "VER SEMANA COMPLETA"
+  // -------------------------------------------------------------
+  function toggleWeekView() {
+    showFullWeek = !showFullWeek;
+    updateRosterViewMode();
     queueAutoSave();
   }
 
-  function applyRosterBodyVisibility() {
-    const el = document.getElementById('rosterCollapsibleContent');
-    const btn = document.getElementById('btnToggleRosterBody');
-    if (rosterBodyVisible) {
-      el.style.display = 'block';
-      btn.innerText = 'Plegar';
-    } else {
-      el.style.display = 'none';
-      btn.innerText = 'Expandir';
-    }
-  }
+  function updateRosterViewMode() {
+    const btn = document.getElementById('btnToggleWeekView');
+    const btnPaste = document.getElementById('btnPasteExcel');
+    const btnAdd = document.getElementById('btnAddTech');
+    const todayView = document.getElementById('todayFixedView');
+    const weekView = document.getElementById('weekGridView');
+    const titleEl = document.getElementById('rosterPanelTitle');
 
-  function toggleTodayBanner() {
-    todayBannerVisible = !todayBannerVisible;
-    applyTodayBannerVisibility();
-    queueAutoSave();
-  }
-
-  function applyTodayBannerVisibility() {
-    const content = document.getElementById('todayBannerContent');
-    const btn = document.getElementById('btnToggleTodayBanner');
-    if (todayBannerVisible) {
-      content.style.display = 'flex';
-      btn.innerText = 'Plegar';
+    if (showFullWeek) {
+      // Modo Grilla Completa
+      btn.innerText = '▲ Solo Hoy';
+      titleEl.innerText = 'Cronograma Semanal';
+      todayView.style.display = 'none';
+      weekView.style.display = 'block';
+      btnPaste.style.display = 'inline-flex';
+      btnAdd.style.display = 'inline-flex';
+      renderRoster();
     } else {
-      content.style.display = 'none';
-      btn.innerText = 'Expandir';
+      // Modo Fijo Solo Hoy
+      btn.innerText = '📅 Ver Semana';
+      titleEl.innerText = 'Guardia de Hoy';
+      todayView.style.display = 'block';
+      weekView.style.display = 'none';
+      btnPaste.style.display = 'none';
+      btnAdd.style.display = 'none';
+      renderTodayFixed();
     }
   }
 
   // -------------------------------------------------------------
-  // RENDER: BANNER HORIZONTAL DE VISITAS DE HOY
+  // RENDER: VISTA FIJA DE HOY
   // -------------------------------------------------------------
-  function renderTodayBanner() {
-    const dayIndex = getCurrentDayIndex();
-    const daysNames = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
-    const titleEl = document.getElementById('todayBannerTitle');
-    const container = document.getElementById('todayBannerContent');
+  function renderTodayFixed() {
+    const container = document.getElementById('todayFixedContent');
+    if (!container) return;
     container.innerHTML = '';
 
+    const dayIndex = getCurrentDayIndex();
+
+    // Caso Fin de Semana
     if (dayIndex === -1) {
-      titleEl.innerText = `📍 VISITAS DE HOY — FIN DE SEMANA (GUARDIA)`;
-      container.innerHTML = `<div style="color:var(--text-muted); font-size:0.8rem; padding: 4px;">No hay cronograma de visitas de lunes a viernes programado para hoy.</div>`;
+      container.innerHTML = `
+        <div class="today-fixed-empty">
+          🏖️ <strong>Fin de semana:</strong> Hoy no hay visitas programadas en el cronograma regular.
+        </div>
+      `;
       return;
     }
 
-    const currentDayName = daysNames[dayIndex];
-    titleEl.innerText = `📍 VISITAS PROGRAMADAS PARA HOY (${currentDayName})`;
+    // Filtrar qué técnicos tienen algo asignado hoy
+    let activeTechs = [];
+    rosterData.forEach(t => {
+      const m = (t.m[dayIndex] || '').trim();
+      const tarde = (t.t[dayIndex] || '').trim();
+      if (m !== '' || tarde !== '') {
+        activeTechs.push({ name: t.name, m, t: tarde });
+      }
+    });
 
-    rosterData.forEach(tech => {
-      const mVal = tech.m[dayIndex] || '---';
-      const tVal = tech.t[dayIndex] || '---';
-
-      const card = document.createElement('div');
-      card.className = 'today-tech-card';
-      card.innerHTML = `
-        <span class="today-tech-name" title="${tech.name}">${tech.name}</span>
-        <div class="today-tech-slot">
-          <span style="color:var(--text-muted); width:12px;">M:</span>
-          <span class="today-slot-pill ${getCellColorClass(mVal)}">${mVal}</span>
-        </div>
-        <div class="today-tech-slot">
-          <span style="color:var(--text-muted); width:12px;">T:</span>
-          <span class="today-slot-pill ${getCellColorClass(tVal)}">${tVal}</span>
+    if (activeTechs.length === 0) {
+      container.innerHTML = `
+        <div class="today-fixed-empty">
+          📍 <strong>Hoy no hay visitas registradas.</strong>
         </div>
       `;
-      container.appendChild(card);
+      return;
+    }
+
+    let html = `
+      <table class="today-table">
+        <thead>
+          <tr>
+            <th style="width: 35%;">Técnico</th>
+            <th style="width: 32.5%;">Mañana (M)</th>
+            <th style="width: 32.5%;">Tarde (T)</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    activeTechs.forEach(item => {
+      html += `
+        <tr>
+          <td style="color:var(--text-bright); font-weight:700;">${item.name}</td>
+          <td class="${getCellColorClass(item.m)}" style="text-align:center;">${item.m || '---'}</td>
+          <td class="${getCellColorClass(item.t)}" style="text-align:center;">${item.t || '---'}</td>
+        </tr>
+      `;
     });
+
+    html += `</tbody></table>`;
+    container.innerHTML = html;
   }
 
   // CHECKLIST
@@ -1207,14 +1199,14 @@
       t: ['', '', '', '', '']
     });
     renderRoster();
-    renderTodayBanner();
+    renderTodayFixed();
     queueAutoSave();
   }
 
   function removeRosterRow(index) {
     rosterData.splice(index, 1);
     renderRoster();
-    renderTodayBanner();
+    renderTodayFixed();
     queueAutoSave();
   }
 
@@ -1223,15 +1215,11 @@
     tbody.innerHTML = '';
     const dayIndex = getCurrentDayIndex();
 
-    // Resaltar cabecera del día actual
     for (let d = 0; d < 5; d++) {
       const th = document.getElementById(`thDay${d}`);
       if (th) {
-        if (d === dayIndex) {
-          th.classList.add('col-today');
-        } else {
-          th.classList.remove('col-today');
-        }
+        if (d === dayIndex) th.classList.add('col-today');
+        else th.classList.remove('col-today');
       }
     }
 
@@ -1240,7 +1228,7 @@
       const trM = document.createElement('tr');
       trM.innerHTML = `
         <td rowspan="2" class="tech-cell">
-          <input type="text" class="excel-input" style="font-weight:800; text-align:center; color:#0f172a;" value="${tech.name}" oninput="rosterData[${i}].name = this.value; renderTodayBanner(); queueAutoSave();">
+          <input type="text" class="excel-input" style="font-weight:800; text-align:center; color:#0f172a;" value="${tech.name}" oninput="rosterData[${i}].name = this.value; renderTodayFixed(); queueAutoSave();">
         </td>
         <td class="shift-cell">M</td>
         ${tech.m.map((val, d) => `
@@ -1273,12 +1261,11 @@
     const val = inputEl.value;
     rosterData[techIndex][shift][dayIndex] = val;
     
-    // Aplicar color en vivo a la celda
     const td = inputEl.parentElement;
     const isToday = (dayIndex === getCurrentDayIndex());
     td.className = `${getCellColorClass(val)} ${isToday ? 'col-today-cell' : ''}`;
 
-    renderTodayBanner();
+    renderTodayFixed();
     queueAutoSave();
   }
 
@@ -1314,7 +1301,7 @@
       if (newRoster.length > 0) {
         rosterData = newRoster;
         renderRoster();
-        renderTodayBanner();
+        renderTodayFixed();
         queueAutoSave();
       }
     } catch (err) {
