@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workspace & Tickets</title>
+  <title>Workspace & Control Operativo</title>
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --bg: #0d1117;
-      --card-bg: #161b22;
-      --card-subtle: #21262d;
-      --border: #30363d;
-      --text: #c9d1d9;
-      --text-bright: #f0f6fc;
-      --text-muted: #8b949e;
-      --accent: #58a6ff;
-      --accent-hover: #1f6feb;
-      --success: #238636;
-      --danger: #da3633;
+      --bg: #0b0e14;
+      --card-bg: #151921;
+      --card-subtle: #1c212c;
+      --border: #28303f;
+      --border-focus: #3b82f6;
+      --text: #cbd5e1;
+      --text-bright: #f8fafc;
+      --text-muted: #64748b;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
     }
 
     * { box-sizing: border-box; }
@@ -28,18 +30,13 @@
       background-color: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 24px;
-      font-size: 14px;
-      line-height: 1.5;
+      padding: 12px 16px;
+      font-size: 13px;
     }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
+    /* Auth Box */
     .auth-container {
-      max-width: 360px;
+      max-width: 340px;
       margin: 80px auto;
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -48,71 +45,120 @@
     }
 
     .auth-container h2 {
-      margin-top: 0;
+      margin: 0 0 16px 0;
       color: var(--text-bright);
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       text-align: center;
     }
 
-    .header-bar {
+    /* Top Navigation Bar */
+    .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      gap: 12px;
     }
 
-    .header-bar h1 {
-      font-size: 1.15rem;
-      color: var(--text-bright);
-      margin: 0;
-      font-weight: 600;
-    }
-
-    .user-pill {
+    .top-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 14px;
+    }
+
+    .app-brand {
+      font-weight: 700;
+      color: var(--text-bright);
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+
+    .sync-status {
+      font-size: 0.75rem;
+      color: var(--success);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .search-inline {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .search-inline input {
+      width: 170px;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .clock-display {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.85rem;
+      color: var(--text-bright);
+      background: var(--card-subtle);
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .clock-time {
+      color: #38bdf8;
+      font-weight: bold;
+    }
+
+    .user-tag {
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
-    input, textarea {
+    /* Forms & Inputs */
+    input, textarea, select {
       background: var(--card-subtle);
       border: 1px solid var(--border);
       color: var(--text-bright);
-      padding: 8px 12px;
-      border-radius: 6px;
+      padding: 6px 10px;
+      border-radius: 4px;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       outline: none;
-      transition: border-color 0.2s;
     }
 
-    input:focus, textarea:focus {
-      border-color: var(--accent);
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--border-focus);
     }
 
     button {
       background: var(--card-subtle);
       color: var(--text-bright);
       border: 1px solid var(--border);
-      padding: 8px 14px;
-      border-radius: 6px;
+      padding: 5px 10px;
+      border-radius: 4px;
       cursor: pointer;
-      font-weight: 500;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.15s ease;
+      gap: 4px;
+      transition: background 0.15s ease;
     }
 
     button:hover {
-      background: #30363d;
-      border-color: #8b949e;
+      background: #252c3b;
+      border-color: #475569;
     }
 
     .btn-primary {
@@ -123,239 +169,253 @@
 
     .btn-primary:hover {
       background: var(--accent-hover);
-      border-color: var(--accent-hover);
     }
 
     .btn-danger {
       color: var(--danger);
+      background: transparent;
+      border-color: transparent;
     }
     .btn-danger:hover {
-      background: rgba(218, 54, 51, 0.1);
+      background: rgba(239, 68, 68, 0.15);
       border-color: var(--danger);
     }
 
-    .search-box {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 18px;
+    .btn-icon {
+      padding: 3px 6px;
+      font-size: 0.75rem;
     }
 
-    .search-box input {
-      flex: 1;
-    }
-
-    .tabs {
+    /* Tabs Bar */
+    .tabs-bar {
       display: flex;
       gap: 4px;
       border-bottom: 1px solid var(--border);
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       overflow-x: auto;
     }
 
     .tab {
-      padding: 8px 14px;
-      border-radius: 6px 6px 0 0;
+      padding: 6px 12px;
+      border-radius: 5px 5px 0 0;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       color: var(--text-muted);
       border: 1px solid transparent;
       border-bottom: none;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
 
     .tab.active {
       background: var(--card-bg);
       color: var(--text-bright);
       border-color: var(--border);
-      font-weight: 500;
+      font-weight: 600;
       border-top: 2px solid var(--accent);
     }
 
     .tab .close-tab {
-      color: var(--text-muted);
-      font-size: 1rem;
-      padding: 0 2px;
+      font-size: 0.9rem;
       line-height: 1;
+      padding: 0 2px;
     }
 
     .tab .close-tab:hover {
       color: var(--danger);
     }
 
-    .workspace {
+    /* 2 Columns Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .panel {
       background: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    .workspace-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .workspace-header h2 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: var(--text-bright);
-    }
-
-    .section-title {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .checklist-container {
-      background: var(--card-subtle);
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 12px;
-      margin-bottom: 20px;
     }
 
-    .checklist-input-box {
+    .panel-header {
       display: flex;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-subtitle {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    /* Checklist */
+    .checklist-box {
+      background: var(--card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px;
+      margin-bottom: 12px;
     }
 
     .checklist-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 8px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
     }
 
     .checklist-item:last-child {
       border-bottom: none;
     }
 
-    .checklist-item input[type="checkbox"] {
-      cursor: pointer;
-      accent-color: var(--accent);
-    }
-
-    .checklist-text {
-      flex: 1;
-      font-size: 0.9rem;
-    }
-
-    .checklist-item.done .checklist-text {
+    .checklist-item.done span {
       text-decoration: line-through;
       color: var(--text-muted);
     }
 
-    .card {
+    /* Compact Cards */
+    .note-card {
       background: var(--card-subtle);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      margin-bottom: 12px;
+      border-radius: 4px;
+      margin-bottom: 8px;
       overflow: hidden;
     }
 
-    .card-header {
+    .note-card-header {
       display: flex;
       align-items: center;
-      padding: 8px 12px;
-      gap: 10px;
+      padding: 6px 8px;
+      gap: 8px;
       background: rgba(255,255,255,0.02);
-      border-bottom: 1px solid transparent;
     }
 
-    .card-header.open {
-      border-bottom-color: var(--border);
+    .note-card-header.open {
+      border-bottom: 1px solid var(--border);
     }
 
-    .card-title-input {
+    .note-title-input {
       flex: 1;
       background: transparent;
       border: 1px solid transparent;
       font-weight: 600;
       color: var(--text-bright);
-      padding: 4px 6px;
+      padding: 2px 4px;
     }
 
-    .card-title-input:focus {
+    .note-title-input:focus {
       background: var(--bg);
       border-color: var(--accent);
     }
 
-    .ticket-input-inline {
-      width: 130px;
-      font-size: 0.85rem;
-      padding: 4px 8px;
+    .ticket-chip {
+      width: 100px;
+      padding: 2px 6px;
+      font-size: 0.75rem;
     }
 
-    .card-body {
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .note-card-body {
+      padding: 8px;
     }
 
-    .card-body.hidden {
+    .note-card-body.hidden {
       display: none;
     }
 
     textarea {
       width: 100%;
-      height: 65px;
+      height: 55px;
       resize: vertical;
     }
 
+    /* Excel-Style Roster Table */
+    .excel-table-container {
+      overflow-x: auto;
+    }
+
+    .excel-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .excel-table th {
+      background: #11141a;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-align: left;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      text-transform: uppercase;
+      font-size: 0.7rem;
+    }
+
+    .excel-table td {
+      border: 1px solid var(--border);
+      padding: 2px 4px;
+      background: var(--card-subtle);
+    }
+
+    .excel-table input, .excel-table select {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 4px;
+      color: var(--text-bright);
+      font-size: 0.8rem;
+    }
+
+    .excel-table input:focus, .excel-table select:focus {
+      background: var(--bg);
+      outline: none;
+    }
+
+    /* Routine Line Items for Complexes */
     .line-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--card-subtle);
-      padding: 8px 12px;
-      margin-bottom: 6px;
-      border-radius: 6px;
+      padding: 6px 10px;
+      margin-bottom: 4px;
+      border-radius: 4px;
       border: 1px solid var(--border);
-      gap: 10px;
+      gap: 8px;
     }
 
     .line-text {
       flex: 1;
-      font-size: 0.9rem;
-    }
-
-    .actions-bar {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
-
-    .sync-status {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-
-  <!-- VISTA DE LOGIN -->
+  <!-- LOGIN BOX -->
   <div id="authView" class="auth-container">
     <h2>Iniciar Sesión</h2>
-    <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
       <input type="email" id="authEmail" placeholder="tu@email.com">
       <input type="password" id="authPassword" placeholder="Contraseña">
       <button class="btn-primary" onclick="handleAuth('login')">Entrar</button>
@@ -364,89 +424,126 @@
     </div>
   </div>
 
-  <!-- VISTA PRINCIPAL DE LA APP -->
+  <!-- DASHBOARD PRINCIPAL -->
   <div id="appView" style="display: none;">
-    <div class="header-bar">
-      <div>
-        <h1>Workspace Personal</h1>
+    
+    <!-- BARRA SUPERIOR SLIM -->
+    <div class="top-bar">
+      <div class="top-left">
+        <span class="app-brand">WORKSPACE</span>
         <span class="sync-status" id="syncStatus">● Sincronizado</span>
+        <div class="search-inline">
+          <input type="text" id="complexInput" placeholder="Código complejo..." maxlength="4" onkeypress="if(event.key==='Enter') createNewTab()">
+          <button class="btn-primary" onclick="createNewTab()">+ Complejo</button>
+        </div>
       </div>
-      <div class="user-pill">
-        <span id="userDisplay"></span>
-        <button onclick="logout()">Salir</button>
+
+      <div class="top-right">
+        <!-- RELOJ DIGITAL EN VIVO -->
+        <div class="clock-display">
+          <span id="liveDate" style="color:var(--text-muted);">---</span>
+          <span id="liveTime" class="clock-time">00:00:00</span>
+        </div>
+        <span class="user-tag" id="userDisplay"></span>
+        <button class="btn-danger btn-icon" onclick="logout()" title="Cerrar Sesión">Salir</button>
       </div>
     </div>
 
-    <!-- Buscador de Complejo -->
-    <div class="search-box">
-      <input type="text" id="complexInput" placeholder="Código de complejo (ej: 2008, 0733)..." maxlength="4" onkeypress="if(event.key==='Enter') createNewTab()">
-      <button class="btn-primary" onclick="createNewTab()">+ Abrir Complejo</button>
-    </div>
+    <!-- PESTAÑAS -->
+    <div class="tabs-bar" id="tabsContainer"></div>
 
-    <!-- Solapas -->
-    <div class="tabs" id="tabsContainer"></div>
-
-    <!-- Workspace Activo -->
-    <div class="workspace" id="workspace">
-      <div class="workspace-header">
-        <h2 id="currentTitle">Notas / Bitácora</h2>
-      </div>
-
-      <!-- SECCIÓN EXCLUSIVA DE NOTAS -->
-      <div id="notesSpecificSection" style="display: none;">
-        <span class="section-title">Checklist / Foco del Día</span>
-        <div class="checklist-container">
-          <div class="checklist-input-box">
-            <input type="text" id="newTodoInput" placeholder="Nueva tarea pendiente..." style="flex:1;" onkeypress="if(event.key==='Enter') addTodo()">
-            <button onclick="addTodo()">Agregar</button>
+    <!-- CONTENIDO 1: MODO PERSONAL (2 COLUMNAS) -->
+    <div id="notesWorkspace" class="dashboard-grid" style="display: none;">
+      
+      <!-- COLUMNA IZQUIERDA: BITÁCORA Y NOTAS -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Bitácora & Tareas</span>
+          <div style="display:flex; gap:6px;">
+            <button class="btn-icon" onclick="toggleNotesBody()" id="btnToggleNotesBody" title="Minimizar panel">Plegar</button>
+            <button class="btn-primary btn-icon" onclick="addCustomLine()">+ Tarjeta</button>
           </div>
-          <div id="todosContainer"></div>
+        </div>
+
+        <div id="notesCollapsibleContent">
+          <!-- Checklist -->
+          <span class="section-subtitle">Checklist / Turno</span>
+          <div class="checklist-box">
+            <div style="display:flex; gap:6px; margin-bottom: 6px;">
+              <input type="text" id="newTodoInput" placeholder="Nueva tarea..." style="flex:1;" onkeypress="if(event.key==='Enter') addTodo()">
+              <button onclick="addTodo()">+</button>
+            </div>
+            <div id="todosContainer"></div>
+          </div>
+
+          <!-- Tarjetas Colapsables -->
+          <span class="section-subtitle">Tarjetas de Apuntes</span>
+          <div id="customCardsContainer"></div>
         </div>
       </div>
 
-      <!-- SECCIÓN COMPLEJOS -->
-      <div id="complexSection" style="display: none;">
-        <span class="section-title">Relevos y Rutinas</span>
-        <div id="staticLines"></div>
-
-        <div style="margin: 16px 0;">
-          <span class="section-title">Equipos / Impresoras (Pegar lista ej: KI02 SN03):</span>
-          <textarea id="rawEquipments" placeholder="KI02 SN03 SN04..." oninput="processEquipments()"></textarea>
+      <!-- COLUMNA DERECHA: PLANILLA EXCEL TÉCNICOS EN VIVO -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Distribución de Técnicos (En Vivo)</span>
+          <button class="btn-primary btn-icon" onclick="addRosterRow()">+ Fila</button>
         </div>
 
-        <span class="section-title">Limpiezas Generadas</span>
-        <div id="dynamicLines"></div>
-      </div>
-
-      <!-- TARJETAS MODULARES -->
-      <div style="margin-top: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span class="section-title" id="cardsSectionTitle">Notas / Tarjetas</span>
-          <button onclick="addCustomLine()">+ Nueva Tarjeta</button>
+        <div class="excel-table-container">
+          <table class="excel-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Técnico</th>
+                <th style="width: 25%;">Complejo / Destino</th>
+                <th style="width: 30%;">Estado / Tarea</th>
+                <th style="width: 15%;">Horario</th>
+                <th style="width: 5%;"></th>
+              </tr>
+            </thead>
+            <tbody id="rosterTableBody"></tbody>
+          </table>
         </div>
-        <div id="customCardsContainer"></div>
       </div>
 
-      <div class="actions-bar" id="complexActions" style="display: none;">
-        <button class="btn-primary" onclick="copyAll()">Copiar Todo el Reporte</button>
+    </div>
+
+    <!-- CONTENIDO 2: MODO COMPLEJO SELECCIONADO -->
+    <div id="complexWorkspace" class="panel" style="display: none;">
+      <div class="panel-header">
+        <span class="panel-title" id="complexTitleDisplay">Complejo</span>
+        <button class="btn-primary" onclick="copyAll()">Copiar Reporte Completo</button>
+      </div>
+
+      <span class="section-subtitle">Relevos y Rutinas</span>
+      <div id="staticLines"></div>
+
+      <div style="margin: 12px 0;">
+        <span class="section-subtitle">Pegar mezcla de Equipos / Impresoras (ej: KI02 SN03):</span>
+        <textarea id="rawEquipments" placeholder="KI02 SN03 SN04..." oninput="processEquipments()"></textarea>
+      </div>
+
+      <span class="section-subtitle">Limpiezas Generadas</span>
+      <div id="dynamicLines"></div>
+
+      <div style="margin-top: 14px;">
+        <div class="panel-header" style="border:none; margin:0; padding:0 0 6px 0;">
+          <span class="section-subtitle">Ventanas Personalizadas de este Complejo</span>
+          <button class="btn-icon" onclick="addCustomLine()">+ Agregar</button>
+        </div>
+        <div id="complexCustomCardsContainer"></div>
       </div>
     </div>
+
   </div>
 
-</div>
-
 <script>
-  // -------------------------------------------------------------
-  // CONFIGURACIÓN DE SUPABASE
-  // -------------------------------------------------------------
+  // CONFIGURACIÓN SUPABASE
   const SUPABASE_URL = 'https://xlwhvmmgimeuvbvghemt.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsd2h2bW1naW1ldXZidmdoZW10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2Mzc1NjUsImV4cCI6MjEwNDIxMzU2NX0.wqtbkubn-JGW671twlZFAD6bWH0TohSH2BbsoZOdSHU';
-
-  // Usamos sbClient para que no colisione con el objeto global window.supabase
-  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  var sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const dbComplejos = {
-    "0000": "Bitácora / Notas",
+    "0000": "Bitácora / Personal",
     "0732": "Palmares", "0733": "Palermo", "0734": "Caballito", "0739": "Soleil",
     "0745": "Santa Fe", "0748": "San Justo", "0749": "Malvinas", "0756": "Tortugas",
     "2000": "Unicenter", "2001": "Moron", "2002": "Quilmes", "2003": "Dot",
@@ -460,11 +557,29 @@
   let activeTabs = [];
   let currentTabId = noteTabId;
   let userTodos = [];
+  let rosterData = [];
+  let notesBodyVisible = true;
   let saveTimeout = null;
 
-  // -------------------------------------------------------------
+  // RELOJ EN TIEMPO REAL
+  function updateClock() {
+    const now = new Date();
+    const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const dName = days[now.getDay()];
+    const dNum = String(now.getDate()).padStart(2, '0');
+    const mNum = String(now.getMonth() + 1).padStart(2, '0');
+
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+
+    document.getElementById('liveDate').innerText = `${dName} ${dNum}/${mNum}`;
+    document.getElementById('liveTime').innerText = `${hh}:${mm}:${ss}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
   // AUTENTICACIÓN
-  // -------------------------------------------------------------
   async function checkSession() {
     try {
       const { data } = await sbClient.auth.getSession();
@@ -474,8 +589,7 @@
       } else {
         showAuth();
       }
-    } catch (err) {
-      console.error("Error al autenticar:", err);
+    } catch (e) {
       showAuth();
     }
   }
@@ -491,17 +605,14 @@
       return;
     }
 
-    let result;
-    if (type === 'login') {
-      result = await sbClient.auth.signInWithPassword({ email, password });
-    } else {
-      result = await sbClient.auth.signUp({ email, password });
-    }
+    let res = (type === 'login') 
+      ? await sbClient.auth.signInWithPassword({ email, password })
+      : await sbClient.auth.signUp({ email, password });
 
-    if (result.error) {
-      errorEl.innerText = result.error.message;
+    if (res.error) {
+      errorEl.innerText = res.error.message;
     } else {
-      currentUser = result.data.user;
+      currentUser = res.data.user;
       showApp();
     }
   }
@@ -524,21 +635,22 @@
     await loadRemoteData();
   }
 
-  // -------------------------------------------------------------
   // PERSISTENCIA
-  // -------------------------------------------------------------
   function queueAutoSave() {
     document.getElementById('syncStatus').innerText = '○ Guardando...';
+    document.getElementById('syncStatus').style.color = 'var(--warning)';
     clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(saveRemoteData, 800);
+    saveTimeout = setTimeout(saveRemoteData, 700);
   }
 
   async function saveRemoteData() {
     if (!currentUser) return;
     const payload = {
-      activeTabs: activeTabs,
-      currentTabId: currentTabId,
-      userTodos: userTodos
+      activeTabs,
+      currentTabId,
+      userTodos,
+      rosterData,
+      notesBodyVisible
     };
 
     const { error } = await sbClient
@@ -547,13 +659,15 @@
 
     if (!error) {
       document.getElementById('syncStatus').innerText = '● Sincronizado';
+      document.getElementById('syncStatus').style.color = 'var(--success)';
     } else {
-      document.getElementById('syncStatus').innerText = '⚠ Error al guardar';
+      document.getElementById('syncStatus').innerText = '⚠ Error';
+      document.getElementById('syncStatus').style.color = 'var(--danger)';
     }
   }
 
   async function loadRemoteData() {
-    const { data, error } = await sbClient
+    const { data } = await sbClient
       .from('user_workspace')
       .select('data')
       .eq('user_id', currentUser.id)
@@ -563,6 +677,8 @@
       activeTabs = data.data.activeTabs || [];
       currentTabId = data.data.currentTabId || noteTabId;
       userTodos = data.data.userTodos || [];
+      rosterData = data.data.rosterData || [];
+      notesBodyVisible = data.data.notesBodyVisible !== undefined ? data.data.notesBodyVisible : true;
     }
 
     if (!activeTabs || activeTabs.length === 0) {
@@ -571,21 +687,25 @@
         code: "0000",
         name: "Notas / Bitácora",
         ticketsState: {},
-        customLines: [
-          { id: 'c_init_1', title: 'Anotaciones rápidas', text: '', ticket: '', isOpen: true }
-        ],
+        customLines: [],
         rawInput: ""
       }];
       currentTabId = noteTabId;
     }
 
+    if (!rosterData || rosterData.length === 0) {
+      rosterData = [
+        { tech: 'Técnico 1', complex: 'Unicenter (2000)', task: 'Mantenimiento Preventivo', time: '10:00 - 14:00' },
+        { tech: 'Técnico 2', complex: 'Palermo (0733)', task: 'Cambio de Fuente KI01', time: '12:00 - 15:30' }
+      ];
+    }
+
+    applyNotesBodyVisibility();
     renderTabs();
     selectTab(currentTabId);
   }
 
-  // -------------------------------------------------------------
-  // TABS & LOGIC
-  // -------------------------------------------------------------
+  // TABS
   function createNewTab() {
     let rawCode = document.getElementById('complexInput').value.trim();
     if (!rawCode) return;
@@ -632,21 +752,20 @@
     if (!tab) return;
 
     const isNotes = tab.code === "0000";
-    document.getElementById('currentTitle').innerText = isNotes ? 'Bitácora & Notas Personales' : `${tab.name} (${tab.code})`;
-    document.getElementById('notesSpecificSection').style.display = isNotes ? 'block' : 'none';
-    document.getElementById('complexSection').style.display = isNotes ? 'none' : 'block';
-    document.getElementById('complexActions').style.display = isNotes ? 'none' : 'flex';
-    document.getElementById('cardsSectionTitle').innerText = isNotes ? 'Tarjetas de Apuntes' : 'Tickets Manuales / Ventanas';
+    document.getElementById('notesWorkspace').style.display = isNotes ? 'grid' : 'none';
+    document.getElementById('complexWorkspace').style.display = isNotes ? 'none' : 'block';
 
     if (isNotes) {
       renderTodos();
+      renderCustomCards('customCardsContainer');
+      renderRoster();
     } else {
+      document.getElementById('complexTitleDisplay').innerText = `${tab.name} (${tab.code})`;
       document.getElementById('rawEquipments').value = tab.rawInput || "";
       renderStaticLines();
       processEquipments();
+      renderCustomCards('complexCustomCardsContainer');
     }
-
-    renderCustomCards();
     queueAutoSave();
   }
 
@@ -660,15 +779,32 @@
     queueAutoSave();
   }
 
-  // -------------------------------------------------------------
+  // MINIMIZAR CUADRO NOTAS
+  function toggleNotesBody() {
+    notesBodyVisible = !notesBodyVisible;
+    applyNotesBodyVisibility();
+    queueAutoSave();
+  }
+
+  function applyNotesBodyVisibility() {
+    const el = document.getElementById('notesCollapsibleContent');
+    const btn = document.getElementById('btnToggleNotesBody');
+    if (notesBodyVisible) {
+      el.style.display = 'block';
+      btn.innerText = 'Plegar';
+    } else {
+      el.style.display = 'none';
+      btn.innerText = 'Expandir';
+    }
+  }
+
   // CHECKLIST
-  // -------------------------------------------------------------
   function addTodo() {
     const input = document.getElementById('newTodoInput');
     const text = input.value.trim();
     if (!text) return;
 
-    userTodos.push({ id: 'todo_' + Date.now(), text, done: false });
+    userTodos.push({ id: 'td_' + Date.now(), text, done: false });
     input.value = '';
     renderTodos();
     queueAutoSave();
@@ -690,76 +826,77 @@
   }
 
   function renderTodos() {
-    const container = document.getElementById('todosContainer');
-    container.innerHTML = '';
-
+    const c = document.getElementById('todosContainer');
+    c.innerHTML = '';
     userTodos.forEach(item => {
       const div = document.createElement('div');
       div.className = `checklist-item ${item.done ? 'done' : ''}`;
       div.innerHTML = `
         <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleTodo('${item.id}')">
-        <span class="checklist-text">${item.text}</span>
-        <button class="btn-danger" style="padding:2px 6px; font-size:0.75rem;" onclick="removeTodo('${item.id}')">✕</button>
+        <span style="flex:1;">${item.text}</span>
+        <button class="btn-danger btn-icon" onclick="removeTodo('${item.id}')">✕</button>
       `;
-      container.appendChild(div);
+      c.appendChild(div);
     });
   }
 
-  // -------------------------------------------------------------
-  // TARJETAS / APUNTES
-  // -------------------------------------------------------------
+  // TARJETAS
   function addCustomLine() {
     const tab = activeTabs.find(t => t.id === currentTabId);
     if (!tab) return;
 
     tab.customLines.push({
       id: 'c_' + Date.now(),
-      title: 'Nota nueva',
+      title: 'Nota rápida',
       text: '',
       ticket: '',
-      isOpen: true
+      isOpen: false // colapsada de entrada para mantenerlo minimalista
     });
 
-    renderCustomCards();
+    const targetContainer = (tab.code === "0000") ? 'customCardsContainer' : 'complexCustomCardsContainer';
+    renderCustomCards(targetContainer);
     queueAutoSave();
   }
 
-  function renderCustomCards() {
+  function renderCustomCards(containerId) {
     const tab = activeTabs.find(t => t.id === currentTabId);
     if (!tab) return;
 
-    const container = document.getElementById('customCardsContainer');
+    const container = document.getElementById(containerId);
+    if (!container) return;
     container.innerHTML = '';
 
     tab.customLines.forEach(item => {
       const card = document.createElement('div');
-      card.className = 'card';
+      card.className = 'note-card';
 
       const header = document.createElement('div');
-      header.className = `card-header ${item.isOpen ? 'open' : ''}`;
+      header.className = `note-card-header ${item.isOpen ? 'open' : ''}`;
 
       const titleInput = document.createElement('input');
       titleInput.type = 'text';
-      titleInput.className = 'card-title-input';
+      titleInput.className = 'note-title-input';
       titleInput.value = item.title;
       titleInput.oninput = (e) => { item.title = e.target.value; queueAutoSave(); };
 
       const ticketInput = document.createElement('input');
       ticketInput.type = 'text';
-      ticketInput.className = 'ticket-input-inline';
-      ticketInput.placeholder = 'Ticket # (opcional)';
+      ticketInput.className = 'ticket-chip';
+      ticketInput.placeholder = 'INC # (opc)';
       ticketInput.value = item.ticket || '';
       ticketInput.oninput = (e) => { item.ticket = e.target.value; queueAutoSave(); };
 
       const btnToggle = document.createElement('button');
-      btnToggle.innerText = item.isOpen ? 'Plegar' : 'Expandir';
+      btnToggle.className = 'btn-icon';
+      btnToggle.innerText = item.isOpen ? '▲' : '▼';
       btnToggle.onclick = () => {
         item.isOpen = !item.isOpen;
-        renderCustomCards();
+        renderCustomCards(containerId);
         queueAutoSave();
       };
 
       const btnCopy = document.createElement('button');
+      btnCopy.className = 'btn-icon';
       btnCopy.innerText = 'Copiar';
       btnCopy.onclick = () => {
         const textToCopy = item.ticket ? `${item.ticket} ${item.text}` : item.text;
@@ -767,11 +904,11 @@
       };
 
       const btnDel = document.createElement('button');
-      btnDel.className = 'btn-danger';
+      btnDel.className = 'btn-danger btn-icon';
       btnDel.innerText = '✕';
       btnDel.onclick = () => {
         tab.customLines = tab.customLines.filter(c => c.id !== item.id);
-        renderCustomCards();
+        renderCustomCards(containerId);
         queueAutoSave();
       };
 
@@ -782,10 +919,10 @@
       header.appendChild(btnDel);
 
       const body = document.createElement('div');
-      body.className = `card-body ${item.isOpen ? '' : 'hidden'}`;
+      body.className = `note-card-body ${item.isOpen ? '' : 'hidden'}`;
 
       const textarea = document.createElement('textarea');
-      textarea.placeholder = 'Escribí tus notas o cuerpo del ticket...';
+      textarea.placeholder = 'Detalles...';
       textarea.value = item.text;
       textarea.oninput = (e) => { item.text = e.target.value; queueAutoSave(); };
 
@@ -796,9 +933,37 @@
     });
   }
 
-  // -------------------------------------------------------------
-  // RUTINAS Y EQUIPOS
-  // -------------------------------------------------------------
+  // PLANILLA EXCEL TÉCNICOS
+  function addRosterRow() {
+    rosterData.push({ tech: '', complex: '', task: '', time: '' });
+    renderRoster();
+    queueAutoSave();
+  }
+
+  function removeRosterRow(index) {
+    rosterData.splice(index, 1);
+    renderRoster();
+    queueAutoSave();
+  }
+
+  function renderRoster() {
+    const tbody = document.getElementById('rosterTableBody');
+    tbody.innerHTML = '';
+
+    rosterData.forEach((row, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" value="${row.tech || ''}" placeholder="Nombre técnico" oninput="rosterData[${i}].tech = this.value; queueAutoSave();"></td>
+        <td><input type="text" value="${row.complex || ''}" placeholder="Complejo..." oninput="rosterData[${i}].complex = this.value; queueAutoSave();"></td>
+        <td><input type="text" value="${row.task || ''}" placeholder="Tarea / Guardia" oninput="rosterData[${i}].task = this.value; queueAutoSave();"></td>
+        <td><input type="text" value="${row.time || ''}" placeholder="Turno" oninput="rosterData[${i}].time = this.value; queueAutoSave();"></td>
+        <td style="text-align:center;"><button class="btn-danger btn-icon" onclick="removeRosterRow(${i})">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // RELEVOS Y LIMPIEZAS
   function renderStaticLines() {
     const lines = [
       { id: 'visita', text: 'SW informa que se realizo la visita semanal de' },
@@ -845,8 +1010,8 @@
 
     const input = document.createElement('input');
     input.type = 'text';
-    input.className = 'ticket-input-inline';
-    input.placeholder = 'INC / Ticket';
+    input.style.width = '120px';
+    input.placeholder = 'INC #';
     input.value = savedVal;
     input.oninput = (e) => {
       tab.ticketsState[key] = e.target.value;
@@ -854,6 +1019,7 @@
     };
 
     const btn = document.createElement('button');
+    btn.className = 'btn-icon';
     btn.innerText = 'Copiar';
     btn.onclick = () => {
       const full = input.value.trim() ? `${input.value.trim()} ${text}` : text;
@@ -870,12 +1036,12 @@
     navigator.clipboard.writeText(text);
     if (btnElement) {
       const original = btnElement.innerText;
-      btnElement.innerText = '✓ Copiado';
-      btnElement.style.color = '#3fb950';
+      btnElement.innerText = '✓';
+      btnElement.style.color = '#38bdf8';
       setTimeout(() => {
         btnElement.innerText = original;
         btnElement.style.color = '';
-      }, 1000);
+      }, 900);
     }
   }
 
@@ -886,7 +1052,7 @@
     let lines = [];
     document.querySelectorAll('#staticLines .line-item, #dynamicLines .line-item').forEach(item => {
       const text = item.querySelector('.line-text').innerText;
-      const tVal = item.querySelector('.ticket-input-inline').value.trim();
+      const tVal = item.querySelector('input').value.trim();
       lines.push(tVal ? `${tVal} ${text}` : text);
     });
 
