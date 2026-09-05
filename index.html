@@ -103,32 +103,37 @@
       gap: 12px;
     }
 
-    /* RELOJ LLAMATIVO */
-    .clock-display {
-      font-family: 'Consolas', 'Courier New', monospace;
-      background: #020617;
-      border: 1px solid #0284c7;
-      padding: 3px 10px;
-      border-radius: 4px;
-      display: flex;
+    /* RELOJ INTEGRADO JUNTO A LA GRILLA */
+    .roster-clock-badge {
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+      gap: 6px;
+      background: #020617;
+      border: 1.5px solid #fde047;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      box-shadow: 0 0 10px rgba(253, 224, 71, 0.25);
     }
 
-    .clock-date {
-      color: #facc15;
+    .roster-clock-date {
+      color: #fde047;
       font-weight: 800;
       font-size: 0.8rem;
-      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .clock-time {
+    .roster-clock-sep {
+      color: #475569;
+      font-weight: bold;
+    }
+
+    .roster-clock-time {
       color: #38bdf8;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 900;
       letter-spacing: 1px;
-      text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+      text-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
     }
 
     .user-tag {
@@ -196,10 +201,10 @@
       font-size: 0.75rem;
     }
 
-    /* Tabs Bar */
+    /* Tabs Bar con tonos mate diferenciados */
     .tabs-bar {
       display: flex;
-      gap: 4px;
+      gap: 5px;
       border-bottom: 1px solid var(--border);
       margin-bottom: 8px;
       overflow-x: auto;
@@ -212,28 +217,55 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      color: var(--text-muted);
-      border: 1px solid transparent;
+      border: 1px solid var(--border);
       border-bottom: none;
       font-size: 0.8rem;
+      font-weight: 500;
+      transition: filter 0.15s ease, transform 0.1s ease;
+    }
+
+    .tab:hover {
+      filter: brightness(1.15);
     }
 
     .tab.active {
-      background: var(--card-bg);
-      color: var(--text-bright);
-      border-color: var(--border);
-      font-weight: 600;
-      border-top: 2px solid var(--accent);
+      font-weight: 700;
+      border-bottom: 1px solid var(--card-bg);
+      transform: translateY(1px);
     }
+
+    /* Paleta mate para complejos */
+    .tab-mate-notes { background: #1e293b; color: #94a3b8; border-top: 2.5px solid #64748b; }
+    .tab-mate-notes.active { background: var(--card-bg); color: #f8fafc; border-top-color: #38bdf8; }
+
+    .tab-mate-0 { background: #1e3a38; color: #99f6e4; border-top: 2.5px solid #2dd4bf; }
+    .tab-mate-0.active { background: #134e4a; color: #ffffff; border-top-color: #5eead4; }
+
+    .tab-mate-1 { background: #3b2a1a; color: #fed7aa; border-top: 2.5px solid #fb923c; }
+    .tab-mate-1.active { background: #451a03; color: #ffffff; border-top-color: #fdba74; }
+
+    .tab-mate-2 { background: #2e263d; color: #e9d5ff; border-top: 2.5px solid #c084fc; }
+    .tab-mate-2.active { background: #3b0764; color: #ffffff; border-top-color: #d8b4fe; }
+
+    .tab-mate-3 { background: #3a2228; color: #fecdd3; border-top: 2.5px solid #f43f5e; }
+    .tab-mate-3.active { background: #4c0519; color: #ffffff; border-top-color: #fda4af; }
+
+    .tab-mate-4 { background: #26382b; color: #bbf7d0; border-top: 2.5px solid #4ade80; }
+    .tab-mate-4.active { background: #14532d; color: #ffffff; border-top-color: #86efac; }
+
+    .tab-mate-5 { background: #33301a; color: #fef08a; border-top: 2.5px solid #eab308; }
+    .tab-mate-5.active { background: #422006; color: #ffffff; border-top-color: #fde047; }
 
     .tab .close-tab {
       font-size: 0.9rem;
       line-height: 1;
       padding: 0 2px;
+      opacity: 0.7;
     }
 
     .tab .close-tab:hover {
       color: var(--danger);
+      opacity: 1;
     }
 
     /* Layout 2 Columnas */
@@ -358,9 +390,7 @@
       resize: vertical;
     }
 
-    /* -----------------------------------------------------------
-       TABLA EXCEL OPERATIVA CON SUB-FILAS (M/T) Y COLORES
-    ----------------------------------------------------------- */
+    /* TABLA EXCEL OPERATIVA */
     .excel-container {
       overflow-x: auto;
       background: #000000;
@@ -429,7 +459,7 @@
       color: #ffffff !important;
     }
 
-    /* Clases de colores dinámicos idénticos al Excel */
+    /* Clases de colores dinámicos */
     .cell-hq { background-color: #fbcfe8 !important; color: #831843 !important; }
     .cell-cmk { background-color: #fef08a !important; color: #713f12 !important; }
     .cell-sdo { background-color: #475569 !important; color: #ffffff !important; }
@@ -488,11 +518,6 @@
       </div>
 
       <div class="top-right">
-        <!-- RELOJ DESTACADO -->
-        <div class="clock-display">
-          <span id="liveDate" class="clock-date">---</span>
-          <span id="liveTime" class="clock-time">00:00:00</span>
-        </div>
         <span class="user-tag" id="userDisplay"></span>
         <button class="btn-danger btn-icon" onclick="logout()" title="Cerrar Sesión">Salir</button>
       </div>
@@ -531,8 +556,17 @@
 
       <!-- COLUMNA DERECHA: GRILLA DE TÉCNICOS ESTILO EXCEL -->
       <div class="panel">
-        <div class="panel-header">
-          <span class="panel-title">Rango de Técnicos / Guardia Semanal</span>
+        <div class="panel-header" style="align-items: center;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="panel-title">Rango de Técnicos / Guardia Semanal</span>
+            <!-- RELOJ INTEGRADO AL TÍTULO -->
+            <div class="roster-clock-badge">
+              <span id="liveDate" class="roster-clock-date">---</span>
+              <span class="roster-clock-sep">|</span>
+              <span id="liveTime" class="roster-clock-time">00:00:00</span>
+            </div>
+          </div>
+
           <div style="display: flex; gap: 6px;">
             <button class="btn-icon" onclick="pasteFromExcelPrompt()" title="Pegar datos directo desde Excel">📋 Pegar Excel</button>
             <button class="btn-primary btn-icon" onclick="addRosterRow()">+ Técnico</button>
@@ -630,8 +664,10 @@
     const mm = String(now.getMinutes()).padStart(2, '0');
     const ss = String(now.getSeconds()).padStart(2, '0');
 
-    document.getElementById('liveDate').innerText = `${dName} ${dNum}/${mNum}`;
-    document.getElementById('liveTime').innerText = `${hh}:${mm}:${ss}`;
+    const dateEl = document.getElementById('liveDate');
+    const timeEl = document.getElementById('liveTime');
+    if (dateEl) dateEl.innerText = `${dName} ${dNum}/${mNum}`;
+    if (timeEl) timeEl.innerText = `${hh}:${mm}:${ss}`;
   }
   setInterval(updateClock, 1000);
   updateClock();
@@ -752,7 +788,6 @@
       currentTabId = noteTabId;
     }
 
-    // Datos por defecto idénticos al Excel
     if (!rosterData || rosterData.length === 0) {
       rosterData = [
         {
@@ -794,7 +829,17 @@
     selectTab(currentTabId);
   }
 
-  // TABS
+  // TABS CON COLORES MATE DISTINTIVOS
+  function getTabMateClass(tab, index) {
+    if (tab.code === "0000" || tab.id === noteTabId) {
+      return 'tab-mate-notes';
+    }
+    // Asignación de color determinística según código para mantener consistencia
+    const codeNum = parseInt(tab.code, 10);
+    const colorIndex = isNaN(codeNum) ? (index % 6) : (codeNum % 6);
+    return `tab-mate-${colorIndex}`;
+  }
+
   function createNewTab() {
     let rawCode = document.getElementById('complexInput').value.trim();
     if (!rawCode) return;
@@ -821,9 +866,10 @@
     const container = document.getElementById('tabsContainer');
     container.innerHTML = '';
 
-    activeTabs.forEach(tab => {
+    activeTabs.forEach((tab, index) => {
       const tabEl = document.createElement('div');
-      tabEl.className = `tab ${tab.id === currentTabId ? 'active' : ''}`;
+      const mateClass = getTabMateClass(tab, index);
+      tabEl.className = `tab ${mateClass} ${tab.id === currentTabId ? 'active' : ''}`;
       tabEl.innerHTML = `
         <span>${tab.name}</span>
         ${tab.id !== noteTabId ? `<span class="close-tab" onclick="closeTab(event, '${tab.id}')">&times;</span>` : ''}
@@ -1133,18 +1179,15 @@
 
       const rows = text.trim().split(/\r?\n/).map(row => row.split('\t'));
       
-      // Si el formato viene con M y T consecutivas por cada técnico
       let newRoster = [];
       for (let i = 0; i < rows.length; i += 2) {
         const rowM = rows[i];
         const rowT = rows[i + 1] || [];
         
-        // Asumiendo Col 0: Técnico, Col 1: Turno (M/T), Col 2..6: Lunes a Viernes
         const name = rowM[0] ? rowM[0].trim() : `Técnico ${Math.floor(i/2) + 1}`;
         const mCols = rowM.slice(rowM[1] === 'M' ? 2 : 1, 7);
         const tCols = rowT.slice(rowT[1] === 'T' ? 2 : 1, 7);
 
-        // Completar a 5 días
         while (mCols.length < 5) mCols.push('');
         while (tCols.length < 5) tCols.push('');
 
