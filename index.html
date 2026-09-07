@@ -515,8 +515,15 @@
     .line-text { flex: 1; font-size: 0.8rem; }
 
     /* -----------------------------------------------------------
-       NUEVO: PANEL CONTROL MENSUAL RELEVOS (DATACENTER & CARTELERÍA)
+       RELEVO MENSUAL: DATACENTER & CARTELERÍA (POR REGIONES)
     ----------------------------------------------------------- */
+    .relevos-badge-group {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
     .relevos-badge {
       font-size: 0.72rem;
       background: #090d14;
@@ -525,25 +532,43 @@
       border-radius: 4px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
+
+    .badge-dc { border-color: #0284c7; }
+    .badge-cart { border-color: #ea580c; }
+
     .relevos-stat-done { color: #4ade80; font-weight: 800; }
     .relevos-stat-pend { color: #f87171; font-weight: 800; }
+
+    .relevos-region-header {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin: 8px 0 4px 0;
+      padding-bottom: 2px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .region-caba { color: #38bdf8; }
+    .region-gba { color: #a78bfa; }
+    .region-interior { color: #fb923c; }
 
     .relevos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
-      gap: 6px;
-      max-height: 380px;
-      overflow-y: auto;
-      padding-right: 4px;
+      gap: 5px;
+      margin-bottom: 6px;
     }
 
     .relevo-card {
       background: #0d1117;
       border: 1px solid #21262d;
       border-radius: 4px;
-      padding: 6px 8px;
+      padding: 5px 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -733,15 +758,26 @@
 
         </div>
 
-        <!-- 3. NUEVO RECUADRO: RELEVO MENSUAL DATACENTER Y CARTELERÍA -->
+        <!-- 3. RELEVO MENSUAL: DATACENTER & CARTELERÍA (CONTADORES INDEPENDIENTES Y POR ZONAS) -->
         <div class="panel" style="margin-top: 10px; border-color: #334155; padding: 8px;">
           <div class="panel-header" style="margin-bottom: 6px; border-bottom: 1px solid #334155;">
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <span class="panel-title" style="color: #38bdf8;">🖥️ Relevos: Datacenter & Cartelería</span>
-              <div class="relevos-badge">
-                <span>Completos: <span id="relevosDoneCount" class="relevos-stat-done">0</span>/26</span>
-                <span style="color:#475569;">|</span>
-                <span>Faltan: <span id="relevosPendingCount" class="relevos-stat-pend">26</span></span>
+              <span class="panel-title" style="color: #38bdf8;">🖥️ Datacenter & Cartelería</span>
+              <div class="relevos-badge-group">
+                <!-- CONTADOR INDEPENDIENTE DC -->
+                <div class="relevos-badge badge-dc" title="Relevo de Datacenter">
+                  <span style="color:#38bdf8; font-weight:700;">DC:</span>
+                  <span><span id="dcDoneCount" class="relevos-stat-done">0</span>/26</span>
+                  <span style="color:#475569;">|</span>
+                  <span>Faltan: <span id="dcPendingCount" class="relevos-stat-pend">26</span></span>
+                </div>
+                <!-- CONTADOR INDEPENDIENTE CARTELERÍA -->
+                <div class="relevos-badge badge-cart" title="Relevo de Cartelería">
+                  <span style="color:#fb923c; font-weight:700;">CART:</span>
+                  <span><span id="cartDoneCount" class="relevos-stat-done">0</span>/26</span>
+                  <span style="color:#475569;">|</span>
+                  <span>Faltan: <span id="cartPendingCount" class="relevos-stat-pend">26</span></span>
+                </div>
               </div>
             </div>
 
@@ -751,8 +787,18 @@
             </div>
           </div>
 
-          <div id="relevosCollapsibleContent">
-            <div class="relevos-grid" id="relevosContainer"></div>
+          <div id="relevosCollapsibleContent" style="max-height: 380px; overflow-y: auto; padding-right: 4px;">
+            <!-- REGION CABA -->
+            <div class="relevos-region-header region-caba">🏛️ CABA</div>
+            <div class="relevos-grid" id="relevosContainerCABA"></div>
+
+            <!-- REGION GBA -->
+            <div class="relevos-region-header region-gba">🏙️ GBA</div>
+            <div class="relevos-grid" id="relevosContainerGBA"></div>
+
+            <!-- REGION INTERIOR -->
+            <div class="relevos-region-header region-interior">✈️ INTERIOR</div>
+            <div class="relevos-grid" id="relevosContainerInterior"></div>
           </div>
         </div>
 
@@ -805,34 +851,40 @@
     "2014": "Neuquen", "2015": "Avellaneda", "2016": "Parque Brown"
   };
 
-  // LISTA DE LOS 26 SECTORES A RELEVAR (24 Complejos + 2 Premium)
-  const relevosComplejosList = [
-    { id: '2000', name: 'Unicenter (2000)', isPremium: false },
-    { id: '2000_prem', name: 'Unicenter Premium', isPremium: true },
-    { id: '2003', name: 'Dot (2003)', isPremium: false },
-    { id: '2003_prem', name: 'Dot Premium', isPremium: true },
-    { id: '0732', name: 'Palmares (0732)', isPremium: false },
-    { id: '0733', name: 'Palermo (0733)', isPremium: false },
-    { id: '0734', name: 'Caballito (0734)', isPremium: false },
-    { id: '0739', name: 'Soleil (0739)', isPremium: false },
-    { id: '0745', name: 'Santa Fe (0745)', isPremium: false },
-    { id: '0748', name: 'San Justo (0748)', isPremium: false },
-    { id: '0749', name: 'Malvinas (0749)', isPremium: false },
-    { id: '0756', name: 'Tortugas (0756)', isPremium: false },
-    { id: '2001', name: 'Moron (2001)', isPremium: false },
-    { id: '2002', name: 'Quilmes (2002)', isPremium: false },
-    { id: '2004', name: 'Abasto (2004)', isPremium: false },
-    { id: '2005', name: 'Temperley (2005)', isPremium: false },
-    { id: '2006', name: 'Moreno (2006)', isPremium: false },
-    { id: '2007', name: 'Salta Hoyts (2007)', isPremium: false },
-    { id: '2008', name: 'Nuevo Centro (2008)', isPremium: false },
-    { id: '2009', name: 'Patio Olmos (2009)', isPremium: false },
-    { id: '2010', name: 'Rosario (2010)', isPremium: false },
-    { id: '2013', name: 'Salta Cnk (2013)', isPremium: false },
-    { id: '2014', name: 'Neuquen (2014)', isPremium: false },
-    { id: '2015', name: 'Avellaneda (2015)', isPremium: false },
-    { id: '2016', name: 'Parque Brown (2016)', isPremium: false }
-  ];
+  // ESTRUCTURA AGRUPADA DE RELEVOS (26 SECTORES)
+  const relevosGrouped = {
+    caba: [
+      { id: '0734', name: 'Caballito (0734)', isPremium: false },
+      { id: '0733', name: 'Palermo (0733)', isPremium: false },
+      { id: 'madero', name: 'Madero', isPremium: false },
+      { id: '2004', name: 'Abasto (2004)', isPremium: false },
+      { id: '2000', name: 'Unicenter (2000)', isPremium: false },
+      { id: '2000_prem', name: 'Unicenter Premium', isPremium: true },
+      { id: '2003', name: 'DOT (2003)', isPremium: false },
+      { id: '2003_prem', name: 'DOT Premium', isPremium: true }
+    ],
+    gba: [
+      { id: '2015', name: 'Avellaneda (2015)', isPremium: false },
+      { id: '2002', name: 'Quilmes (2002)', isPremium: false },
+      { id: '2005', name: 'Temperley (2005)', isPremium: false },
+      { id: '0739', name: 'Soleil (0739)', isPremium: false },
+      { id: '0756', name: 'Tortugas (0756)', isPremium: false },
+      { id: '0749', name: 'Malvinas (0749)', isPremium: false },
+      { id: '0748', name: 'San Justo (0748)', isPremium: false },
+      { id: '2006', name: 'Moreno (2006)', isPremium: false },
+      { id: '2001', name: 'Moron (2001)', isPremium: false }
+    ],
+    interior: [
+      { id: '0732', name: 'Palmares (0732)', isPremium: false },
+      { id: '2013', name: 'Salta Cnk (2013)', isPremium: false },
+      { id: '2007', name: 'Salta Hoyts (2007)', isPremium: false },
+      { id: '2014', name: 'Neuquen (2014)', isPremium: false },
+      { id: '0745', name: 'Santa Fe (0745)', isPremium: false },
+      { id: '2010', name: 'Rosario (2010)', isPremium: false },
+      { id: '2009', name: 'Patio Olmos (2009)', isPremium: false },
+      { id: '2008', name: 'Nuevo Centro (2008)', isPremium: false }
+    ]
+  };
 
   const noteTabId = 'tab_personal';
   let currentUser = null;
@@ -841,7 +893,7 @@
   let userTodos = [];
   let rosterData = [];
   let interiorRosterData = [];
-  let relevosState = {}; // { '2000': { dc: true, cart: false }, ... }
+  let relevosState = {}; // { [id]: { dc: boolean, cart: boolean } }
   let notesBodyVisible = true;
   let showFullWeek = false;
   let relevosVisible = true;
@@ -1227,7 +1279,7 @@
   }
 
   // -------------------------------------------------------------
-  // LÓGICA DE RELEVOS (DATACENTER & CARTELERÍA)
+  // LÓGICA DE RELEVOS AGRUPADOS CON CONTADORES INDEPENDIENTES
   // -------------------------------------------------------------
   function toggleRelevosPanel() {
     relevosVisible = !relevosVisible;
@@ -1248,31 +1300,35 @@
   }
 
   function renderRelevosGrid() {
-    const container = document.getElementById('relevosContainer');
+    renderRegionSection('caba', 'relevosContainerCABA');
+    renderRegionSection('gba', 'relevosContainerGBA');
+    renderRegionSection('interior', 'relevosContainerInterior');
+    updateIndependentRelevosCounts();
+  }
+
+  function renderRegionSection(regionKey, containerId) {
+    const container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = '';
 
-    let completedCount = 0;
-    const totalSectores = relevosComplejosList.length;
-
-    relevosComplejosList.forEach(comp => {
+    const list = relevosGrouped[regionKey] || [];
+    list.forEach(comp => {
       const state = relevosState[comp.id] || { dc: false, cart: false };
-      const isDone = state.dc && state.cart;
-      if (isDone) completedCount++;
+      const isBothDone = state.dc && state.cart;
 
       const card = document.createElement('div');
-      card.className = `relevo-card ${isDone ? 'all-done' : ''}`;
+      card.className = `relevo-card ${isBothDone ? 'all-done' : ''}`;
 
       card.innerHTML = `
         <span class="relevo-name ${comp.isPremium ? 'premium-text' : ''}" title="${comp.name}">
           ${comp.isPremium ? '⭐ ' : ''}${comp.name}
         </span>
         <div class="relevo-checks">
-          <label class="relevo-check-label" title="Datacenter">
+          <label class="relevo-check-label" title="Relevo Datacenter">
             <input type="checkbox" ${state.dc ? 'checked' : ''} onchange="updateRelevoCheck('${comp.id}', 'dc', this.checked)">
             DC
           </label>
-          <label class="relevo-check-label" title="Cartelería">
+          <label class="relevo-check-label" title="Relevo Cartelería">
             <input type="checkbox" ${state.cart ? 'checked' : ''} onchange="updateRelevoCheck('${comp.id}', 'cart', this.checked)">
             CART
           </label>
@@ -1280,12 +1336,32 @@
       `;
       container.appendChild(card);
     });
+  }
 
-    const pendingCount = totalSectores - completedCount;
-    const doneEl = document.getElementById('relevosDoneCount');
-    const pendEl = document.getElementById('relevosPendingCount');
-    if (doneEl) doneEl.innerText = completedCount;
-    if (pendEl) pendEl.innerText = pendingCount;
+  function updateIndependentRelevosCounts() {
+    const totalSectores = 26; // 8 CABA + 9 GBA + 9 Interior
+    let dcCompleted = 0;
+    let cartCompleted = 0;
+
+    const allSectores = [...relevosGrouped.caba, ...relevosGrouped.gba, ...relevosGrouped.interior];
+    allSectores.forEach(comp => {
+      const state = relevosState[comp.id] || { dc: false, cart: false };
+      if (state.dc) dcCompleted++;
+      if (state.cart) cartCompleted++;
+    });
+
+    const dcPending = totalSectores - dcCompleted;
+    const cartPending = totalSectores - cartCompleted;
+
+    const dcDoneEl = document.getElementById('dcDoneCount');
+    const dcPendEl = document.getElementById('dcPendingCount');
+    const cartDoneEl = document.getElementById('cartDoneCount');
+    const cartPendEl = document.getElementById('cartPendingCount');
+
+    if (dcDoneEl) dcDoneEl.innerText = dcCompleted;
+    if (dcPendEl) dcPendEl.innerText = dcPending;
+    if (cartDoneEl) cartDoneEl.innerText = cartCompleted;
+    if (cartPendEl) cartPendEl.innerText = cartPending;
   }
 
   function updateRelevoCheck(id, field, value) {
