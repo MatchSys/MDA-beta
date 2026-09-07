@@ -103,7 +103,7 @@
       gap: 12px;
     }
 
-    /* RELOJ INTEGRADO JUNTO A LA GRILLA */
+    /* RELOJ INTEGRADO */
     .roster-clock-badge {
       display: inline-flex;
       align-items: center;
@@ -513,6 +513,78 @@
       gap: 8px;
     }
     .line-text { flex: 1; font-size: 0.8rem; }
+
+    /* -----------------------------------------------------------
+       NUEVO: PANEL CONTROL MENSUAL RELEVOS (DATACENTER & CARTELERÍA)
+    ----------------------------------------------------------- */
+    .relevos-badge {
+      font-size: 0.72rem;
+      background: #090d14;
+      border: 1px solid #334155;
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .relevos-stat-done { color: #4ade80; font-weight: 800; }
+    .relevos-stat-pend { color: #f87171; font-weight: 800; }
+
+    .relevos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+      gap: 6px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .relevo-card {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 4px;
+      padding: 6px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.15s;
+    }
+    .relevo-card.all-done {
+      border-color: #238636;
+      background: rgba(35, 134, 54, 0.08);
+    }
+    .relevo-name {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 110px;
+    }
+    .relevo-name.premium-text {
+      color: #facc15;
+    }
+    .relevo-checks {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .relevo-check-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .relevo-check-label input {
+      cursor: pointer;
+      margin: 0;
+      accent-color: #38bdf8;
+    }
   </style>
 </head>
 <body>
@@ -606,7 +678,7 @@
         <!-- 2. VISTA GRILLAS SEMANALES (AMBA + INTERIOR) -->
         <div id="weekGridView" style="display: none;">
           
-          <!-- SECCIÓN 1: TÉCNICOS CENTRAL / AMBA (FORMATO M/T) -->
+          <!-- SECCIÓN 1: TÉCNICOS CENTRAL / AMBA -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 6px 0;">
             <span class="section-subtitle" style="color: #38bdf8; margin: 0;">🏢 Técnicos Central / AMBA (M / T)</span>
             <div style="display: flex; gap: 4px;">
@@ -633,7 +705,7 @@
             </table>
           </div>
 
-          <!-- SECCIÓN 2: VISITAS DEL INTERIOR (FORMATO SIMPLE DIRECTO) -->
+          <!-- SECCIÓN 2: VISITAS DEL INTERIOR -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0 6px 0;">
             <span class="section-subtitle" style="color: #fb923c; margin: 0;">📍 Visitas del Interior (Planilla Simple)</span>
             <div style="display: flex; gap: 4px;">
@@ -659,6 +731,29 @@
             </table>
           </div>
 
+        </div>
+
+        <!-- 3. NUEVO RECUADRO: RELEVO MENSUAL DATACENTER Y CARTELERÍA -->
+        <div class="panel" style="margin-top: 10px; border-color: #334155; padding: 8px;">
+          <div class="panel-header" style="margin-bottom: 6px; border-bottom: 1px solid #334155;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span class="panel-title" style="color: #38bdf8;">🖥️ Relevos: Datacenter & Cartelería</span>
+              <div class="relevos-badge">
+                <span>Completos: <span id="relevosDoneCount" class="relevos-stat-done">0</span>/26</span>
+                <span style="color:#475569;">|</span>
+                <span>Faltan: <span id="relevosPendingCount" class="relevos-stat-pend">26</span></span>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 5px;">
+              <button class="btn-danger btn-icon" onclick="resetRelevosMensual()" title="Resetear todas las casillas al inicio del mes">🔄 Reset Mensual</button>
+              <button class="btn-icon" id="btnToggleRelevos" onclick="toggleRelevosPanel()">Plegar</button>
+            </div>
+          </div>
+
+          <div id="relevosCollapsibleContent">
+            <div class="relevos-grid" id="relevosContainer"></div>
+          </div>
         </div>
 
       </div>
@@ -710,15 +805,46 @@
     "2014": "Neuquen", "2015": "Avellaneda", "2016": "Parque Brown"
   };
 
+  // LISTA DE LOS 26 SECTORES A RELEVAR (24 Complejos + 2 Premium)
+  const relevosComplejosList = [
+    { id: '2000', name: 'Unicenter (2000)', isPremium: false },
+    { id: '2000_prem', name: 'Unicenter Premium', isPremium: true },
+    { id: '2003', name: 'Dot (2003)', isPremium: false },
+    { id: '2003_prem', name: 'Dot Premium', isPremium: true },
+    { id: '0732', name: 'Palmares (0732)', isPremium: false },
+    { id: '0733', name: 'Palermo (0733)', isPremium: false },
+    { id: '0734', name: 'Caballito (0734)', isPremium: false },
+    { id: '0739', name: 'Soleil (0739)', isPremium: false },
+    { id: '0745', name: 'Santa Fe (0745)', isPremium: false },
+    { id: '0748', name: 'San Justo (0748)', isPremium: false },
+    { id: '0749', name: 'Malvinas (0749)', isPremium: false },
+    { id: '0756', name: 'Tortugas (0756)', isPremium: false },
+    { id: '2001', name: 'Moron (2001)', isPremium: false },
+    { id: '2002', name: 'Quilmes (2002)', isPremium: false },
+    { id: '2004', name: 'Abasto (2004)', isPremium: false },
+    { id: '2005', name: 'Temperley (2005)', isPremium: false },
+    { id: '2006', name: 'Moreno (2006)', isPremium: false },
+    { id: '2007', name: 'Salta Hoyts (2007)', isPremium: false },
+    { id: '2008', name: 'Nuevo Centro (2008)', isPremium: false },
+    { id: '2009', name: 'Patio Olmos (2009)', isPremium: false },
+    { id: '2010', name: 'Rosario (2010)', isPremium: false },
+    { id: '2013', name: 'Salta Cnk (2013)', isPremium: false },
+    { id: '2014', name: 'Neuquen (2014)', isPremium: false },
+    { id: '2015', name: 'Avellaneda (2015)', isPremium: false },
+    { id: '2016', name: 'Parque Brown (2016)', isPremium: false }
+  ];
+
   const noteTabId = 'tab_personal';
   let currentUser = null;
   let activeTabs = [];
   let currentTabId = noteTabId;
   let userTodos = [];
-  let rosterData = [];        // AMBA: { name, m: [], t: [] }
-  let interiorRosterData = []; // Interior: { label: 'Interior', days: ['', '', '', '', ''] }
+  let rosterData = [];
+  let interiorRosterData = [];
+  let relevosState = {}; // { '2000': { dc: true, cart: false }, ... }
   let notesBodyVisible = true;
   let showFullWeek = false;
+  let relevosVisible = true;
   let saveTimeout = null;
 
   // RELOJ LLAMATIVO
@@ -819,8 +945,10 @@
       userTodos,
       rosterData,
       interiorRosterData,
+      relevosState,
       notesBodyVisible,
-      showFullWeek
+      showFullWeek,
+      relevosVisible
     };
 
     const { error } = await sbClient
@@ -849,8 +977,10 @@
       userTodos = data.data.userTodos || [];
       rosterData = data.data.rosterData || [];
       interiorRosterData = data.data.interiorRosterData || [];
+      relevosState = data.data.relevosState || {};
       notesBodyVisible = data.data.notesBodyVisible !== undefined ? data.data.notesBodyVisible : true;
       showFullWeek = data.data.showFullWeek !== undefined ? data.data.showFullWeek : false;
+      relevosVisible = data.data.relevosVisible !== undefined ? data.data.relevosVisible : true;
     }
 
     if (!activeTabs || activeTabs.length === 0) {
@@ -880,9 +1010,11 @@
     }
 
     applyNotesBodyVisibility();
+    applyRelevosVisibility();
     updateRosterViewMode();
     renderTabs();
     selectTab(currentTabId);
+    renderRelevosGrid();
   }
 
   // TABS
@@ -948,6 +1080,7 @@
       renderCustomCards('customCardsContainer');
       renderRoster();
       renderTodayFixed();
+      renderRelevosGrid();
     } else {
       document.getElementById('complexTitleDisplay').innerText = `${tab.name} (${tab.code})`;
       document.getElementById('rawEquipments').value = tab.rawInput || "";
@@ -986,7 +1119,6 @@
     }
   }
 
-  // ALTERNAR VISTAS
   function toggleWeekView() {
     showFullWeek = !showFullWeek;
     updateRosterViewMode();
@@ -1014,7 +1146,7 @@
     }
   }
 
-  // VISTA FIJA DE HOY (CONSOLIDADA)
+  // VISTA FIJA DE HOY
   function renderTodayFixed() {
     const container = document.getElementById('todayFixedContent');
     if (!container) return;
@@ -1092,6 +1224,85 @@
     }
 
     container.innerHTML = html;
+  }
+
+  // -------------------------------------------------------------
+  // LÓGICA DE RELEVOS (DATACENTER & CARTELERÍA)
+  // -------------------------------------------------------------
+  function toggleRelevosPanel() {
+    relevosVisible = !relevosVisible;
+    applyRelevosVisibility();
+    queueAutoSave();
+  }
+
+  function applyRelevosVisibility() {
+    const el = document.getElementById('relevosCollapsibleContent');
+    const btn = document.getElementById('btnToggleRelevos');
+    if (relevosVisible) {
+      el.style.display = 'block';
+      btn.innerText = 'Plegar';
+    } else {
+      el.style.display = 'none';
+      btn.innerText = 'Expandir';
+    }
+  }
+
+  function renderRelevosGrid() {
+    const container = document.getElementById('relevosContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    let completedCount = 0;
+    const totalSectores = relevosComplejosList.length;
+
+    relevosComplejosList.forEach(comp => {
+      const state = relevosState[comp.id] || { dc: false, cart: false };
+      const isDone = state.dc && state.cart;
+      if (isDone) completedCount++;
+
+      const card = document.createElement('div');
+      card.className = `relevo-card ${isDone ? 'all-done' : ''}`;
+
+      card.innerHTML = `
+        <span class="relevo-name ${comp.isPremium ? 'premium-text' : ''}" title="${comp.name}">
+          ${comp.isPremium ? '⭐ ' : ''}${comp.name}
+        </span>
+        <div class="relevo-checks">
+          <label class="relevo-check-label" title="Datacenter">
+            <input type="checkbox" ${state.dc ? 'checked' : ''} onchange="updateRelevoCheck('${comp.id}', 'dc', this.checked)">
+            DC
+          </label>
+          <label class="relevo-check-label" title="Cartelería">
+            <input type="checkbox" ${state.cart ? 'checked' : ''} onchange="updateRelevoCheck('${comp.id}', 'cart', this.checked)">
+            CART
+          </label>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    const pendingCount = totalSectores - completedCount;
+    const doneEl = document.getElementById('relevosDoneCount');
+    const pendEl = document.getElementById('relevosPendingCount');
+    if (doneEl) doneEl.innerText = completedCount;
+    if (pendEl) pendEl.innerText = pendingCount;
+  }
+
+  function updateRelevoCheck(id, field, value) {
+    if (!relevosState[id]) {
+      relevosState[id] = { dc: false, cart: false };
+    }
+    relevosState[id][field] = value;
+    renderRelevosGrid();
+    queueAutoSave();
+  }
+
+  function resetRelevosMensual() {
+    if (confirm("¿Estás seguro de que querés resetear todos los relevos de Datacenter y Cartelería para el nuevo mes?")) {
+      relevosState = {};
+      renderRelevosGrid();
+      queueAutoSave();
+    }
   }
 
   // CHECKLIST
@@ -1280,7 +1491,7 @@
       if (thI) d === dayIndex ? thI.classList.add('col-today') : thI.classList.remove('col-today');
     }
 
-    // 1. AMBA (M y T)
+    // 1. AMBA
     const tbodyAMBA = document.getElementById('rosterTableBody');
     tbodyAMBA.innerHTML = '';
     rosterData.forEach((tech, i) => {
@@ -1314,7 +1525,7 @@
       tbodyAMBA.appendChild(trT);
     });
 
-    // 2. Interior (Línea simple)
+    // 2. Interior
     const tbodyInterior = document.getElementById('interiorRosterTableBody');
     tbodyInterior.innerHTML = '';
     interiorRosterData.forEach((row, i) => {
