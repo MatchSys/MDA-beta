@@ -141,7 +141,7 @@
       color: var(--text-muted);
     }
 
-    /* Form Controls */
+    /* Form Controls con Auto-Ajuste de Altura */
     input, textarea, select {
       background: var(--card-subtle);
       border: 1px solid var(--border);
@@ -151,6 +151,16 @@
       font-family: inherit;
       font-size: 0.85rem;
       outline: none;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 42px;
+      height: auto;
+      resize: none; /* Se expande solo, no hace falta estirarlo manualmente */
+      overflow-y: hidden; /* Elimina la barra de scroll */
+      line-height: 1.45;
+      field-sizing: content; /* Soporte nativo para CSS moderno */
     }
 
     input:focus, textarea:focus, select:focus {
@@ -350,8 +360,6 @@
     .note-card-body { padding: 6px; }
     .note-card-body.hidden { display: none; }
 
-    textarea { width: 100%; height: 50px; resize: vertical; }
-
     /* VISTA COMPACTA: "SOLO HOY" */
     .today-fixed-container {
       background: #090d14;
@@ -514,9 +522,7 @@
     }
     .line-text { flex: 1; font-size: 0.8rem; }
 
-    /* -----------------------------------------------------------
-       RELEVO MENSUAL: DATACENTER & CARTELERÍA (POR REGIONES)
-    ----------------------------------------------------------- */
+    /* RELEVO MENSUAL: DATACENTER & CARTELERÍA */
     .relevos-badge-group {
       display: inline-flex;
       gap: 6px;
@@ -758,20 +764,18 @@
 
         </div>
 
-        <!-- 3. RELEVO MENSUAL: DATACENTER & CARTELERÍA (CONTADORES INDEPENDIENTES Y POR ZONAS) -->
+        <!-- 3. RELEVO MENSUAL: DATACENTER & CARTELERÍA -->
         <div class="panel" style="margin-top: 10px; border-color: #334155; padding: 8px;">
           <div class="panel-header" style="margin-bottom: 6px; border-bottom: 1px solid #334155;">
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <span class="panel-title" style="color: #38bdf8;">🖥️ Datacenter & Cartelería</span>
               <div class="relevos-badge-group">
-                <!-- CONTADOR INDEPENDIENTE DC -->
                 <div class="relevos-badge badge-dc" title="Relevo de Datacenter">
                   <span style="color:#38bdf8; font-weight:700;">DC:</span>
                   <span><span id="dcDoneCount" class="relevos-stat-done">0</span>/26</span>
                   <span style="color:#475569;">|</span>
                   <span>Faltan: <span id="dcPendingCount" class="relevos-stat-pend">26</span></span>
                 </div>
-                <!-- CONTADOR INDEPENDIENTE CARTELERÍA -->
                 <div class="relevos-badge badge-cart" title="Relevo de Cartelería">
                   <span style="color:#fb923c; font-weight:700;">CART:</span>
                   <span><span id="cartDoneCount" class="relevos-stat-done">0</span>/26</span>
@@ -782,21 +786,18 @@
             </div>
 
             <div style="display: flex; gap: 5px;">
-              <button class="btn-danger btn-icon" onclick="resetRelevosMensual()" title="Resetear todas las casillas al inicio del mes">🔄 Reset Mensual</button>
+              <button class="btn-danger btn-icon" onclick="resetRelevosMensual()" title="Resetear al inicio del mes">🔄 Reset Mensual</button>
               <button class="btn-icon" id="btnToggleRelevos" onclick="toggleRelevosPanel()">Plegar</button>
             </div>
           </div>
 
-          <div id="relevosCollapsibleContent" style="max-height: 380px; overflow-y: auto; padding-right: 4px;">
-            <!-- REGION CABA -->
+          <div id="relevosCollapsibleContent" style="padding-right: 4px;">
             <div class="relevos-region-header region-caba">🏛️ CABA</div>
             <div class="relevos-grid" id="relevosContainerCABA"></div>
 
-            <!-- REGION GBA -->
             <div class="relevos-region-header region-gba">🏙️ GBA</div>
             <div class="relevos-grid" id="relevosContainerGBA"></div>
 
-            <!-- REGION INTERIOR -->
             <div class="relevos-region-header region-interior">✈️ INTERIOR</div>
             <div class="relevos-grid" id="relevosContainerInterior"></div>
           </div>
@@ -818,7 +819,7 @@
 
       <div style="margin: 12px 0;">
         <span class="section-subtitle">Pegar Equipos / Impresoras (ej: KI02 SN03):</span>
-        <textarea id="rawEquipments" placeholder="KI02 SN03 SN04..." oninput="processEquipments()"></textarea>
+        <textarea id="rawEquipments" placeholder="KI02 SN03 SN04..." oninput="autoResizeTextarea(this); processEquipments();"></textarea>
       </div>
 
       <span class="section-subtitle">Limpiezas Generadas</span>
@@ -836,6 +837,13 @@
   </div>
 
 <script>
+  // AUTO-AJUSTE DINÁMICO DE ALTURA PARA TEXTAREAS
+  function autoResizeTextarea(el) {
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  }
+
   // CONFIGURACIÓN SUPABASE
   const SUPABASE_URL = 'https://xlwhvmmgimeuvbvghemt.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsd2h2bW1naW1ldXZidmdoZW10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2Mzc1NjUsImV4cCI6MjEwNDIxMzU2NX0.wqtbkubn-JGW671twlZFAD6bWH0TohSH2BbsoZOdSHU';
@@ -851,7 +859,6 @@
     "2014": "Neuquen", "2015": "Avellaneda", "2016": "Parque Brown"
   };
 
-  // ESTRUCTURA AGRUPADA DE RELEVOS (26 SECTORES)
   const relevosGrouped = {
     caba: [
       { id: '0734', name: 'Caballito (0734)', isPremium: false },
@@ -893,13 +900,13 @@
   let userTodos = [];
   let rosterData = [];
   let interiorRosterData = [];
-  let relevosState = {}; // { [id]: { dc: boolean, cart: boolean } }
+  let relevosState = {};
   let notesBodyVisible = true;
   let showFullWeek = false;
   let relevosVisible = true;
   let saveTimeout = null;
 
-  // RELOJ LLAMATIVO
+  // RELOJ EN TIEMPO REAL
   function updateClock() {
     const now = new Date();
     const days = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
@@ -1135,7 +1142,9 @@
       renderRelevosGrid();
     } else {
       document.getElementById('complexTitleDisplay').innerText = `${tab.name} (${tab.code})`;
-      document.getElementById('rawEquipments').value = tab.rawInput || "";
+      const rawEl = document.getElementById('rawEquipments');
+      rawEl.value = tab.rawInput || "";
+      autoResizeTextarea(rawEl);
       renderStaticLines();
       processEquipments();
       renderCustomCards('complexCustomCardsContainer');
@@ -1278,9 +1287,7 @@
     container.innerHTML = html;
   }
 
-  // -------------------------------------------------------------
-  // LÓGICA DE RELEVOS AGRUPADOS CON CONTADORES INDEPENDIENTES
-  // -------------------------------------------------------------
+  // RELEVOS
   function toggleRelevosPanel() {
     relevosVisible = !relevosVisible;
     applyRelevosVisibility();
@@ -1339,7 +1346,7 @@
   }
 
   function updateIndependentRelevosCounts() {
-    const totalSectores = 26; // 8 CABA + 9 GBA + 9 Interior
+    const totalSectores = 26;
     let dcCompleted = 0;
     let cartCompleted = 0;
 
@@ -1423,7 +1430,7 @@
     });
   }
 
-  // TARJETAS
+  // TARJETAS CON TEXTAREA AJUSTABLE AUTOMÁTICAMENTE
   function addCustomLine() {
     const tab = activeTabs.find(t => t.id === currentTabId);
     if (!tab) return;
@@ -1433,7 +1440,7 @@
       title: 'Nota rápida',
       text: '',
       ticket: '',
-      isOpen: false
+      isOpen: true
     });
 
     const targetContainer = (tab.code === "0000") ? 'customCardsContainer' : 'complexCustomCardsContainer';
@@ -1507,12 +1514,19 @@
       const textarea = document.createElement('textarea');
       textarea.placeholder = 'Detalles...';
       textarea.value = item.text;
-      textarea.oninput = (e) => { item.text = e.target.value; queueAutoSave(); };
+      textarea.oninput = (e) => { 
+        item.text = e.target.value; 
+        autoResizeTextarea(textarea);
+        queueAutoSave(); 
+      };
 
       body.appendChild(textarea);
       card.appendChild(header);
       card.appendChild(body);
       container.appendChild(card);
+
+      // Auto-ajustar altura al renderizar
+      setTimeout(() => autoResizeTextarea(textarea), 0);
     });
   }
 
@@ -1567,7 +1581,6 @@
       if (thI) d === dayIndex ? thI.classList.add('col-today') : thI.classList.remove('col-today');
     }
 
-    // 1. AMBA
     const tbodyAMBA = document.getElementById('rosterTableBody');
     tbodyAMBA.innerHTML = '';
     rosterData.forEach((tech, i) => {
@@ -1601,7 +1614,6 @@
       tbodyAMBA.appendChild(trT);
     });
 
-    // 2. Interior
     const tbodyInterior = document.getElementById('interiorRosterTableBody');
     tbodyInterior.innerHTML = '';
     interiorRosterData.forEach((row, i) => {
