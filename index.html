@@ -141,7 +141,7 @@
       color: var(--text-muted);
     }
 
-    /* Form Controls con Auto-Ajuste de Altura */
+    /* Form Controls */
     input, textarea, select {
       background: var(--card-subtle);
       border: 1px solid var(--border);
@@ -157,10 +157,10 @@
       width: 100%;
       min-height: 42px;
       height: auto;
-      resize: none; /* Se expande solo, no hace falta estirarlo manualmente */
-      overflow-y: hidden; /* Elimina la barra de scroll */
+      resize: none;
+      overflow-y: hidden;
       line-height: 1.45;
-      field-sizing: content; /* Soporte nativo para CSS moderno */
+      field-sizing: content;
     }
 
     input:focus, textarea:focus, select:focus {
@@ -764,40 +764,45 @@
 
         </div>
 
-        <!-- 3. RELEVO MENSUAL: DATACENTER & CARTELERÍA -->
+        <!-- 3. RELEVO MENSUAL: DATACENTER & CARTELERÍA (27 SEDES/SECTORES) -->
         <div class="panel" style="margin-top: 10px; border-color: #334155; padding: 8px;">
           <div class="panel-header" style="margin-bottom: 6px; border-bottom: 1px solid #334155;">
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <span class="panel-title" style="color: #38bdf8;">🖥️ Datacenter & Cartelería</span>
               <div class="relevos-badge-group">
+                <!-- CONTADOR INDEPENDIENTE DC -->
                 <div class="relevos-badge badge-dc" title="Relevo de Datacenter">
                   <span style="color:#38bdf8; font-weight:700;">DC:</span>
-                  <span><span id="dcDoneCount" class="relevos-stat-done">0</span>/26</span>
+                  <span><span id="dcDoneCount" class="relevos-stat-done">0</span>/27</span>
                   <span style="color:#475569;">|</span>
-                  <span>Faltan: <span id="dcPendingCount" class="relevos-stat-pend">26</span></span>
+                  <span>Faltan: <span id="dcPendingCount" class="relevos-stat-pend">27</span></span>
                 </div>
+                <!-- CONTADOR INDEPENDIENTE CARTELERÍA -->
                 <div class="relevos-badge badge-cart" title="Relevo de Cartelería">
                   <span style="color:#fb923c; font-weight:700;">CART:</span>
-                  <span><span id="cartDoneCount" class="relevos-stat-done">0</span>/26</span>
+                  <span><span id="cartDoneCount" class="relevos-stat-done">0</span>/27</span>
                   <span style="color:#475569;">|</span>
-                  <span>Faltan: <span id="cartPendingCount" class="relevos-stat-pend">26</span></span>
+                  <span>Faltan: <span id="cartPendingCount" class="relevos-stat-pend">27</span></span>
                 </div>
               </div>
             </div>
 
             <div style="display: flex; gap: 5px;">
-              <button class="btn-danger btn-icon" onclick="resetRelevosMensual()" title="Resetear al inicio del mes">🔄 Reset Mensual</button>
+              <button class="btn-danger btn-icon" onclick="resetRelevosMensual()" title="Resetear todas las casillas al inicio del mes">🔄 Reset Mensual</button>
               <button class="btn-icon" id="btnToggleRelevos" onclick="toggleRelevosPanel()">Plegar</button>
             </div>
           </div>
 
           <div id="relevosCollapsibleContent" style="padding-right: 4px;">
+            <!-- REGION CABA -->
             <div class="relevos-region-header region-caba">🏛️ CABA</div>
             <div class="relevos-grid" id="relevosContainerCABA"></div>
 
+            <!-- REGION GBA -->
             <div class="relevos-region-header region-gba">🏙️ GBA</div>
             <div class="relevos-grid" id="relevosContainerGBA"></div>
 
+            <!-- REGION INTERIOR -->
             <div class="relevos-region-header region-interior">✈️ INTERIOR</div>
             <div class="relevos-grid" id="relevosContainerInterior"></div>
           </div>
@@ -859,6 +864,7 @@
     "2014": "Neuquen", "2015": "Avellaneda", "2016": "Parque Brown"
   };
 
+  // ESTRUCTURA AGRUPADA DE RELEVOS (27 SECTORES INCLUYENDO PARQUE BROWN Y PREMIUMS)
   const relevosGrouped = {
     caba: [
       { id: '0734', name: 'Caballito (0734)', isPremium: false },
@@ -868,7 +874,8 @@
       { id: '2000', name: 'Unicenter (2000)', isPremium: false },
       { id: '2000_prem', name: 'Unicenter Premium', isPremium: true },
       { id: '2003', name: 'DOT (2003)', isPremium: false },
-      { id: '2003_prem', name: 'DOT Premium', isPremium: true }
+      { id: '2003_prem', name: 'DOT Premium', isPremium: true },
+      { id: '2016', name: 'Parque Brown (2016)', isPremium: false }
     ],
     gba: [
       { id: '2015', name: 'Avellaneda (2015)', isPremium: false },
@@ -900,7 +907,7 @@
   let userTodos = [];
   let rosterData = [];
   let interiorRosterData = [];
-  let relevosState = {};
+  let relevosState = {}; // { [id]: { dc: boolean, cart: boolean } }
   let notesBodyVisible = true;
   let showFullWeek = false;
   let relevosVisible = true;
@@ -1287,7 +1294,9 @@
     container.innerHTML = html;
   }
 
-  // RELEVOS
+  // -------------------------------------------------------------
+  // LÓGICA DE RELEVOS AGRUPADOS (27 SEDES/SECTORES)
+  // -------------------------------------------------------------
   function toggleRelevosPanel() {
     relevosVisible = !relevosVisible;
     applyRelevosVisibility();
@@ -1346,7 +1355,7 @@
   }
 
   function updateIndependentRelevosCounts() {
-    const totalSectores = 26;
+    const totalSectores = 27; // 9 CABA + 9 GBA + 9 Interior
     let dcCompleted = 0;
     let cartCompleted = 0;
 
@@ -1430,7 +1439,7 @@
     });
   }
 
-  // TARJETAS CON TEXTAREA AJUSTABLE AUTOMÁTICAMENTE
+  // TARJETAS
   function addCustomLine() {
     const tab = activeTabs.find(t => t.id === currentTabId);
     if (!tab) return;
@@ -1525,7 +1534,6 @@
       card.appendChild(body);
       container.appendChild(card);
 
-      // Auto-ajustar altura al renderizar
       setTimeout(() => autoResizeTextarea(textarea), 0);
     });
   }
@@ -1581,6 +1589,7 @@
       if (thI) d === dayIndex ? thI.classList.add('col-today') : thI.classList.remove('col-today');
     }
 
+    // 1. AMBA
     const tbodyAMBA = document.getElementById('rosterTableBody');
     tbodyAMBA.innerHTML = '';
     rosterData.forEach((tech, i) => {
@@ -1614,6 +1623,7 @@
       tbodyAMBA.appendChild(trT);
     });
 
+    // 2. Interior
     const tbodyInterior = document.getElementById('interiorRosterTableBody');
     tbodyInterior.innerHTML = '';
     interiorRosterData.forEach((row, i) => {
