@@ -522,99 +522,156 @@
     }
     .line-text { flex: 1; font-size: 0.8rem; }
 
-    /* RELEVO MENSUAL: DATACENTER & CARTELERÍA */
-    .relevos-badge-group {
-      display: inline-flex;
+    /* -----------------------------------------------------------
+       RELEVO MENSUAL: TABS EXCLUSIVAS (DC Y CARTELERIA)
+    ----------------------------------------------------------- */
+    .relevo-cat-nav {
+      display: flex;
       gap: 6px;
-      align-items: center;
-      flex-wrap: wrap;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 6px;
     }
 
-    .relevos-badge {
-      font-size: 0.72rem;
-      background: #090d14;
-      border: 1px solid #334155;
-      padding: 2px 8px;
+    .btn-cat-tab {
+      flex: 1;
+      padding: 6px 10px;
+      font-weight: 700;
+      font-size: 0.78rem;
       border-radius: 4px;
-      display: inline-flex;
+      border: 1px solid #334155;
+      background: #090d14;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
       align-items: center;
-      gap: 4px;
+      justify-content: space-between;
+      transition: all 0.2s ease;
     }
 
-    .badge-dc { border-color: #0284c7; }
-    .badge-cart { border-color: #ea580c; }
+    .btn-cat-tab.active-dc {
+      background: #082f49;
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    }
 
-    .relevos-stat-done { color: #4ade80; font-weight: 800; }
-    .relevos-stat-pend { color: #f87171; font-weight: 800; }
+    .btn-cat-tab.active-cart {
+      background: #431407;
+      border-color: #fb923c;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(251, 146, 60, 0.2);
+    }
+
+    .cat-badge-counter {
+      font-size: 0.72rem;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-weight: 800;
+      background: rgba(0,0,0,0.5);
+    }
 
     .relevos-region-header {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 800;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       margin: 8px 0 4px 0;
-      padding-bottom: 2px;
-      border-bottom: 1px solid #1e293b;
+      color: #94a3b8;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .region-caba { color: #38bdf8; }
-    .region-gba { color: #a78bfa; }
-    .region-interior { color: #fb923c; }
 
-    .relevos-grid {
+    /* Grilla de Pendientes (Normales) */
+    .relevos-grid-pending {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 5px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
-    .relevo-card {
+    .relevo-card-pending {
       background: #0d1117;
-      border: 1px solid #21262d;
+      border: 1px solid #334155;
       border-radius: 4px;
       padding: 5px 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: border-color 0.15s;
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
-    .relevo-card.all-done {
-      border-color: #238636;
-      background: rgba(35, 134, 54, 0.08);
+
+    .relevo-card-pending:hover {
+      border-color: #475569;
+      background: #161b22;
     }
-    .relevo-name {
+
+    .relevo-card-pending .relevo-name {
       font-size: 0.75rem;
       font-weight: 700;
       color: var(--text-bright);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 110px;
+      max-width: 140px;
     }
-    .relevo-name.premium-text {
+
+    .relevo-card-pending .relevo-name.premium-text {
       color: #facc15;
     }
-    .relevo-checks {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+
+    /* Grilla de Realizadas (Agrupadas, chicas y gentiles a la vista) */
+    .completed-section {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed #1e293b;
     }
-    .relevo-check-label {
+
+    .completed-header {
       font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 800;
+      color: #4ade80;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .relevos-grid-completed {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .relevo-chip-done {
+      background: rgba(35, 134, 54, 0.12);
+      border: 1px solid #238636;
+      border-radius: 3px;
+      padding: 3px 6px;
+      font-size: 0.7rem;
       font-weight: 600;
-      color: var(--text-muted);
+      color: #86efac;
       display: inline-flex;
       align-items: center;
-      gap: 2px;
+      gap: 5px;
       cursor: pointer;
-      user-select: none;
+      transition: all 0.15s ease;
     }
-    .relevo-check-label input {
-      cursor: pointer;
+
+    .relevo-chip-done:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+
+    .relevo-chip-done input {
       margin: 0;
-      accent-color: #38bdf8;
+      cursor: pointer;
+      accent-color: #22c55e;
     }
   </style>
 </head>
@@ -764,48 +821,36 @@
 
         </div>
 
-        <!-- 3. RELEVO MENSUAL: DATACENTER & CARTELERÍA (27 SEDES/SECTORES) -->
+        <!-- 3. RELEVO MENSUAL: 2 CATEGORÍAS INDEPENDIENTES CON AUTO-PLEGADO Y SEPARACIÓN DE COMPLETADAS -->
         <div class="panel" style="margin-top: 10px; border-color: #334155; padding: 8px;">
-          <div class="panel-header" style="margin-bottom: 6px; border-bottom: 1px solid #334155;">
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <span class="panel-title" style="color: #38bdf8;">🖥️ Datacenter & Cartelería</span>
-              <div class="relevos-badge-group">
-                <!-- CONTADOR INDEPENDIENTE DC -->
-                <div class="relevos-badge badge-dc" title="Relevo de Datacenter">
-                  <span style="color:#38bdf8; font-weight:700;">DC:</span>
-                  <span><span id="dcDoneCount" class="relevos-stat-done">0</span>/<span id="dcTotalCount">27</span></span>
-                  <span style="color:#475569;">|</span>
-                  <span>Faltan: <span id="dcPendingCount" class="relevos-stat-pend">27</span></span>
-                </div>
-                <!-- CONTADOR INDEPENDIENTE CARTELERÍA -->
-                <div class="relevos-badge badge-cart" title="Relevo de Cartelería">
-                  <span style="color:#fb923c; font-weight:700;">CART:</span>
-                  <span><span id="cartDoneCount" class="relevos-stat-done">0</span>/<span id="cartTotalCount">27</span></span>
-                  <span style="color:#475569;">|</span>
-                  <span>Faltan: <span id="cartPendingCount" class="relevos-stat-pend">27</span></span>
-                </div>
-              </div>
-            </div>
-
+          
+          <div class="panel-header" style="margin-bottom: 6px; border-bottom: none; padding-bottom: 0;">
+            <span class="panel-title" style="color: #f8fafc;">📋 Relevos Mensuales</span>
             <div style="display: flex; gap: 5px;">
               <button class="btn-danger btn-icon" onclick="resetRelevosMensual()" title="Resetear todas las casillas al inicio del mes">🔄 Reset Mensual</button>
-              <button class="btn-icon" id="btnToggleRelevos" onclick="toggleRelevosPanel()">Plegar</button>
+              <button class="btn-icon" id="btnToggleRelevosGlobal" onclick="toggleRelevosGlobal()">Plegar Todo</button>
             </div>
           </div>
 
-          <div id="relevosCollapsibleContent" style="padding-right: 4px;">
-            <!-- REGION CABA -->
-            <div class="relevos-region-header region-caba">🏛️ CABA</div>
-            <div class="relevos-grid" id="relevosContainerCABA"></div>
+          <div id="relevosFullWrapper">
+            <!-- NAVEGADOR DE CATEGORÍAS (ABRIR UNA MINIMIZA LA OTRA) -->
+            <div class="relevo-cat-nav">
+              <button class="btn-cat-tab active-dc" id="btnCatDC" onclick="switchRelevoCategory('dc')">
+                <span>🖥️ DATACENTER</span>
+                <span class="cat-badge-counter" id="badgeNavDC">0/27</span>
+              </button>
+              <button class="btn-cat-tab" id="btnCatCart" onclick="switchRelevoCategory('cart')">
+                <span>📢 CARTELERÍA</span>
+                <span class="cat-badge-counter" id="badgeNavCart">0/27</span>
+              </button>
+            </div>
 
-            <!-- REGION GBA -->
-            <div class="relevos-region-header region-gba">🏙️ GBA</div>
-            <div class="relevos-grid" id="relevosContainerGBA"></div>
-
-            <!-- REGION INTERIOR -->
-            <div class="relevos-region-header region-interior">✈️ INTERIOR</div>
-            <div class="relevos-grid" id="relevosContainerInterior"></div>
+            <!-- CONTENEDOR PRINCIPAL DE RELEVOS -->
+            <div id="relevosContainerActive" style="max-height: 420px; overflow-y: auto; padding-right: 4px;">
+              <!-- Se inyecta dinámicamente con las sedes pendientes arriba y las completadas abajo -->
+            </div>
           </div>
+
         </div>
 
       </div>
@@ -864,7 +909,7 @@
     "2014": "Neuquen", "2015": "Avellaneda", "2016": "Parque Brown"
   };
 
-  // ESTRUCTURA AGRUPADA DE RELEVOS (27 SECTORES EN TOTAL)
+  // ESTRUCTURA AGRUPADA DE RELEVOS (27 SECTORES EN TOTAL)[cite: 1]
   const relevosGrouped = {
     caba: [
       { id: '0734', name: 'Caballito (0734)', isPremium: false },
@@ -908,9 +953,10 @@
   let rosterData = [];
   let interiorRosterData = [];
   let relevosState = {}; // { [id]: { dc: boolean, cart: boolean } }
+  let activeRelevoCategory = 'dc'; // 'dc' o 'cart'
   let notesBodyVisible = true;
   let showFullWeek = false;
-  let relevosVisible = true;
+  let relevosGlobalVisible = true;
   let saveTimeout = null;
 
   // RELOJ EN TIEMPO REAL
@@ -1012,9 +1058,10 @@
       rosterData,
       interiorRosterData,
       relevosState,
+      activeRelevoCategory,
       notesBodyVisible,
       showFullWeek,
-      relevosVisible
+      relevosGlobalVisible
     };
 
     const { error } = await sbClient
@@ -1044,9 +1091,10 @@
       rosterData = data.data.rosterData || [];
       interiorRosterData = data.data.interiorRosterData || [];
       relevosState = data.data.relevosState || {};
+      activeRelevoCategory = data.data.activeRelevoCategory || 'dc';
       notesBodyVisible = data.data.notesBodyVisible !== undefined ? data.data.notesBodyVisible : true;
       showFullWeek = data.data.showFullWeek !== undefined ? data.data.showFullWeek : false;
-      relevosVisible = data.data.relevosVisible !== undefined ? data.data.relevosVisible : true;
+      relevosGlobalVisible = data.data.relevosGlobalVisible !== undefined ? data.data.relevosGlobalVisible : true;
     }
 
     if (!activeTabs || activeTabs.length === 0) {
@@ -1076,11 +1124,11 @@
     }
 
     applyNotesBodyVisibility();
-    applyRelevosVisibility();
+    applyRelevosGlobalVisibility();
     updateRosterViewMode();
     renderTabs();
     selectTab(currentTabId);
-    renderRelevosGrid();
+    renderRelevosView();
   }
 
   // TABS
@@ -1146,7 +1194,7 @@
       renderCustomCards('customCardsContainer');
       renderRoster();
       renderTodayFixed();
-      renderRelevosGrid();
+      renderRelevosView();
     } else {
       document.getElementById('complexTitleDisplay').innerText = `${tab.name} (${tab.code})`;
       const rawEl = document.getElementById('rawEquipments');
@@ -1294,111 +1342,184 @@
     container.innerHTML = html;
   }
 
-  // -------------------------------------------------------------
-  // LÓGICA DE RELEVOS AGRUPADOS (27 SEDES/SECTORES)
-  // -------------------------------------------------------------
-  function toggleRelevosPanel() {
-    relevosVisible = !relevosVisible;
-    applyRelevosVisibility();
+  // ----------------------------------------------------------------------
+  // LÓGICA DE RELEVOS: 2 CATEGORÍAS (ACORDEÓN EXCLUSIVO) + AUTO-SEPARACIÓN
+  // ----------------------------------------------------------------------
+  function switchRelevoCategory(cat) {
+    activeRelevoCategory = cat;
+    renderRelevosView();
     queueAutoSave();
   }
 
-  function applyRelevosVisibility() {
-    const el = document.getElementById('relevosCollapsibleContent');
-    const btn = document.getElementById('btnToggleRelevos');
-    if (relevosVisible) {
+  function toggleRelevosGlobal() {
+    relevosGlobalVisible = !relevosGlobalVisible;
+    applyRelevosGlobalVisibility();
+    queueAutoSave();
+  }
+
+  function applyRelevosGlobalVisibility() {
+    const el = document.getElementById('relevosFullWrapper');
+    const btn = document.getElementById('btnToggleRelevosGlobal');
+    if (relevosGlobalVisible) {
       el.style.display = 'block';
-      btn.innerText = 'Plegar';
+      btn.innerText = 'Plegar Todo';
     } else {
       el.style.display = 'none';
       btn.innerText = 'Expandir';
     }
   }
 
-  function renderRelevosGrid() {
-    renderRegionSection('caba', 'relevosContainerCABA');
-    renderRegionSection('gba', 'relevosContainerGBA');
-    renderRegionSection('interior', 'relevosContainerInterior');
-    updateIndependentRelevosCounts();
-  }
-
-  function renderRegionSection(regionKey, containerId) {
-    const container = document.getElementById(containerId);
+  function renderRelevosView() {
+    const btnDC = document.getElementById('btnCatDC');
+    const btnCart = document.getElementById('btnCatCart');
+    const container = document.getElementById('relevosContainerActive');
     if (!container) return;
     container.innerHTML = '';
 
-    const list = relevosGrouped[regionKey] || [];
-    list.forEach(comp => {
-      const state = relevosState[comp.id] || { dc: false, cart: false };
-      const isBothDone = state.dc && state.cart;
+    // Estilos de botones de categoría
+    if (activeRelevoCategory === 'dc') {
+      btnDC.className = 'btn-cat-tab active-dc';
+      btnCart.className = 'btn-cat-tab';
+    } else {
+      btnDC.className = 'btn-cat-tab';
+      btnCart.className = 'btn-cat-tab active-cart';
+    }
 
-      const card = document.createElement('div');
-      card.className = `relevo-card ${isBothDone ? 'all-done' : ''}`;
+    const field = activeRelevoCategory; // 'dc' o 'cart'
+    const regions = [
+      { key: 'caba', title: '🏛️ CABA' },
+      { key: 'gba', title: '🏙️ GBA' },
+      { key: 'interior', title: '✈️ INTERIOR' }
+    ];
 
-      card.innerHTML = `
-        <span class="relevo-name ${comp.isPremium ? 'premium-text' : ''}" title="${comp.name}">
-          ${comp.isPremium ? '⭐ ' : ''}${comp.name}
-        </span>
-        <div class="relevo-checks">
-          <label class="relevo-check-label" title="Relevo Datacenter">
-            <input type="checkbox" ${state.dc ? 'checked' : ''} onchange="updateRelevoCheck('${comp.id}', 'dc', this.checked)">
-            DC
-          </label>
-          <label class="relevo-check-label" title="Relevo Cartelería">
-            <input type="checkbox" ${state.cart ? 'checked' : ''} onchange="updateRelevoCheck('${comp.id}', 'cart', this.checked)">
-            CART
-          </label>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
+    let pendingList = [];
+    let completedList = [];
 
-  function updateIndependentRelevosCounts() {
-    const allSectores = [...relevosGrouped.caba, ...relevosGrouped.gba, ...relevosGrouped.interior];
-    const totalSectores = allSectores.length; // 27
-
-    let dcCompleted = 0;
-    let cartCompleted = 0;
-
-    allSectores.forEach(comp => {
-      const state = relevosState[comp.id] || { dc: false, cart: false };
-      if (state.dc) dcCompleted++;
-      if (state.cart) cartCompleted++;
+    regions.forEach(reg => {
+      const items = relevosGrouped[reg.key] || [];
+      items.forEach(comp => {
+        const state = relevosState[comp.id] || { dc: false, cart: false };
+        const isDone = state[field] === true;
+        if (isDone) {
+          completedList.push({ ...comp, region: reg.title });
+        } else {
+          pendingList.push({ ...comp, regionKey: reg.key, regionTitle: reg.title });
+        }
+      });
     });
 
-    const dcPending = totalSectores - dcCompleted;
-    const cartPending = totalSectores - cartCompleted;
+    // 1. DIBUJAR PENDIENTES (Agrupadas por región con tarjetas oscuras)
+    regions.forEach(reg => {
+      const regPending = pendingList.filter(p => p.regionKey === reg.key);
+      if (regPending.length > 0) {
+        const header = document.createElement('div');
+        header.className = 'relevos-region-header';
+        header.innerText = `${reg.title} (${regPending.length})`;
+        container.appendChild(header);
 
-    const dcDoneEl = document.getElementById('dcDoneCount');
-    const dcPendEl = document.getElementById('dcPendingCount');
-    const cartDoneEl = document.getElementById('cartDoneCount');
-    const cartPendEl = document.getElementById('cartPendingCount');
+        const grid = document.createElement('div');
+        grid.className = 'relevos-grid-pending';
 
-    if (dcDoneEl) dcDoneEl.innerText = dcCompleted;
-    if (dcPendEl) dcPendEl.innerText = dcPending;
-    if (cartDoneEl) cartDoneEl.innerText = cartCompleted;
-    if (cartPendEl) cartPendEl.innerText = cartPending;
+        regPending.forEach(comp => {
+          const card = document.createElement('div');
+          card.className = 'relevo-card-pending';
+          card.onclick = () => toggleRelevoStatus(comp.id, field);
 
-    const dcTotalEl = document.getElementById('dcTotalCount');
-    const cartTotalEl = document.getElementById('cartTotalCount');
-    if (dcTotalEl) dcTotalEl.innerText = totalSectores;
-    if (cartTotalEl) cartTotalEl.innerText = totalSectores;
+          card.innerHTML = `
+            <span class="relevo-name ${comp.isPremium ? 'premium-text' : ''}" title="${comp.name}">
+              ${comp.isPremium ? '⭐ ' : ''}${comp.name}
+            </span>
+            <input type="checkbox" style="cursor:pointer; accent-color:${field==='dc'?'#38bdf8':'#fb923c'}; pointer-events:none;">
+          `;
+          grid.appendChild(card);
+        });
+
+        container.appendChild(grid);
+      }
+    });
+
+    if (pendingList.length === 0) {
+      const allDoneNotice = document.createElement('div');
+      allDoneNotice.style.color = '#4ade80';
+      allDoneNotice.style.fontSize = '0.85rem';
+      allDoneNotice.style.fontWeight = '700';
+      allDoneNotice.style.padding = '8px 0';
+      allDoneNotice.innerText = `🎉 ¡Todas las sedes de ${field === 'dc' ? 'Datacenter' : 'Cartelería'} fueron relevadas este mes!`;
+      container.appendChild(allDoneNotice);
+    }
+
+    // 2. DIBUJAR COMPLETADAS (Chips sutiles, compactos y separados abajo)
+    if (completedList.length > 0) {
+      const compSection = document.createElement('div');
+      compSection.className = 'completed-section';
+
+      const compHeader = document.createElement('div');
+      compHeader.className = 'completed-header';
+      compHeader.innerHTML = `<span>✓ REALIZADAS (${completedList.length})</span> <span style="color:var(--text-muted); font-size:0.65rem; font-weight:normal;">(Clic para desmarcar)</span>`;
+      compSection.appendChild(compHeader);
+
+      const compGrid = document.createElement('div');
+      compGrid.className = 'relevos-grid-completed';
+
+      completedList.forEach(comp => {
+        const chip = document.createElement('div');
+        chip.className = 'relevo-chip-done';
+        chip.title = `${comp.name} - Clic para volver a marcar pendiente`;
+        chip.onclick = () => toggleRelevoStatus(comp.id, field);
+
+        chip.innerHTML = `
+          <input type="checkbox" checked style="pointer-events:none;">
+          <span>${comp.isPremium ? '⭐ ' : ''}${comp.name}</span>
+        `;
+        compGrid.appendChild(chip);
+      });
+
+      compSection.appendChild(compGrid);
+      container.appendChild(compSection);
+    }
+
+    updateRelevosNavCounters();
   }
 
-  function updateRelevoCheck(id, field, value) {
+  function toggleRelevoStatus(id, field) {
     if (!relevosState[id]) {
       relevosState[id] = { dc: false, cart: false };
     }
-    relevosState[id][field] = value;
-    renderRelevosGrid();
+    relevosState[id][field] = !relevosState[id][field];
+    renderRelevosView();
     queueAutoSave();
+  }
+
+  function updateRelevosNavCounters() {
+    const allSectores = [...relevosGrouped.caba, ...relevosGrouped.gba, ...relevosGrouped.interior];
+    const totalSectores = allSectores.length; // 27[cite: 1]
+
+    let dcCount = 0;
+    let cartCount = 0;
+
+    allSectores.forEach(comp => {
+      const state = relevosState[comp.id] || { dc: false, cart: false };
+      if (state.dc) dcCount++;
+      if (state.cart) cartCount++;
+    });
+
+    const badgeDC = document.getElementById('badgeNavDC');
+    const badgeCart = document.getElementById('badgeNavCart');
+
+    if (badgeDC) {
+      badgeDC.innerText = `${dcCount}/${totalSectores}`;
+      badgeDC.style.color = (dcCount === totalSectores) ? '#4ade80' : '#38bdf8';
+    }
+    if (badgeCart) {
+      badgeCart.innerText = `${cartCount}/${totalSectores}`;
+      badgeCart.style.color = (cartCount === totalSectores) ? '#4ade80' : '#fb923c';
+    }
   }
 
   function resetRelevosMensual() {
     if (confirm("¿Estás seguro de que querés resetear todos los relevos de Datacenter y Cartelería para el nuevo mes?")) {
       relevosState = {};
-      renderRelevosGrid();
+      renderRelevosView();
       queueAutoSave();
     }
   }
