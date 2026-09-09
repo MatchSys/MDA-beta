@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workspace & Control Operativo</title>
+  <title>Workspace & Control Operativo - MDA 3.0</title>
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --bg: #0b0e14;
-      --card-bg: #151921;
-      --card-subtle: #1c212c;
-      --border: #28303f;
-      --border-focus: #3b82f6;
+      --bg: #090d16;
+      --card-bg: #131822;
+      --card-subtle: #1a202c;
+      --border: #242d3d;
+      --border-focus: #38bdf8;
       --text: #cbd5e1;
       --text-bright: #f8fafc;
       --text-muted: #64748b;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
+      --accent: #0284c7;
+      --accent-hover: #0369a1;
       --success: #10b981;
       --danger: #ef4444;
       --warning: #f59e0b;
@@ -51,7 +51,7 @@
       text-align: center;
     }
 
-    /* Header Compacto */
+    /* Top Bar */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -92,7 +92,7 @@
     }
 
     .search-inline input {
-      width: 150px;
+      width: 140px;
       padding: 4px 8px;
       font-size: 0.8rem;
     }
@@ -100,10 +100,10 @@
     .top-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    /* RELOJ INTEGRADO */
+    /* Reloj Integrado */
     .roster-clock-badge {
       display: inline-flex;
       align-items: center;
@@ -112,36 +112,27 @@
       border: 1.5px solid #fde047;
       border-radius: 4px;
       padding: 2px 8px;
-      font-family: 'Consolas', 'Courier New', monospace;
-      box-shadow: 0 0 10px rgba(253, 224, 71, 0.25);
+      font-family: 'Consolas', monospace;
+      box-shadow: 0 0 10px rgba(253, 224, 71, 0.2);
     }
 
     .roster-clock-date {
       color: #fde047;
       font-weight: 800;
       font-size: 0.8rem;
-      letter-spacing: 0.5px;
     }
 
-    .roster-clock-sep {
-      color: #475569;
-      font-weight: bold;
-    }
-
+    .roster-clock-sep { color: #475569; font-weight: bold; }
     .roster-clock-time {
       color: #38bdf8;
       font-size: 0.9rem;
       font-weight: 900;
       letter-spacing: 1px;
-      text-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
     }
 
-    .user-tag {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
+    .user-tag { font-size: 0.8rem; color: var(--text-muted); }
 
-    /* Form Controls */
+    /* Controls */
     input, textarea, select {
       background: var(--card-subtle);
       border: 1px solid var(--border);
@@ -151,20 +142,19 @@
       font-family: inherit;
       font-size: 0.85rem;
       outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     textarea {
       width: 100%;
       min-height: 42px;
-      height: auto;
       resize: none;
-      overflow-y: hidden;
       line-height: 1.45;
-      field-sizing: content;
     }
 
     input:focus, textarea:focus, select:focus {
       border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
     }
 
     button {
@@ -182,7 +172,7 @@
     }
 
     button:hover {
-      background: #252c3b;
+      background: #252e3e;
       border-color: #475569;
     }
 
@@ -192,9 +182,7 @@
       color: #ffffff;
     }
 
-    .btn-primary:hover {
-      background: var(--accent-hover);
-    }
+    .btn-primary:hover { background: var(--accent-hover); }
 
     .btn-danger {
       color: var(--danger);
@@ -206,10 +194,7 @@
       border-color: var(--danger);
     }
 
-    .btn-icon {
-      padding: 3px 6px;
-      font-size: 0.75rem;
-    }
+    .btn-icon { padding: 3px 6px; font-size: 0.75rem; }
 
     /* Tabs Bar */
     .tabs-bar {
@@ -231,7 +216,6 @@
       border-bottom: none;
       font-size: 0.8rem;
       font-weight: 500;
-      transition: filter 0.15s ease, transform 0.1s ease;
     }
 
     .tab:hover { filter: brightness(1.15); }
@@ -239,34 +223,23 @@
 
     .tab-mate-notes { background: #1e293b; color: #94a3b8; border-top: 2.5px solid #64748b; }
     .tab-mate-notes.active { background: var(--card-bg); color: #f8fafc; border-top-color: #38bdf8; }
-
     .tab-mate-0 { background: #1e3a38; color: #99f6e4; border-top: 2.5px solid #2dd4bf; }
     .tab-mate-0.active { background: #134e4a; color: #ffffff; border-top-color: #5eead4; }
-
     .tab-mate-1 { background: #3b2a1a; color: #fed7aa; border-top: 2.5px solid #fb923c; }
     .tab-mate-1.active { background: #451a03; color: #ffffff; border-top-color: #fdba74; }
-
     .tab-mate-2 { background: #2e263d; color: #e9d5ff; border-top: 2.5px solid #c084fc; }
     .tab-mate-2.active { background: #3b0764; color: #ffffff; border-top-color: #d8b4fe; }
-
     .tab-mate-3 { background: #3a2228; color: #fecdd3; border-top: 2.5px solid #f43f5e; }
     .tab-mate-3.active { background: #4c0519; color: #ffffff; border-top-color: #fda4af; }
-
     .tab-mate-4 { background: #26382b; color: #bbf7d0; border-top: 2.5px solid #4ade80; }
     .tab-mate-4.active { background: #14532d; color: #ffffff; border-top-color: #86efac; }
-
     .tab-mate-5 { background: #33301a; color: #fef08a; border-top: 2.5px solid #eab308; }
     .tab-mate-5.active { background: #422006; color: #ffffff; border-top-color: #fde047; }
 
-    .tab .close-tab {
-      font-size: 0.9rem;
-      line-height: 1;
-      padding: 0 2px;
-      opacity: 0.7;
-    }
+    .tab .close-tab { font-size: 0.9rem; line-height: 1; padding: 0 2px; opacity: 0.7; }
     .tab .close-tab:hover { color: var(--danger); opacity: 1; }
 
-    /* Layout 2 Columnas */
+    /* Layout */
     .dashboard-grid {
       display: grid;
       grid-template-columns: 1fr 1.35fr;
@@ -324,7 +297,6 @@
       padding: 3px 0;
       border-bottom: 1px solid rgba(255,255,255,0.03);
     }
-
     .checklist-item:last-child { border-bottom: none; }
     .checklist-item.done span { text-decoration: line-through; color: var(--text-muted); }
 
@@ -343,7 +315,6 @@
       gap: 6px;
       background: rgba(255,255,255,0.02);
     }
-
     .note-card-header.open { border-bottom: 1px solid var(--border); }
 
     .note-title-input {
@@ -354,13 +325,12 @@
       color: var(--text-bright);
       padding: 2px 4px;
     }
-
     .note-title-input:focus { background: var(--bg); border-color: var(--accent); }
-    .ticket-chip { width: 90px; padding: 2px 4px; font-size: 0.75rem; }
+    .ticket-chip { width: 90px; padding: 2px 4px; font-size: 0.75rem; font-family: monospace; }
     .note-card-body { padding: 6px; }
     .note-card-body.hidden { display: none; }
 
-    /* VISTA COMPACTA: "SOLO HOY" */
+    /* Vista Guardia de Hoy */
     .today-fixed-container {
       background: #090d14;
       border: 1px solid #1e293b;
@@ -415,7 +385,7 @@
       font-size: 0.75rem;
     }
 
-    /* TABLA EXCEL SEMANAL */
+    /* Grillas Semanales */
     .excel-container {
       overflow-x: auto;
       background: #000000;
@@ -428,7 +398,6 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 0.75rem;
-      font-family: inherit;
     }
 
     .excel-table th {
@@ -438,15 +407,12 @@
       text-align: center;
       padding: 4px;
       border: 1px solid #475569;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
     }
 
     .excel-table th.col-today {
       background: #38bdf8 !important;
       color: #000000 !important;
       font-weight: 900 !important;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
     }
 
     .excel-table td {
@@ -454,7 +420,6 @@
       padding: 0;
       height: 22px;
       text-align: center;
-      vertical-align: middle;
       font-weight: 600;
     }
 
@@ -463,21 +428,8 @@
       border-right: 2px solid #38bdf8 !important;
     }
 
-    .tech-cell {
-      background: #94a3b8;
-      color: #0f172a;
-      font-weight: 800;
-      padding: 4px !important;
-      text-align: center;
-    }
-
-    .shift-cell {
-      background: #cbd5e1;
-      color: #0f172a;
-      font-weight: 800;
-      width: 22px;
-      text-align: center;
-    }
+    .tech-cell { background: #94a3b8; color: #0f172a; font-weight: 800; padding: 4px !important; }
+    .shift-cell { background: #cbd5e1; color: #0f172a; font-weight: 800; width: 22px; }
 
     .excel-input {
       width: 100%;
@@ -488,16 +440,8 @@
       font-weight: 700;
       font-size: 0.75rem;
       color: inherit;
-      padding: 2px;
     }
 
-    .excel-input:focus {
-      outline: 2px solid #38bdf8;
-      background: #000000 !important;
-      color: #ffffff !important;
-    }
-
-    /* Colores automáticos */
     .cell-hq { background-color: #fbcfe8 !important; color: #831843 !important; }
     .cell-cmk { background-color: #fef08a !important; color: #713f12 !important; }
     .cell-sdo { background-color: #475569 !important; color: #ffffff !important; }
@@ -508,29 +452,11 @@
     .cell-green { background-color: #bbf7d0 !important; color: #14532d !important; }
     .cell-default { background-color: #ffffff !important; color: #000000 !important; }
 
-    /* Complejos */
-    .line-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--card-subtle);
-      padding: 5px 8px;
-      margin-bottom: 4px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      gap: 8px;
-    }
-    .line-text { flex: 1; font-size: 0.8rem; }
-
-    /* -----------------------------------------------------------
-       RELEVO MENSUAL: TABS EXCLUSIVAS (DC Y CARTELERIA)
-    ----------------------------------------------------------- */
+    /* Relevos y Barras de Progreso */
     .relevo-cat-nav {
       display: flex;
       gap: 6px;
-      margin-bottom: 8px;
-      border-bottom: 1px solid #1e293b;
-      padding-bottom: 6px;
+      margin-bottom: 6px;
     }
 
     .btn-cat-tab {
@@ -546,7 +472,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: all 0.2s ease;
     }
 
     .btn-cat-tab.active-dc {
@@ -563,12 +488,27 @@
       box-shadow: 0 0 10px rgba(251, 146, 60, 0.2);
     }
 
-    .cat-badge-counter {
-      font-size: 0.72rem;
-      padding: 1px 6px;
-      border-radius: 3px;
-      font-weight: 800;
-      background: rgba(0,0,0,0.5);
+    .progress-bar-wrap {
+      background: #0c1017;
+      border: 1px solid #1e293b;
+      border-radius: 4px;
+      height: 8px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #38bdf8;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .relevos-filter-input {
+      width: 100%;
+      margin-bottom: 6px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
     }
 
     .relevos-region-header {
@@ -578,15 +518,11 @@
       text-transform: uppercase;
       margin: 8px 0 4px 0;
       color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    /* Grilla de Pendientes (Normales) */
     .relevos-grid-pending {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
       gap: 5px;
       margin-bottom: 8px;
     }
@@ -600,79 +536,182 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
+    .relevo-card-pending:hover { border-color: #475569; background: #161b22; }
+    .relevo-card-pending .relevo-name { font-size: 0.75rem; font-weight: 700; color: var(--text-bright); }
+    .relevo-card-pending .relevo-name.premium-text { color: #facc15; }
 
-    .relevo-card-pending:hover {
-      border-color: #475569;
-      background: #161b22;
-    }
-
-    .relevo-card-pending .relevo-name {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-bright);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 140px;
-    }
-
-    .relevo-card-pending .relevo-name.premium-text {
-      color: #facc15;
-    }
-
-    /* Grilla de Realizadas (Agrupadas, chicas y gentiles a la vista) */
     .completed-section {
       margin-top: 10px;
       padding-top: 8px;
       border-top: 1px dashed #1e293b;
     }
-
     .completed-header {
       font-size: 0.68rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       font-weight: 800;
       color: #4ade80;
       margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
     }
 
-    .relevos-grid-completed {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
+    .relevos-grid-completed { display: flex; flex-wrap: wrap; gap: 4px; }
     .relevo-chip-done {
-      background: rgba(35, 134, 54, 0.12);
+      background: rgba(35, 134, 54, 0.15);
       border: 1px solid #238636;
       border-radius: 3px;
       padding: 3px 6px;
       font-size: 0.7rem;
-      font-weight: 600;
       color: #86efac;
       display: inline-flex;
       align-items: center;
       gap: 5px;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
-    .relevo-chip-done:hover {
-      background: rgba(239, 68, 68, 0.15);
-      border-color: #ef4444;
-      color: #fca5a5;
+    /* Complejos */
+    .line-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-subtle);
+      padding: 5px 8px;
+      margin-bottom: 4px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      gap: 8px;
     }
+    .line-text { flex: 1; font-size: 0.8rem; }
 
-    .relevo-chip-done input {
-      margin: 0;
+    /* =====================================================================
+       PUNTO 1: COMMAND PALETTE MODAL (Ctrl + K)
+    ===================================================================== */
+    .cmd-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 99999;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 12vh;
+    }
+    .cmd-modal {
+      width: 520px;
+      max-width: 92vw;
+      background: #0f141f;
+      border: 1px solid #38bdf8;
+      border-radius: 8px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      overflow: hidden;
+    }
+    .cmd-search-wrap {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid #1e293b;
+      gap: 8px;
+    }
+    .cmd-search-wrap input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      color: #f8fafc;
+      font-size: 1rem;
+      outline: none;
+    }
+    .cmd-list {
+      max-height: 320px;
+      overflow-y: auto;
+      padding: 6px;
+    }
+    .cmd-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 5px;
       cursor: pointer;
-      accent-color: #22c55e;
+      color: var(--text);
+      font-size: 0.82rem;
     }
+    .cmd-item:hover, .cmd-item.selected {
+      background: #1e293b;
+      color: #38bdf8;
+    }
+    .cmd-badge {
+      font-size: 0.7rem;
+      background: #090d14;
+      border: 1px solid #334155;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--text-muted);
+    }
+
+    /* =====================================================================
+       PUNTO 4: DRAWER FLOTANTE LATERAL "GUARDIA DE HOY" (Alt + G)
+    ===================================================================== */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 88888;
+      display: none;
+    }
+    .side-drawer {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      max-width: 90vw;
+      height: 100vh;
+      background: #0d121c;
+      border-left: 1px solid #334155;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+      z-index: 88889;
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+      transition: right 0.25s ease;
+    }
+    .side-drawer.open { right: 0; }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* =====================================================================
+       PUNTO 5: NOTIFICACIONES TOAST (Modern Feedback)
+    ===================================================================== */
+    .toast-container {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 100000;
+      pointer-events: none;
+    }
+    .toast {
+      background: #182030;
+      color: #f8fafc;
+      border: 1px solid #38bdf8;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      animation: fadeIn 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -692,18 +731,20 @@
   <!-- DASHBOARD PRINCIPAL -->
   <div id="appView" style="display: none;">
     
-    <!-- BARRA SUPERIOR SLIM -->
+    <!-- BARRA SUPERIOR -->
     <div class="top-bar">
       <div class="top-left">
         <span class="app-brand">WORKSPACE</span>
         <span class="sync-status" id="syncStatus">● Sincronizado</span>
+        <button class="btn-icon" onclick="openCommandPalette()" style="border-color:#38bdf8; color:#38bdf8; font-weight:700;">⌘ Ctrl + K</button>
         <div class="search-inline">
-          <input type="text" id="complexInput" placeholder="Código complejo..." maxlength="4" onkeypress="if(event.key==='Enter') createNewTab()">
+          <input type="text" id="complexInput" placeholder="Código (ej. 2004)..." maxlength="4" onkeypress="if(event.key==='Enter') createNewTab()">
           <button class="btn-primary" onclick="createNewTab()">+ Complejo</button>
         </div>
       </div>
 
       <div class="top-right">
+        <button class="btn-icon" onclick="toggleDrawer()" style="background:#082f49; border-color:#38bdf8; color:#f8fafc;" title="Ver Guardia Actual sin cambiar de pantalla">🛡️ Guardia Hoy (Alt+G)</button>
         <span class="user-tag" id="userDisplay"></span>
         <button class="btn-danger btn-icon" onclick="logout()" title="Cerrar Sesión">Salir</button>
       </div>
@@ -712,10 +753,10 @@
     <!-- PESTAÑAS -->
     <div class="tabs-bar" id="tabsContainer"></div>
 
-    <!-- MODO 1: TABLERO OPERATIVO PRINCIPAL (2 COLUMNAS) -->
+    <!-- MODO 1: BITÁCORA Y CONTROL OPERATIVO -->
     <div id="notesWorkspace" class="dashboard-grid" style="display: none;">
       
-      <!-- COLUMNA IZQUIERDA: BITÁCORA Y TAREAS -->
+      <!-- COLUMNA IZQUIERDA: BITÁCORA -->
       <div class="panel">
         <div class="panel-header">
           <span class="panel-title">Bitácora & Tareas</span>
@@ -740,12 +781,11 @@
         </div>
       </div>
 
-      <!-- COLUMNA DERECHA: GUARDIA FIJA DE HOY Y/O GRILLAS SEMANALES -->
+      <!-- COLUMNA DERECHA: CRONOGRAMA & RELEVOS -->
       <div class="panel">
         <div class="panel-header" style="align-items: center;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="panel-title" id="rosterPanelTitle">Guardia de Hoy</span>
-            <!-- RELOJ INTEGRADO AL TÍTULO -->
             <div class="roster-clock-badge">
               <span id="liveDate" class="roster-clock-date">---</span>
               <span class="roster-clock-sep">|</span>
@@ -758,19 +798,17 @@
           </div>
         </div>
 
-        <!-- 1. VISTA FIJA DE HOY -->
+        <!-- VISTA FIJA DE HOY -->
         <div id="todayFixedView" class="today-fixed-container">
           <div id="todayFixedContent"></div>
         </div>
 
-        <!-- 2. VISTA GRILLAS SEMANALES (AMBA + INTERIOR) -->
+        <!-- GRILLAS SEMANALES -->
         <div id="weekGridView" style="display: none;">
-          
-          <!-- SECCIÓN 1: TÉCNICOS CENTRAL / AMBA -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 6px 0;">
             <span class="section-subtitle" style="color: #38bdf8; margin: 0;">🏢 Técnicos Central / AMBA (M / T)</span>
             <div style="display: flex; gap: 4px;">
-              <button class="btn-icon" onclick="pasteFromExcelPrompt('main')" title="Pegar desde Excel">📋 Pegar AMBA</button>
+              <button class="btn-icon" onclick="pasteFromExcelPrompt('main')">📋 Pegar AMBA</button>
               <button class="btn-primary btn-icon" onclick="addRosterRow('main')">+ Técnico</button>
             </div>
           </div>
@@ -793,11 +831,10 @@
             </table>
           </div>
 
-          <!-- SECCIÓN 2: VISITAS DEL INTERIOR -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0 6px 0;">
-            <span class="section-subtitle" style="color: #fb923c; margin: 0;">📍 Visitas del Interior (Planilla Simple)</span>
+            <span class="section-subtitle" style="color: #fb923c; margin: 0;">📍 Visitas del Interior</span>
             <div style="display: flex; gap: 4px;">
-              <button class="btn-icon" onclick="pasteFromExcelPrompt('interior')" title="Pegar desde Excel">📋 Pegar Interior</button>
+              <button class="btn-icon" onclick="pasteFromExcelPrompt('interior')">📋 Pegar Interior</button>
               <button class="btn-primary btn-icon" onclick="addRosterRow('interior')">+ Fila</button>
             </div>
           </div>
@@ -818,43 +855,44 @@
               <tbody id="interiorRosterTableBody"></tbody>
             </table>
           </div>
-
         </div>
 
-        <!-- 3. RELEVO MENSUAL: 2 CATEGORÍAS INDEPENDIENTES CON AUTO-PLEGADO Y SEPARACIÓN DE COMPLETADAS -->
+        <!-- RELEVOS MENSUALES CON BARRA DE PROGRESO Y BUSCADOR -->
         <div class="panel" style="margin-top: 10px; border-color: #334155; padding: 8px;">
-          
           <div class="panel-header" style="margin-bottom: 6px; border-bottom: none; padding-bottom: 0;">
             <span class="panel-title" style="color: #f8fafc;">📋 Relevos Mensuales</span>
             <div style="display: flex; gap: 5px;">
-              <button class="btn-danger btn-icon" onclick="resetRelevosMensual()" title="Resetear todas las casillas al inicio del mes">🔄 Reset Mensual</button>
-              <button class="btn-icon" id="btnToggleRelevosGlobal" onclick="toggleRelevosGlobal()">Plegar Todo</button>
+              <button class="btn-danger btn-icon" onclick="resetRelevosMensual()">🔄 Reset Mensual</button>
+              <button class="btn-icon" id="btnToggleRelevosGlobal" onclick="toggleRelevosGlobal()">Plegar</button>
             </div>
           </div>
 
           <div id="relevosFullWrapper">
-            <!-- NAVEGADOR DE CATEGORÍAS (ABRIR UNA MINIMIZA LA OTRA) -->
             <div class="relevo-cat-nav">
               <button class="btn-cat-tab active-dc" id="btnCatDC" onclick="switchRelevoCategory('dc')">
                 <span>🖥️ DATACENTER</span>
-                <span class="cat-badge-counter" id="badgeNavDC">0/27</span>
+                <span id="badgeNavDC">0/27</span>
               </button>
               <button class="btn-cat-tab" id="btnCatCart" onclick="switchRelevoCategory('cart')">
                 <span>📢 CARTELERÍA</span>
-                <span class="cat-badge-counter" id="badgeNavCart">0/27</span>
+                <span id="badgeNavCart">0/27</span>
               </button>
             </div>
 
-            <!-- CONTENEDOR PRINCIPAL DE RELEVOS -->
-            <div id="relevosContainerActive" style="max-height: 420px; overflow-y: auto; padding-right: 4px;">
-              <!-- Se inyecta dinámicamente con las sedes pendientes arriba y las completadas abajo -->
+            <!-- BARRA DE PROGRESO -->
+            <div class="progress-bar-wrap">
+              <div id="relevosProgressBar" class="progress-bar-fill"></div>
             </div>
-          </div>
 
+            <!-- FILTRO DE SEDES -->
+            <input type="text" id="relevoFilterInput" class="relevos-filter-input" placeholder="🔍 Filtrar sede en vivo (ej. dot, palermo, salta)..." oninput="renderRelevosView()">
+
+            <!-- CONTENEDOR DE RELEVOS -->
+            <div id="relevosContainerActive" style="max-height: 380px; overflow-y: auto; padding-right: 4px;"></div>
+          </div>
         </div>
 
       </div>
-
     </div>
 
     <!-- MODO 2: COMPLEJO ACTIVO -->
@@ -886,15 +924,39 @@
 
   </div>
 
+  <!-- COMMAND PALETTE MODAL (Ctrl + K) -->
+  <div id="cmdPalette" class="cmd-overlay" onclick="closeCommandPalette(event)">
+    <div class="cmd-modal" onclick="event.stopPropagation()">
+      <div class="cmd-search-wrap">
+        <span style="color:#38bdf8; font-weight:bold;">⌘</span>
+        <input type="text" id="cmdInput" placeholder="Escribí un complejo (ej. Abasto), o acción..." oninput="filterCommandPalette()" onkeydown="handleCommandKeydown(event)">
+        <span class="cmd-badge">ESC para salir</span>
+      </div>
+      <div id="cmdList" class="cmd-list"></div>
+    </div>
+  </div>
+
+  <!-- DRAWER FLOTANTE LATERAL "GUARDIA DE HOY" (Alt + G) -->
+  <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+  <div id="sideDrawer" class="side-drawer">
+    <div class="drawer-header">
+      <span class="panel-title" style="color:#38bdf8;">🛡️ Guardia de Hoy (En Vivo)</span>
+      <button class="btn-icon" onclick="toggleDrawer()">✕</button>
+    </div>
+    <div style="flex:1; overflow-y:auto;" id="drawerContent"></div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toastContainer" class="toast-container"></div>
+
 <script>
-  // AUTO-AJUSTE DINÁMICO DE ALTURA PARA TEXTAREAS
   function autoResizeTextarea(el) {
     if (!el) return;
     el.style.height = 'auto';
     el.style.height = el.scrollHeight + 'px';
   }
 
-  // CONFIGURACIÓN SUPABASE
+  // SUPABASE CONFIG
   const SUPABASE_URL = 'https://xlwhvmmgimeuvbvghemt.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsd2h2bW1naW1ldXZidmdoZW10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2Mzc1NjUsImV4cCI6MjEwNDIxMzU2NX0.wqtbkubn-JGW671twlZFAD6bWH0TohSH2BbsoZOdSHU';
   var sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -909,7 +971,6 @@
     "2014": "Neuquen", "2015": "Avellaneda", "2016": "Parque Brown"
   };
 
-  // ESTRUCTURA AGRUPADA DE RELEVOS (27 SECTORES EN TOTAL)[cite: 1]
   const relevosGrouped = {
     caba: [
       { id: '0734', name: 'Caballito (0734)', isPremium: false },
@@ -952,21 +1013,31 @@
   let userTodos = [];
   let rosterData = [];
   let interiorRosterData = [];
-  let relevosState = {}; // { [id]: { dc: boolean, cart: boolean } }
-  let activeRelevoCategory = 'dc'; // 'dc' o 'cart'
+  let relevosState = {};
+  let activeRelevoCategory = 'dc';
   let notesBodyVisible = true;
   let showFullWeek = false;
   let relevosGlobalVisible = true;
   let saveTimeout = null;
+  let cmdSelectedIndex = 0;
 
-  // RELOJ EN TIEMPO REAL
+  // TOAST NOTIFICATIONS (PUNTO 5)
+  function showToast(message, type = 'info') {
+    const c = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<span>${type === 'success' ? '✓' : 'ℹ'}</span> <span>${message}</span>`;
+    c.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+  }
+
+  // RELOJ
   function updateClock() {
     const now = new Date();
     const days = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
     const dName = days[now.getDay()];
     const dNum = String(now.getDate()).padStart(2, '0');
     const mNum = String(now.getMonth() + 1).padStart(2, '0');
-
     const hh = String(now.getHours()).padStart(2, '0');
     const mm = String(now.getMinutes()).padStart(2, '0');
     const ss = String(now.getSeconds()).padStart(2, '0');
@@ -1139,26 +1210,32 @@
     return `tab-mate-${colorIndex}`;
   }
 
-  function createNewTab() {
-    let rawCode = document.getElementById('complexInput').value.trim();
-    if (!rawCode) return;
-
-    const code = rawCode.padStart(4, '0');
-    const name = dbComplejos[code] || "Complejo " + code;
+  function openOrSelectComplex(code) {
+    const padded = String(code).padStart(4, '0');
+    const existing = activeTabs.find(t => t.code === padded);
+    if (existing) {
+      selectTab(existing.id);
+      return;
+    }
+    const name = dbComplejos[padded] || "Complejo " + padded;
     const tabId = 'tab_' + Date.now();
-
     activeTabs.push({
       id: tabId,
-      code: code,
+      code: padded,
       name: name,
       ticketsState: {},
       customLines: [],
       rawInput: ""
     });
-
-    document.getElementById('complexInput').value = '';
     selectTab(tabId);
     queueAutoSave();
+  }
+
+  function createNewTab() {
+    let rawCode = document.getElementById('complexInput').value.trim();
+    if (!rawCode) return;
+    openOrSelectComplex(rawCode);
+    document.getElementById('complexInput').value = '';
   }
 
   function renderTabs() {
@@ -1262,21 +1339,11 @@
     }
   }
 
-  // VISTA FIJA DE HOY
-  function renderTodayFixed() {
-    const container = document.getElementById('todayFixedContent');
-    if (!container) return;
-    container.innerHTML = '';
-
+  // GENERADOR HTML GUARDIA DE HOY
+  function buildTodayScheduleHTML() {
     const dayIndex = getCurrentDayIndex();
-
     if (dayIndex === -1) {
-      container.innerHTML = `
-        <div class="today-fixed-empty">
-          🏖️ <strong>Fin de semana:</strong> No hay cronograma regular para hoy.
-        </div>
-      `;
-      return;
+      return `<div class="today-fixed-empty">🏖️ <strong>Fin de semana:</strong> No hay guardias asignadas para hoy.</div>`;
     }
 
     let ambaList = [];
@@ -1293,16 +1360,10 @@
     });
 
     if (ambaList.length === 0 && interiorList.length === 0) {
-      container.innerHTML = `
-        <div class="today-fixed-empty">
-          📍 <strong>Hoy no hay visitas registradas ni en AMBA ni en el Interior.</strong>
-        </div>
-      `;
-      return;
+      return `<div class="today-fixed-empty">📍 <strong>Hoy no hay visitas registradas ni en AMBA ni en el Interior.</strong></div>`;
     }
 
     let html = '';
-
     if (ambaList.length > 0) {
       html += `
         <table class="today-table">
@@ -1338,13 +1399,32 @@
       });
       html += `</div></div>`;
     }
-
-    container.innerHTML = html;
+    return html;
   }
 
-  // ----------------------------------------------------------------------
-  // LÓGICA DE RELEVOS: 2 CATEGORÍAS (ACORDEÓN EXCLUSIVO) + AUTO-SEPARACIÓN
-  // ----------------------------------------------------------------------
+  function renderTodayFixed() {
+    const container = document.getElementById('todayFixedContent');
+    if (container) container.innerHTML = buildTodayScheduleHTML();
+    const drawerContainer = document.getElementById('drawerContent');
+    if (drawerContainer) drawerContainer.innerHTML = buildTodayScheduleHTML();
+  }
+
+  // DRAWER LATERAL (PUNTO 4)
+  function toggleDrawer() {
+    const drawer = document.getElementById('sideDrawer');
+    const overlay = document.getElementById('drawerOverlay');
+    const isOpen = drawer.classList.contains('open');
+    if (isOpen) {
+      drawer.classList.remove('open');
+      overlay.style.display = 'none';
+    } else {
+      renderTodayFixed();
+      drawer.classList.add('open');
+      overlay.style.display = 'block';
+    }
+  }
+
+  // RELEVOS CON FILTRO EN VIVO Y BARRA DE PROGRESO (PUNTO 3)
   function switchRelevoCategory(cat) {
     activeRelevoCategory = cat;
     renderRelevosView();
@@ -1362,7 +1442,7 @@
     const btn = document.getElementById('btnToggleRelevosGlobal');
     if (relevosGlobalVisible) {
       el.style.display = 'block';
-      btn.innerText = 'Plegar Todo';
+      btn.innerText = 'Plegar';
     } else {
       el.style.display = 'none';
       btn.innerText = 'Expandir';
@@ -1373,10 +1453,10 @@
     const btnDC = document.getElementById('btnCatDC');
     const btnCart = document.getElementById('btnCatCart');
     const container = document.getElementById('relevosContainerActive');
+    const filterTerm = (document.getElementById('relevoFilterInput')?.value || '').toLowerCase().trim();
     if (!container) return;
     container.innerHTML = '';
 
-    // Estilos de botones de categoría
     if (activeRelevoCategory === 'dc') {
       btnDC.className = 'btn-cat-tab active-dc';
       btnCart.className = 'btn-cat-tab';
@@ -1385,7 +1465,7 @@
       btnCart.className = 'btn-cat-tab active-cart';
     }
 
-    const field = activeRelevoCategory; // 'dc' o 'cart'
+    const field = activeRelevoCategory;
     const regions = [
       { key: 'caba', title: '🏛️ CABA' },
       { key: 'gba', title: '🏙️ GBA' },
@@ -1400,15 +1480,17 @@
       items.forEach(comp => {
         const state = relevosState[comp.id] || { dc: false, cart: false };
         const isDone = state[field] === true;
-        if (isDone) {
-          completedList.push({ ...comp, region: reg.title });
-        } else {
-          pendingList.push({ ...comp, regionKey: reg.key, regionTitle: reg.title });
+        const matches = comp.name.toLowerCase().includes(filterTerm) || comp.id.toLowerCase().includes(filterTerm);
+        if (matches) {
+          if (isDone) {
+            completedList.push({ ...comp, region: reg.title });
+          } else {
+            pendingList.push({ ...comp, regionKey: reg.key, regionTitle: reg.title });
+          }
         }
       });
     });
 
-    // 1. DIBUJAR PENDIENTES (Agrupadas por región con tarjetas oscuras)
     regions.forEach(reg => {
       const regPending = pendingList.filter(p => p.regionKey === reg.key);
       if (regPending.length > 0) {
@@ -1438,25 +1520,20 @@
       }
     });
 
-    if (pendingList.length === 0) {
-      const allDoneNotice = document.createElement('div');
-      allDoneNotice.style.color = '#4ade80';
-      allDoneNotice.style.fontSize = '0.85rem';
-      allDoneNotice.style.fontWeight = '700';
-      allDoneNotice.style.padding = '8px 0';
-      allDoneNotice.innerText = `🎉 ¡Todas las sedes de ${field === 'dc' ? 'Datacenter' : 'Cartelería'} fueron relevadas este mes!`;
-      container.appendChild(allDoneNotice);
+    if (pendingList.length === 0 && completedList.length > 0 && !filterTerm) {
+      const allDone = document.createElement('div');
+      allDone.style.color = '#4ade80';
+      allDone.style.fontSize = '0.85rem';
+      allDone.style.fontWeight = '700';
+      allDone.style.padding = '8px 0';
+      allDone.innerText = `🎉 ¡Todas las sedes de ${field === 'dc' ? 'Datacenter' : 'Cartelería'} fueron relevadas!`;
+      container.appendChild(allDone);
     }
 
-    // 2. DIBUJAR COMPLETADAS (Chips sutiles, compactos y separados abajo)
     if (completedList.length > 0) {
       const compSection = document.createElement('div');
       compSection.className = 'completed-section';
-
-      const compHeader = document.createElement('div');
-      compHeader.className = 'completed-header';
-      compHeader.innerHTML = `<span>✓ REALIZADAS (${completedList.length})</span> <span style="color:var(--text-muted); font-size:0.65rem; font-weight:normal;">(Clic para desmarcar)</span>`;
-      compSection.appendChild(compHeader);
+      compSection.innerHTML = `<div class="completed-header"><span>✓ REALIZADAS (${completedList.length})</span> <span style="color:var(--text-muted); font-size:0.65rem;">(Clic para desmarcar)</span></div>`;
 
       const compGrid = document.createElement('div');
       compGrid.className = 'relevos-grid-completed';
@@ -1464,13 +1541,8 @@
       completedList.forEach(comp => {
         const chip = document.createElement('div');
         chip.className = 'relevo-chip-done';
-        chip.title = `${comp.name} - Clic para volver a marcar pendiente`;
         chip.onclick = () => toggleRelevoStatus(comp.id, field);
-
-        chip.innerHTML = `
-          <input type="checkbox" checked style="pointer-events:none;">
-          <span>${comp.isPremium ? '⭐ ' : ''}${comp.name}</span>
-        `;
+        chip.innerHTML = `<input type="checkbox" checked style="pointer-events:none;"> <span>${comp.isPremium ? '⭐ ' : ''}${comp.name}</span>`;
         compGrid.appendChild(chip);
       });
 
@@ -1482,9 +1554,7 @@
   }
 
   function toggleRelevoStatus(id, field) {
-    if (!relevosState[id]) {
-      relevosState[id] = { dc: false, cart: false };
-    }
+    if (!relevosState[id]) relevosState[id] = { dc: false, cart: false };
     relevosState[id][field] = !relevosState[id][field];
     renderRelevosView();
     queueAutoSave();
@@ -1492,44 +1562,45 @@
 
   function updateRelevosNavCounters() {
     const allSectores = [...relevosGrouped.caba, ...relevosGrouped.gba, ...relevosGrouped.interior];
-    const totalSectores = allSectores.length; // 27[cite: 1]
+    const total = allSectores.length;
 
     let dcCount = 0;
     let cartCount = 0;
-
     allSectores.forEach(comp => {
-      const state = relevosState[comp.id] || { dc: false, cart: false };
-      if (state.dc) dcCount++;
-      if (state.cart) cartCount++;
+      const st = relevosState[comp.id] || { dc: false, cart: false };
+      if (st.dc) dcCount++;
+      if (st.cart) cartCount++;
     });
 
     const badgeDC = document.getElementById('badgeNavDC');
     const badgeCart = document.getElementById('badgeNavCart');
+    const progressBar = document.getElementById('relevosProgressBar');
 
-    if (badgeDC) {
-      badgeDC.innerText = `${dcCount}/${totalSectores}`;
-      badgeDC.style.color = (dcCount === totalSectores) ? '#4ade80' : '#38bdf8';
-    }
-    if (badgeCart) {
-      badgeCart.innerText = `${cartCount}/${totalSectores}`;
-      badgeCart.style.color = (cartCount === totalSectores) ? '#4ade80' : '#fb923c';
+    if (badgeDC) badgeDC.innerText = `${dcCount}/${total}`;
+    if (badgeCart) badgeCart.innerText = `${cartCount}/${total}`;
+
+    const currentCount = activeRelevoCategory === 'dc' ? dcCount : cartCount;
+    const pct = Math.round((currentCount / total) * 100);
+    if (progressBar) {
+      progressBar.style.width = `${pct}%`;
+      progressBar.style.background = activeRelevoCategory === 'dc' ? '#38bdf8' : '#fb923c';
     }
   }
 
   function resetRelevosMensual() {
-    if (confirm("¿Estás seguro de que querés resetear todos los relevos de Datacenter y Cartelería para el nuevo mes?")) {
+    if (confirm("¿Resetear todos los relevos mensuales para iniciar el nuevo ciclo?")) {
       relevosState = {};
       renderRelevosView();
       queueAutoSave();
+      showToast("Relevos reseteados correctamente", "success");
     }
   }
 
-  // CHECKLIST
+  // CHECKLIST & TARJETAS
   function addTodo() {
     const input = document.getElementById('newTodoInput');
     const text = input.value.trim();
     if (!text) return;
-
     userTodos.push({ id: 'td_' + Date.now(), text, done: false });
     input.value = '';
     renderTodos();
@@ -1566,7 +1637,6 @@
     });
   }
 
-  // TARJETAS
   function addCustomLine() {
     const tab = activeTabs.find(t => t.id === currentTabId);
     if (!tab) return;
@@ -1579,8 +1649,8 @@
       isOpen: true
     });
 
-    const targetContainer = (tab.code === "0000") ? 'customCardsContainer' : 'complexCustomCardsContainer';
-    renderCustomCards(targetContainer);
+    const target = (tab.code === "0000") ? 'customCardsContainer' : 'complexCustomCardsContainer';
+    renderCustomCards(target);
     queueAutoSave();
   }
 
@@ -1665,7 +1735,7 @@
     });
   }
 
-  // TABLAS SEMANALES (AMBA E INTERIOR)
+  // TABLAS EXCEL
   function getCellColorClass(val) {
     if (!val) return 'cell-default';
     const text = val.trim().toUpperCase();
@@ -1716,7 +1786,6 @@
       if (thI) d === dayIndex ? thI.classList.add('col-today') : thI.classList.remove('col-today');
     }
 
-    // 1. AMBA
     const tbodyAMBA = document.getElementById('rosterTableBody');
     tbodyAMBA.innerHTML = '';
     rosterData.forEach((tech, i) => {
@@ -1750,7 +1819,6 @@
       tbodyAMBA.appendChild(trT);
     });
 
-    // 2. Interior
     const tbodyInterior = document.getElementById('interiorRosterTableBody');
     tbodyInterior.innerHTML = '';
     interiorRosterData.forEach((row, i) => {
@@ -1788,12 +1856,11 @@
     queueAutoSave();
   }
 
-  // PEGAR DIRECTO DESDE EXCEL
   async function pasteFromExcelPrompt(type) {
     try {
       const text = await navigator.clipboard.readText();
       if (!text || !text.includes('\t')) {
-        alert("Copiá primero las celdas desde tu Excel (Ctrl + C) y volvé a tocar este botón.");
+        showToast("Copiá primero las celdas desde tu Excel (Ctrl + C)", "warning");
         return;
       }
 
@@ -1803,40 +1870,28 @@
         let newInterior = [];
         rawRows.forEach(cols => {
           let cleanCols = cols.map(c => c.trim());
-          
-          if (cleanCols[0] && cleanCols[0].toLowerCase().includes('interior')) {
-            cleanCols.shift();
-          }
-
-          if (cleanCols.length > 5 && cleanCols[0] === '') {
-            cleanCols.shift();
-          }
+          if (cleanCols[0] && cleanCols[0].toLowerCase().includes('interior')) cleanCols.shift();
+          if (cleanCols.length > 5 && cleanCols[0] === '') cleanCols.shift();
 
           const days = cleanCols.slice(0, 5);
           while (days.length < 5) days.push('');
-
-          const hasContent = days.some(d => d !== '');
-          if (hasContent) {
-            newInterior.push({ label: 'Interior', days });
-          }
+          if (days.some(d => d !== '')) newInterior.push({ label: 'Interior', days });
         });
 
-        while (newInterior.length < 3) {
-          newInterior.push({ label: 'Interior', days: ['', '', '', '', ''] });
-        }
+        while (newInterior.length < 3) newInterior.push({ label: 'Interior', days: ['', '', '', '', ''] });
 
         if (newInterior.length > 0) {
           interiorRosterData = newInterior;
           renderRoster();
           renderTodayFixed();
           queueAutoSave();
+          showToast("Cronograma Interior importado con éxito", "success");
         }
       } else {
         let newAMBA = [];
         for (let i = 0; i < rawRows.length; i += 2) {
           const rowM = rawRows[i];
           const rowT = rawRows[i + 1] || [];
-
           const name = rowM[0] ? rowM[0].trim() : `Técnico ${Math.floor(i/2) + 1}`;
           const mCols = rowM.slice(rowM[1] === 'M' ? 2 : 1, 7);
           const tCols = rowT.slice(rowT[1] === 'T' ? 2 : 1, 7);
@@ -1844,11 +1899,7 @@
           while (mCols.length < 5) mCols.push('');
           while (tCols.length < 5) tCols.push('');
 
-          newAMBA.push({
-            name: name,
-            m: mCols.map(s => s.trim()),
-            t: tCols.map(s => s.trim())
-          });
+          newAMBA.push({ name, m: mCols.map(s => s.trim()), t: tCols.map(s => s.trim()) });
         }
 
         if (newAMBA.length > 0) {
@@ -1856,10 +1907,11 @@
           renderRoster();
           renderTodayFixed();
           queueAutoSave();
+          showToast("Cronograma AMBA importado con éxito", "success");
         }
       }
     } catch (err) {
-      alert("Permití el acceso al portapapeles para pegar.");
+      showToast("Permití el acceso al portapapeles para pegar", "warning");
     }
   }
 
@@ -1871,7 +1923,6 @@
       { id: 'datacenter', text: 'SW informa que se realizo el relevo de datacenter' },
       { id: 'carteleria', text: 'SW informa que se realizo el relevo de carteleria' }
     ];
-
     const container = document.getElementById('staticLines');
     container.innerHTML = '';
     lines.forEach(item => container.appendChild(createStandardRow(item.id, item.text)));
@@ -1943,6 +1994,7 @@
         btnElement.style.color = '';
       }, 900);
     }
+    showToast("Copiado al portapapeles", "success");
   }
 
   function copyAll() {
@@ -1963,7 +2015,148 @@
     });
 
     navigator.clipboard.writeText(lines.join('\n'));
+    showToast("Reporte completo copiado", "success");
   }
+
+  // =====================================================================
+  // LÓGICA DEL COMMAND PALETTE (PUNTO 1)
+  // =====================================================================
+  let cmdCommands = [];
+
+  function openCommandPalette() {
+    buildCommandsList();
+    const overlay = document.getElementById('cmdPalette');
+    const input = document.getElementById('cmdInput');
+    overlay.style.display = 'flex';
+    input.value = '';
+    cmdSelectedIndex = 0;
+    filterCommandPalette();
+    setTimeout(() => input.focus(), 50);
+  }
+
+  function closeCommandPalette(e) {
+    document.getElementById('cmdPalette').style.display = 'none';
+  }
+
+  function buildCommandsList() {
+    cmdCommands = [];
+
+    // 1. Acceso a Bitácora
+    cmdCommands.push({
+      title: "Ir a Bitácora / Personal",
+      badge: "Tab 0000",
+      action: () => selectTab(noteTabId)
+    });
+
+    // 2. Acciones Globales
+    cmdCommands.push({
+      title: "Copiar reporte completo del complejo activo",
+      badge: "Acción",
+      action: () => copyAll()
+    });
+
+    cmdCommands.push({
+      title: "Abrir / Cerrar panel lateral Guardia de Hoy",
+      badge: "Alt + G",
+      action: () => toggleDrawer()
+    });
+
+    cmdCommands.push({
+      title: "Alternar vista cronograma semanal",
+      badge: "Vista",
+      action: () => toggleWeekView()
+    });
+
+    cmdCommands.push({
+      title: "Agregar nueva tarjeta de apunte",
+      badge: "Alt + N",
+      action: () => addCustomLine()
+    });
+
+    // 3. Complejos del sistema
+    Object.keys(dbComplejos).forEach(code => {
+      if (code !== "0000") {
+        cmdCommands.push({
+          title: `Abrir Complejo: ${dbComplejos[code]} (${code})`,
+          badge: code,
+          action: () => openOrSelectComplex(code)
+        });
+      }
+    });
+  }
+
+  function filterCommandPalette() {
+    const val = document.getElementById('cmdInput').value.toLowerCase().trim();
+    const listEl = document.getElementById('cmdList');
+    listEl.innerHTML = '';
+
+    const filtered = cmdCommands.filter(c => c.title.toLowerCase().includes(val) || c.badge.toLowerCase().includes(val));
+
+    if (cmdSelectedIndex >= filtered.length) cmdSelectedIndex = 0;
+
+    filtered.forEach((cmd, i) => {
+      const item = document.createElement('div');
+      item.className = `cmd-item ${i === cmdSelectedIndex ? 'selected' : ''}`;
+      item.innerHTML = `<span>${cmd.title}</span> <span class="cmd-badge">${cmd.badge}</span>`;
+      item.onclick = () => {
+        cmd.action();
+        closeCommandPalette();
+      };
+      listEl.appendChild(item);
+    });
+  }
+
+  function handleCommandKeydown(e) {
+    const listEl = document.getElementById('cmdList');
+    const items = listEl.querySelectorAll('.cmd-item');
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (cmdSelectedIndex < items.length - 1) cmdSelectedIndex++;
+      updateCmdSelection(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (cmdSelectedIndex > 0) cmdSelectedIndex--;
+      updateCmdSelection(items);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (items[cmdSelectedIndex]) items[cmdSelectedIndex].click();
+    } else if (e.key === 'Escape') {
+      closeCommandPalette();
+    }
+  }
+
+  function updateCmdSelection(items) {
+    items.forEach((item, idx) => {
+      item.className = `cmd-item ${idx === cmdSelectedIndex ? 'selected' : ''}`;
+      if (idx === cmdSelectedIndex) item.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  // SHORTCUTS GLOBALES
+  window.addEventListener('keydown', (e) => {
+    // Ctrl + K o Cmd + K -> Command Palette
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      openCommandPalette();
+    }
+    // Alt + G -> Toggle Drawer Guardia
+    if (e.altKey && e.key.toLowerCase() === 'g') {
+      e.preventDefault();
+      toggleDrawer();
+    }
+    // Alt + N -> Tarjeta de apunte rápida
+    if (e.altKey && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      addCustomLine();
+    }
+    // Escape -> Cerrar modales
+    if (e.key === 'Escape') {
+      closeCommandPalette();
+      const drawer = document.getElementById('sideDrawer');
+      if (drawer.classList.contains('open')) toggleDrawer();
+    }
+  });
 
   window.onload = checkSession;
 </script>
