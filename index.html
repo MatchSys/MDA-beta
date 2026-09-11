@@ -568,7 +568,7 @@
       cursor: pointer;
     }
 
-    /* Complejos */
+    /* Líneas estándar y Wizard */
     .line-item {
       display: flex;
       justify-content: space-between;
@@ -582,9 +582,80 @@
     }
     .line-text { flex: 1; font-size: 0.8rem; }
 
-    /* =====================================================================
-       PUNTO 1: COMMAND PALETTE MODAL (Ctrl + K)
-    ===================================================================== */
+    .wizard-card {
+      background: #0f141f;
+      border: 1px solid #38bdf8;
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .wizard-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+
+    .wizard-progress-bar {
+      flex: 1;
+      height: 4px;
+      background: #020617;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .wizard-progress-fill {
+      height: 100%;
+      background: #38bdf8;
+      transition: width 0.2s ease;
+    }
+
+    .wizard-question {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+    }
+
+    .wizard-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-si {
+      background: #15803d;
+      border-color: #22c55e;
+      color: #ffffff;
+      min-width: 70px;
+      font-weight: 700;
+    }
+    .btn-si:hover { background: #166534; }
+
+    .btn-no {
+      background: #334155;
+      border-color: #475569;
+      color: #f8fafc;
+      min-width: 70px;
+      font-weight: 700;
+    }
+    .btn-no:hover { background: #1e293b; }
+
+    .empty-note {
+      background: var(--card-subtle);
+      border: 1px dashed var(--border);
+      border-radius: 4px;
+      padding: 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* Command Palette Modal */
     .cmd-overlay {
       position: fixed;
       inset: 0;
@@ -649,9 +720,7 @@
       color: var(--text-muted);
     }
 
-    /* =====================================================================
-       PUNTO 4: DRAWER FLOTANTE LATERAL "GUARDIA DE HOY" (Alt + G)
-    ===================================================================== */
+    /* Drawer Flotante Lateral */
     .drawer-overlay {
       position: fixed;
       inset: 0;
@@ -685,9 +754,7 @@
       border-bottom: 1px solid var(--border);
     }
 
-    /* =====================================================================
-       PUNTO 5: NOTIFICACIONES TOAST (Modern Feedback)
-    ===================================================================== */
+    /* Toast Container */
     .toast-container {
       position: fixed;
       bottom: 16px;
@@ -857,7 +924,7 @@
           </div>
         </div>
 
-        <!-- RELEVOS MENSUALES CON BARRA DE PROGRESO Y BUSCADOR -->
+        <!-- RELEVOS MENSUALES -->
         <div class="panel" style="margin-top: 10px; border-color: #334155; padding: 8px;">
           <div class="panel-header" style="margin-bottom: 6px; border-bottom: none; padding-bottom: 0;">
             <span class="panel-title" style="color: #f8fafc;">📋 Relevos Mensuales</span>
@@ -879,15 +946,11 @@
               </button>
             </div>
 
-            <!-- BARRA DE PROGRESO -->
             <div class="progress-bar-wrap">
               <div id="relevosProgressBar" class="progress-bar-fill"></div>
             </div>
 
-            <!-- FILTRO DE SEDES -->
             <input type="text" id="relevoFilterInput" class="relevos-filter-input" placeholder="🔍 Filtrar sede en vivo (ej. dot, palermo, salta)..." oninput="renderRelevosView()">
-
-            <!-- CONTENEDOR DE RELEVOS -->
             <div id="relevosContainerActive" style="max-height: 380px; overflow-y: auto; padding-right: 4px;"></div>
           </div>
         </div>
@@ -902,20 +965,47 @@
         <button class="btn-primary" onclick="copyAll()">Copiar Reporte Completo</button>
       </div>
 
-      <span class="section-subtitle">Relevos y Rutinas</span>
-      <div id="staticLines"></div>
-
-      <div style="margin: 12px 0;">
-        <span class="section-subtitle">Pegar Equipos / Impresoras (ej: KI02 SN03):</span>
-        <textarea id="rawEquipments" placeholder="KI02 SN03 SN04..." oninput="autoResizeTextarea(this); processEquipments();"></textarea>
+      <!-- CUESTIONARIO INTERACTIVO (WIZARD) -->
+      <div class="wizard-card" id="wizardCard" style="display:none;">
+        <div class="wizard-progress">
+          <span id="wizardStepLabel"></span>
+          <span class="wizard-progress-bar"><span class="wizard-progress-fill" id="wizardProgressFill"></span></span>
+        </div>
+        <div class="wizard-question" id="wizardQuestion"></div>
+        <div class="wizard-actions">
+          <button class="btn-si" onclick="responderWizard('si')">Sí</button>
+          <button class="btn-no" onclick="responderWizard('no')">No</button>
+          <button class="btn-icon" id="wizardBack" onclick="volverPreguntaWizard()">← Atrás</button>
+          <span style="color:var(--text-muted); font-size:0.75rem; margin-left: auto;">Atajos: S = Sí | N = No</span>
+        </div>
       </div>
 
-      <span class="section-subtitle">Limpiezas Generadas</span>
-      <div id="dynamicLines"></div>
+      <!-- RESULTADOS Y TAREAS CONFIRMADAS -->
+      <div id="resultArea" style="display:none;">
+        <div class="panel-header" style="border:none; margin: 4px 0;">
+          <span class="section-subtitle" style="margin:0;">Tareas confirmadas</span>
+          <button class="btn-icon" onclick="reiniciarPreguntasWizard()">✎ Reconfigurar Cuestionario</button>
+        </div>
+
+        <div id="staticLines"></div>
+        <div class="empty-note" id="emptyTasks" style="display:none;">
+          No seleccionaste tareas rutinarias para este complejo. Podés reconfigurar el cuestionario o cargar datos en las tarjetas inferiores.
+        </div>
+
+        <div id="sectionEquipos" style="margin: 12px 0; display:none;">
+          <span class="section-subtitle">Pegar Equipos / Impresoras (ej: KI02 SN03):</span>
+          <textarea id="rawEquipments" placeholder="KI02 SN03 SN04..." oninput="autoResizeTextarea(this); processEquipments();"></textarea>
+        </div>
+
+        <div id="sectionLimpieza" style="display:none;">
+          <span class="section-subtitle" id="tituloLimpieza">Limpiezas Generadas</span>
+          <div id="dynamicLines"></div>
+        </div>
+      </div>
 
       <div style="margin-top: 14px;">
         <div class="panel-header" style="border:none; margin:0; padding:0 0 6px 0;">
-          <span class="section-subtitle">Ventanas Personalizadas de este Complejo</span>
+          <span class="section-subtitle">Tarjetas de Tickets Personalizados</span>
           <button class="btn-icon" onclick="addCustomLine()">+ Agregar</button>
         </div>
         <div id="complexCustomCardsContainer"></div>
@@ -936,7 +1026,7 @@
     </div>
   </div>
 
-  <!-- DRAWER FLOTANTE LATERAL "GUARDIA DE HOY" (Alt + G) -->
+  <!-- DRAWER FLOTANTE LATERAL (Alt + G) -->
   <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
   <div id="sideDrawer" class="side-drawer">
     <div class="drawer-header">
@@ -946,7 +1036,6 @@
     <div style="flex:1; overflow-y:auto;" id="drawerContent"></div>
   </div>
 
-  <!-- TOAST CONTAINER -->
   <div id="toastContainer" class="toast-container"></div>
 
 <script>
@@ -970,6 +1059,15 @@
     "2008": "Nuevo Centro", "2009": "Patio Olmos", "2010": "Rosario", "2013": "Salta Cinemark",
     "2014": "Neuquen", "2015": "Avellaneda", "2016": "Parque Brown"
   };
+
+  const preguntasWizard = [
+    { id: 'visita',         pregunta: '¿Hiciste la visita semanal?',              text: 'SW informa que se realizo la visita semanal de' },
+    { id: 'alarmas',        pregunta: '¿Hiciste el check de alarmas?',            text: 'SW informa que se realizo el checklist de alarmas' },
+    { id: 'datacenter',     pregunta: '¿Hiciste el relevo de datacenter?',        text: 'SW informa que se realizo el relevo de datacenter' },
+    { id: 'carteleria',     pregunta: '¿Hiciste el relevo de carteleria?',        text: 'SW informa que se realizo el relevo de carteleria' },
+    { id: 'limpEquipos',    pregunta: '¿Hiciste limpieza de equipos?',            text: null },
+    { id: 'limpImpresoras', pregunta: '¿Hiciste limpieza de impresoras?',         text: null }
+  ];
 
   const relevosGrouped = {
     caba: [
@@ -1021,7 +1119,6 @@
   let saveTimeout = null;
   let cmdSelectedIndex = 0;
 
-  // TOAST NOTIFICATIONS (PUNTO 5)
   function showToast(message, type = 'info') {
     const c = document.getElementById('toastContainer');
     const toast = document.createElement('div');
@@ -1031,7 +1128,6 @@
     setTimeout(() => toast.remove(), 2500);
   }
 
-  // RELOJ
   function updateClock() {
     const now = new Date();
     const days = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
@@ -1056,7 +1152,6 @@
     return -1;
   }
 
-  // AUTENTICACIÓN
   async function checkSession() {
     try {
       const { data } = await sbClient.auth.getSession();
@@ -1112,7 +1207,6 @@
     await loadRemoteData();
   }
 
-  // PERSISTENCIA
   function queueAutoSave() {
     document.getElementById('syncStatus').innerText = '○ Guardando...';
     document.getElementById('syncStatus').style.color = 'var(--warning)';
@@ -1174,11 +1268,18 @@
         code: "0000",
         name: "Notas / Bitácora",
         ticketsState: {},
+        answers: {},
         customLines: [],
         rawInput: ""
       }];
       currentTabId = noteTabId;
     }
+
+    activeTabs.forEach(t => {
+      if (!t.answers) t.answers = {};
+      if (!t.ticketsState) t.ticketsState = {};
+      if (!t.customLines) t.customLines = [];
+    });
 
     if (!rosterData || rosterData.length === 0) {
       rosterData = [
@@ -1202,7 +1303,6 @@
     renderRelevosView();
   }
 
-  // TABS
   function getTabMateClass(tab, index) {
     if (tab.code === "0000" || tab.id === noteTabId) return 'tab-mate-notes';
     const codeNum = parseInt(tab.code, 10);
@@ -1224,6 +1324,7 @@
       code: padded,
       name: name,
       ticketsState: {},
+      answers: {},
       customLines: [],
       rawInput: ""
     });
@@ -1277,8 +1378,7 @@
       const rawEl = document.getElementById('rawEquipments');
       rawEl.value = tab.rawInput || "";
       autoResizeTextarea(rawEl);
-      renderStaticLines();
-      processEquipments();
+      renderWizardFlow();
       renderCustomCards('complexCustomCardsContainer');
     }
     queueAutoSave();
@@ -1294,6 +1394,175 @@
     queueAutoSave();
   }
 
+  /* =====================================================================
+     INTEGRACIÓN CUESTIONARIO (WIZARD)
+  ===================================================================== */
+  function indicePreguntaPendiente(tab) {
+    return preguntasWizard.findIndex(p => tab.answers[p.id] === undefined);
+  }
+
+  function tieneLimpiezaHabilitada(tab) {
+    return tab.answers.limpEquipos === 'si' || tab.answers.limpImpresoras === 'si';
+  }
+
+  function renderWizardFlow() {
+    const tab = activeTabs.find(t => t.id === currentTabId);
+    if (!tab || tab.code === "0000") return;
+
+    const idx = indicePreguntaPendiente(tab);
+    const wizardCard = document.getElementById('wizardCard');
+    const resultArea = document.getElementById('resultArea');
+
+    if (idx !== -1) {
+      wizardCard.style.display = 'block';
+      resultArea.style.display = 'none';
+
+      document.getElementById('wizardQuestion').innerText = preguntasWizard[idx].pregunta;
+      document.getElementById('wizardStepLabel').innerText = `Paso ${idx + 1} de ${preguntasWizard.length}`;
+      document.getElementById('wizardProgressFill').style.width = `${(idx / preguntasWizard.length) * 100}%`;
+      document.getElementById('wizardBack').style.display = idx === 0 ? 'none' : 'inline-block';
+      return;
+    }
+
+    wizardCard.style.display = 'none';
+    resultArea.style.display = 'block';
+
+    renderConfirmedStaticLines();
+
+    const hayLimpieza = tieneLimpiezaHabilitada(tab);
+    document.getElementById('sectionEquipos').style.display = hayLimpieza ? 'block' : 'none';
+    document.getElementById('sectionLimpieza').style.display = hayLimpieza ? 'block' : 'none';
+
+    if (hayLimpieza) {
+      const eq = tab.answers.limpEquipos === 'si';
+      const imp = tab.answers.limpImpresoras === 'si';
+      document.getElementById('tituloLimpieza').innerText =
+        eq && imp ? 'Limpiezas Generadas (Equipos e Impresoras)' :
+        eq ? 'Limpiezas Generadas (Solo Equipos)' : 'Limpiezas Generadas (Solo Impresoras)';
+      processEquipments();
+    } else {
+      document.getElementById('dynamicLines').innerHTML = '';
+      tab.rawInput = "";
+      document.getElementById('rawEquipments').value = "";
+    }
+  }
+
+  function responderWizard(valor) {
+    const tab = activeTabs.find(t => t.id === currentTabId);
+    if (!tab) return;
+
+    const idx = indicePreguntaPendiente(tab);
+    if (idx === -1) return;
+
+    tab.answers[preguntasWizard[idx].id] = valor;
+    if (valor === 'no') {
+      delete tab.ticketsState[preguntasWizard[idx].id];
+    }
+
+    renderWizardFlow();
+    queueAutoSave();
+  }
+
+  function volverPreguntaWizard() {
+    const tab = activeTabs.find(t => t.id === currentTabId);
+    if (!tab) return;
+
+    let idx = indicePreguntaPendiente(tab);
+    if (idx === -1) idx = preguntasWizard.length;
+    if (idx === 0) return;
+
+    delete tab.answers[preguntasWizard[idx - 1].id];
+    renderWizardFlow();
+    queueAutoSave();
+  }
+
+  function reiniciarPreguntasWizard() {
+    const tab = activeTabs.find(t => t.id === currentTabId);
+    if (!tab) return;
+
+    tab.answers = {};
+    renderWizardFlow();
+    queueAutoSave();
+  }
+
+  function renderConfirmedStaticLines() {
+    const tab = activeTabs.find(t => t.id === currentTabId);
+    const container = document.getElementById('staticLines');
+    container.innerHTML = '';
+
+    let confirmadas = 0;
+    preguntasWizard.forEach(p => {
+      if (!p.text) return;
+      if (tab.answers[p.id] === 'si') {
+        container.appendChild(createStandardRow(p.id, p.text));
+        confirmadas++;
+      }
+    });
+
+    const sinTareas = (confirmadas === 0 && !tieneLimpiezaHabilitada(tab));
+    document.getElementById('emptyTasks').style.display = sinTareas ? 'block' : 'none';
+  }
+
+  function processEquipments() {
+    const tab = activeTabs.find(t => t.id === currentTabId);
+    if (!tab || tab.code === "0000" || !tieneLimpiezaHabilitada(tab)) return;
+
+    const rawText = document.getElementById('rawEquipments').value;
+    tab.rawInput = rawText;
+
+    const matches = rawText.match(/\b[A-Za-z0-9]+\b/g) || [];
+    const container = document.getElementById('dynamicLines');
+    container.innerHTML = '';
+
+    matches.forEach((item, index) => {
+      const fullCode = `AR${tab.code}${item.toUpperCase()}`;
+      if (tab.answers.limpEquipos === 'si') {
+        container.appendChild(createStandardRow(`limp_eq_${index}`, `SW informa que se realizo la limpieza del equipo ${fullCode}`));
+      }
+      if (tab.answers.limpImpresoras === 'si') {
+        container.appendChild(createStandardRow(`limp_imp_${index}`, `SW informa que se realizo la limpieza de la impresora del equipo ${fullCode}`));
+      }
+    });
+
+    queueAutoSave();
+  }
+
+  function createStandardRow(key, text) {
+    const tab = activeTabs.find(t => t.id === currentTabId);
+    const savedVal = tab && tab.ticketsState[key] ? tab.ticketsState[key] : '';
+
+    const div = document.createElement('div');
+    div.className = 'line-item';
+
+    const span = document.createElement('span');
+    span.className = 'line-text';
+    span.innerText = text;
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.style.width = '110px';
+    input.placeholder = 'INC #';
+    input.value = savedVal;
+    input.oninput = (e) => {
+      tab.ticketsState[key] = e.target.value;
+      queueAutoSave();
+    };
+
+    const btn = document.createElement('button');
+    btn.className = 'btn-icon';
+    btn.innerText = 'Copiar';
+    btn.onclick = () => {
+      const full = input.value.trim() ? `${input.value.trim()} ${text}` : text;
+      copyText(full, btn);
+    };
+
+    div.appendChild(span);
+    div.appendChild(input);
+    div.appendChild(btn);
+    return div;
+  }
+
+  // CHECKLIST & TARJETAS
   function toggleNotesBody() {
     notesBodyVisible = !notesBodyVisible;
     applyNotesBodyVisibility();
@@ -1339,7 +1608,6 @@
     }
   }
 
-  // GENERADOR HTML GUARDIA DE HOY
   function buildTodayScheduleHTML() {
     const dayIndex = getCurrentDayIndex();
     if (dayIndex === -1) {
@@ -1409,7 +1677,6 @@
     if (drawerContainer) drawerContainer.innerHTML = buildTodayScheduleHTML();
   }
 
-  // DRAWER LATERAL (PUNTO 4)
   function toggleDrawer() {
     const drawer = document.getElementById('sideDrawer');
     const overlay = document.getElementById('drawerOverlay');
@@ -1424,7 +1691,6 @@
     }
   }
 
-  // RELEVOS CON FILTRO EN VIVO Y BARRA DE PROGRESO (PUNTO 3)
   function switchRelevoCategory(cat) {
     activeRelevoCategory = cat;
     renderRelevosView();
@@ -1596,7 +1862,6 @@
     }
   }
 
-  // CHECKLIST & TARJETAS
   function addTodo() {
     const input = document.getElementById('newTodoInput');
     const text = input.value.trim();
@@ -1735,7 +2000,6 @@
     });
   }
 
-  // TABLAS EXCEL
   function getCellColorClass(val) {
     if (!val) return 'cell-default';
     const text = val.trim().toUpperCase();
@@ -1915,74 +2179,6 @@
     }
   }
 
-  // RUTINAS Y EQUIPOS
-  function renderStaticLines() {
-    const lines = [
-      { id: 'visita', text: 'SW informa que se realizo la visita semanal de' },
-      { id: 'alarmas', text: 'SW informa que se realizo el checklist de alarmas' },
-      { id: 'datacenter', text: 'SW informa que se realizo el relevo de datacenter' },
-      { id: 'carteleria', text: 'SW informa que se realizo el relevo de carteleria' }
-    ];
-    const container = document.getElementById('staticLines');
-    container.innerHTML = '';
-    lines.forEach(item => container.appendChild(createStandardRow(item.id, item.text)));
-  }
-
-  function processEquipments() {
-    const tab = activeTabs.find(t => t.id === currentTabId);
-    if (!tab || tab.code === "0000") return;
-
-    const rawText = document.getElementById('rawEquipments').value;
-    tab.rawInput = rawText;
-
-    const matches = rawText.match(/\b[A-Za-z0-9]+\b/g) || [];
-    const container = document.getElementById('dynamicLines');
-    container.innerHTML = '';
-
-    matches.forEach((item, index) => {
-      const fullCode = `AR${tab.code}${item.toUpperCase()}`;
-      container.appendChild(createStandardRow(`limp_eq_${index}`, `SW informa que se realizo la limpieza del equipo ${fullCode}`));
-      container.appendChild(createStandardRow(`limp_imp_${index}`, `SW informa que se realizo la limpieza de la impresora del equipo ${fullCode}`));
-    });
-
-    queueAutoSave();
-  }
-
-  function createStandardRow(key, text) {
-    const tab = activeTabs.find(t => t.id === currentTabId);
-    const savedVal = tab && tab.ticketsState[key] ? tab.ticketsState[key] : '';
-
-    const div = document.createElement('div');
-    div.className = 'line-item';
-
-    const span = document.createElement('span');
-    span.className = 'line-text';
-    span.innerText = text;
-
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.style.width = '110px';
-    input.placeholder = 'INC #';
-    input.value = savedVal;
-    input.oninput = (e) => {
-      tab.ticketsState[key] = e.target.value;
-      queueAutoSave();
-    };
-
-    const btn = document.createElement('button');
-    btn.className = 'btn-icon';
-    btn.innerText = 'Copiar';
-    btn.onclick = () => {
-      const full = input.value.trim() ? `${input.value.trim()} ${text}` : text;
-      copyText(full, btn);
-    };
-
-    div.appendChild(span);
-    div.appendChild(input);
-    div.appendChild(btn);
-    return div;
-  }
-
   function copyText(text, btnElement) {
     navigator.clipboard.writeText(text);
     if (btnElement) {
@@ -2002,11 +2198,13 @@
     if (!tab) return;
 
     let lines = [];
-    document.querySelectorAll('#staticLines .line-item, #dynamicLines .line-item').forEach(item => {
-      const text = item.querySelector('.line-text').innerText;
-      const tVal = item.querySelector('input').value.trim();
-      lines.push(tVal ? `${tVal} ${text}` : text);
-    });
+    if (tab.code !== "0000" && document.getElementById('resultArea').style.display !== 'none') {
+      document.querySelectorAll('#staticLines .line-item, #dynamicLines .line-item').forEach(item => {
+        const text = item.querySelector('.line-text').innerText;
+        const tVal = item.querySelector('input').value.trim();
+        lines.push(tVal ? `${tVal} ${text}` : text);
+      });
+    }
 
     tab.customLines.forEach(item => {
       if (item.text.trim()) {
@@ -2018,9 +2216,7 @@
     showToast("Reporte completo copiado", "success");
   }
 
-  // =====================================================================
-  // LÓGICA DEL COMMAND PALETTE (PUNTO 1)
-  // =====================================================================
+  // COMMAND PALETTE LOGIC
   let cmdCommands = [];
 
   function openCommandPalette() {
@@ -2041,14 +2237,12 @@
   function buildCommandsList() {
     cmdCommands = [];
 
-    // 1. Acceso a Bitácora
     cmdCommands.push({
       title: "Ir a Bitácora / Personal",
       badge: "Tab 0000",
       action: () => selectTab(noteTabId)
     });
 
-    // 2. Acciones Globales
     cmdCommands.push({
       title: "Copiar reporte completo del complejo activo",
       badge: "Acción",
@@ -2073,7 +2267,6 @@
       action: () => addCustomLine()
     });
 
-    // 3. Complejos del sistema
     Object.keys(dbComplejos).forEach(code => {
       if (code !== "0000") {
         cmdCommands.push({
@@ -2133,19 +2326,34 @@
     });
   }
 
-  // SHORTCUTS GLOBALES
+  // KEYDOWN LISTENERS (GLOBALES Y WIZARD)
   window.addEventListener('keydown', (e) => {
-    // Ctrl + K o Cmd + K -> Command Palette
+    const tag = (e.target.tagName || '').toLowerCase();
+
+    // Atajos de teclado del Wizard (S/N)
+    const wizardCard = document.getElementById('wizardCard');
+    if (wizardCard && wizardCard.style.display !== 'none' && tag !== 'input' && tag !== 'textarea') {
+      if (e.key === 's' || e.key === 'S') {
+        responderWizard('si');
+        return;
+      }
+      if (e.key === 'n' || e.key === 'N') {
+        responderWizard('no');
+        return;
+      }
+    }
+
+    // Ctrl + K -> Command Palette
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
       openCommandPalette();
     }
-    // Alt + G -> Toggle Drawer Guardia
+    // Alt + G -> Drawer Guardia
     if (e.altKey && e.key.toLowerCase() === 'g') {
       e.preventDefault();
       toggleDrawer();
     }
-    // Alt + N -> Tarjeta de apunte rápida
+    // Alt + N -> Tarjeta rápida
     if (e.altKey && e.key.toLowerCase() === 'n') {
       e.preventDefault();
       addCustomLine();
